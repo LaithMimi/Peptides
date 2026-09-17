@@ -1,22 +1,22 @@
 ---
-description: "Task list for Peptide Storefront (Catalog + Order Capture)"
+description: "Task list for Peptide Storefront (Catalog + Quote-Request Capture, bilingual)"
 ---
 
-# Tasks: Peptide Storefront (Catalog + Order Capture)
+# Tasks: Peptide Storefront (Catalog + Quote-Request Capture)
 
 **Input**: Design documents from `/specs/001-peptide-storefront/`
 
-**Prerequisites**: plan.md, spec.md, research.md, data-model.md, contracts/submit-order.md, quickstart.md
+**Prerequisites**: plan.md, spec.md, research.md, data-model.md, contracts/submit-quote-request.md, quickstart.md
 
-**Tests**: Not explicitly requested as TDD in spec.md. Dedicated unit/e2e test tasks are included in Polish (Phase 8) to validate against quickstart.md, using the Vitest/Playwright stack chosen in plan.md — not as test-first gates for each story.
+**Tests**: Not explicitly requested as TDD in spec.md. Dedicated unit/e2e test tasks are included in Polish (Phase 8) using the Vitest/Playwright stack chosen in plan.md.
 
-**Organization**: Tasks are grouped by user story (US1–US4, all P1) from spec.md, in the order a customer moves through the site: browse → view product → acknowledgment gate → submit order.
+**Organization**: Tasks are grouped by user story (US1–US4, all P1) from spec.md, in the order a customer moves through the site: browse → view product → acknowledgment gate → submit quote request. Bilingual (EN/AR + RTL) is foundational, not a separate story, since constitution Principle III makes it a first-class requirement of every page.
 
 ## Format: `[ID] [P?] [Story] Description`
 
 - **[P]**: Can run in parallel (different files, no dependencies)
-- **[Story]**: Maps to US1 (Browse Catalog), US2 (Product Detail & Variant), US3 (Acknowledgment Gate), US4 (Submit Order)
-- File paths follow plan.md's Project Structure (single Next.js App Router project at repo root)
+- **[Story]**: Maps to US1 (Browse Catalog), US2 (Product Detail & Vial Selection), US3 (Acknowledgment Gate), US4 (Submit Quote Request)
+- File paths follow plan.md's Project Structure (single Next.js App Router project, `app/[locale]/...`)
 
 ---
 
@@ -24,28 +24,34 @@ description: "Task list for Peptide Storefront (Catalog + Order Capture)"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Scaffold Next.js 15 App Router project with TypeScript and Tailwind CSS at repository root (`npx create-next-app@latest . --typescript --tailwind --app --no-src-dir`)
-- [ ] T002 Install feature dependencies: `zod`, `react-hook-form`, `@hookform/resolvers`, `resend`
+- [X] T001 Scaffold Next.js 15 App Router project with TypeScript and Tailwind CSS at repository root
+- [ ] T002 Install feature dependencies: `zod`, `react-hook-form`, `@hookform/resolvers`, `resend`, `next-intl`
 - [ ] T003 [P] Install dev/test dependencies: `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `@vitejs/plugin-react`, `jsdom`, `@playwright/test`
-- [ ] T004 [P] Create `.env.local.example` documenting `RESEND_API_KEY` and `ORDER_NOTIFICATION_EMAIL` (per quickstart.md Prerequisites)
+- [ ] T004 [P] Create `.env.local.example` documenting `RESEND_API_KEY` and `ORDER_NOTIFICATION_EMAIL`
 - [ ] T005 [P] Configure `vitest.config.ts` and a test setup file for jsdom + Testing Library matchers
 - [ ] T006 [P] Configure `playwright.config.ts` pointing at `http://localhost:3000`
-- [ ] T007 Add `test`, `test:e2e` scripts to `package.json` (per quickstart.md Automated Checks)
+- [ ] T007 Add `test`, `test:e2e` scripts to `package.json`
 
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-**Purpose**: Core types, data, validation, and shared components that every user story depends on
+**Purpose**: Locale routing, core types, data, validation, and shared components that every user story depends on
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T008 Define `Product`, `Variant`, `LineItem`, `Address`, `OrderInput`, `OrderResult` types in `types/catalog.ts` per data-model.md field tables
-- [ ] T009 Create shared Zod schema in `lib/order-schema.ts` implementing the full data-model.md "Validation Summary": `lineItems.length >= 1`; each line item's `productId`/`variantId` must resolve against `lib/products.ts`; `1 <= quantity <= 20` per line item; `customerEmail` valid email format; `ageAndResearchUseAck === true` (hard requirement, request rejected otherwise); all required `Address` fields (`line1`, `city`, `region`, `postalCode`, `country`) non-empty
-- [ ] T010 Create static catalog data module `lib/products.ts` with several `Product` entries (each `active: true`, ≥1 image, a `disclaimer` string defaulting to the standard research-use text, optional `coaUrl`, and ≥1 `Variant` with `id`, `label`, `priceCents > 0`) per data-model.md
-- [ ] T011 [P] Build `components/disclaimer-banner.tsx` rendering the standard "research/laboratory use only — not for human consumption" disclaimer (FR-002, Principle I)
-- [ ] T012 [P] Build `lib/cart-store.ts`: React context + `localStorage`-backed cart state with add/update-quantity/remove-line-item/clear operations, per research.md's client-side cart decision
-- [ ] T013 Wire root `app/layout.tsx` with header (site name + cart link), footer, and global Tailwind styles; mount the cart context provider from T012
+- [ ] T008 Create `i18n/routing.ts` defining supported locales (`en`, `ar`), default locale `en`, and the `next-intl` routing config
+- [ ] T009 Create `i18n/request.ts` (next-intl request config loading the right message file per locale)
+- [ ] T010 Create `middleware.ts` at repo root using `next-intl`'s middleware for locale detection/redirect (root `/` → default locale)
+- [ ] T011 [P] Create `messages/en.json` with all UI strings (nav labels, disclaimer text, form labels/placeholders, button text, error messages, confirmation copy)
+- [ ] T012 [P] Create `messages/ar.json` with the same keys, Arabic translations, adapted from the research-area phrasing the business provided
+- [ ] T013 Define `Product`, `ProductTranslation`, `Vial`, `LineItem`, `QuoteRequestInput`, `QuoteRequestResult` types in `types/catalog.ts` per data-model.md field tables (no price field anywhere)
+- [ ] T014 Create shared Zod schema in `lib/quote-schema.ts` implementing data-model.md's "Validation Summary": `lineItems.length >= 1`; each line item's `productId`/`vialId` must resolve against `lib/products.ts`; `1 <= quantity <= 20`; `customerEmail` valid email format; `customerName` and `country` non-empty; `ageAndResearchUseAck === true` (hard requirement, rejected otherwise)
+- [ ] T015 Create static catalog data module `lib/products.ts` with the 10 real products (TB-500, Ipamorelin, CJC-1295, Retatrutide, BPC-157, GHK-Cu, MOTS-C, KPV, Selank, Semax), each `active: true`, an image placeholder, `purity` where given (e.g., "≥ 99%" for TB-500/BPC-157), one `Vial` per product (label = the vial size provided, e.g. "10 mg"/"100 mg"), and `translations.en`/`translations.ar` with tagline/description/researchAreas/disclaimer adapted from the business-provided content (research-area framing, no therapeutic claims — Principle I)
+- [ ] T016 [P] Build `components/disclaimer-banner.tsx` rendering the localized "research/laboratory use only — not for human consumption" disclaimer via next-intl messages (FR-002, Principle I)
+- [ ] T017 [P] Build `lib/cart-store.ts`: React context + `localStorage`-backed quote-cart state with add/update-quantity/remove-line-item/clear operations (no price/subtotal logic)
+- [ ] T018 [P] Build `components/locale-switcher.tsx` linking between `/en` and `/ar` equivalents of the current page
+- [ ] T019 Implement `app/[locale]/layout.tsx`: set `<html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>`, mount `NextIntlClientProvider`, render header (site name, `locale-switcher.tsx`, cart link) and footer, and mount the cart context provider from T017
 
 **Checkpoint**: Foundation ready — user story implementation can now begin
 
@@ -53,70 +59,70 @@ description: "Task list for Peptide Storefront (Catalog + Order Capture)"
 
 ## Phase 3: User Story 1 - Browse Product Catalog (Priority: P1) 🎯 MVP
 
-**Goal**: A visitor can load the site and see every active product with name, image, starting price, and the research-use disclaimer.
+**Goal**: A visitor can load the site in English or Arabic and see every active product with name, image, research-area tagline, and the research-use disclaimer, correctly laid out for the active direction.
 
-**Independent Test**: Load the catalog page directly; confirm every active product from `lib/products.ts` appears with name, image, starting price, and the disclaimer is visible; confirm no horizontal scroll from 320px–1920px.
+**Independent Test**: Load `/en` and `/ar`; confirm every active product from `lib/products.ts` appears with name, image, tagline, and the disclaimer is visible; confirm RTL mirroring on `/ar` and no horizontal scroll from 320px–1920px on both.
 
 ### Implementation for User Story 1
 
-- [ ] T014 [P] [US1] Build `components/product-card.tsx` displaying a product's name, representative image, short description, and starting price (lowest variant `priceCents`)
-- [ ] T015 [US1] Implement `app/page.tsx` catalog page: fetch all `active: true` products from `lib/products.ts`, render via `product-card.tsx` in a responsive grid, and include `disclaimer-banner.tsx` (FR-001, FR-002)
-- [ ] T016 [US1] Apply responsive grid/spacing to `app/page.tsx` (mobile single-column → tablet/desktop multi-column) guided by the `/impeccable` design skill; verify no horizontal scrolling and no overlapping content from 320px–1920px (FR-013, SC-005)
+- [ ] T020 [P] [US1] Build `components/product-card.tsx` displaying a product's name, image, and localized tagline (uses `translations.<locale>.tagline`)
+- [ ] T021 [US1] Implement `app/[locale]/page.tsx` catalog page: fetch all `active: true` products from `lib/products.ts`, render via `product-card.tsx` in a responsive grid, and include `disclaimer-banner.tsx` (FR-001, FR-002)
+- [ ] T022 [US1] Apply responsive, direction-aware grid/spacing to `app/[locale]/page.tsx` using Tailwind logical properties (`ps-`/`pe-`/`text-start`, per research.md's RTL strategy); verify no horizontal scrolling and correct mirroring on `/ar` from 320px–1920px (FR-013, FR-014, SC-005)
 
-**Checkpoint**: Catalog is fully browsable and independently testable/demoable.
+**Checkpoint**: Catalog is fully browsable in both languages and independently testable/demoable.
 
 ---
 
-## Phase 4: User Story 2 - View Product Details & Select a Variant (Priority: P1)
+## Phase 4: User Story 2 - View Product Details & Select a Vial (Priority: P1)
 
-**Goal**: A visitor can open any product, read full details, and select a variant + quantity to add to their order.
+**Goal**: A visitor can open any product, read the full localized research-area description, and select a vial + quantity to add to their quote request — with no price shown anywhere.
 
-**Independent Test**: Navigate directly to `/products/[slug]` for a known product; confirm full description, all variants with prices, and disclaimer render; select a variant and quantity and confirm the line subtotal updates; confirm adding without a variant selected is blocked.
+**Independent Test**: Navigate directly to `/[locale]/products/[slug]` for a known product; confirm full description, vial size(s), and purity render in the active language; select a vial and quantity and confirm the selection is reflected; confirm adding without a vial selected is blocked.
 
 ### Implementation for User Story 2
 
-- [ ] T017 [P] [US2] Build `components/variant-selector.tsx`: variant choice control (radio/select) + quantity input constrained to `1 <= quantity <= 20` (data-model.md), computing `lineSubtotalCents = variant.priceCents * quantity`
-- [ ] T018 [US2] Implement `app/products/[slug]/page.tsx`: look up the product by slug in `lib/products.ts` (404/not-found state if missing or `active: false`), render full description, images, `coaUrl` link when present, `disclaimer-banner.tsx`, and `variant-selector.tsx` (FR-003)
-- [ ] T019 [US2] Wire an "Add to order" action on the product page that calls `lib/cart-store.ts` to add the selected `{ productId, variantId, quantity }`; disable/block the action with a clear inline message when no variant is selected (Acceptance Scenario 3)
-- [ ] T020 [P] [US2] Build `components/cart-summary.tsx` showing current cart line items (product name, variant label, quantity, subtotal) and running total; mount it from the header (T013) and the product page
+- [ ] T023 [P] [US2] Build `components/vial-selector.tsx`: vial choice control (radio/select, localized labels where needed) + quantity input constrained to `1 <= quantity <= 20` (data-model.md) — no price/subtotal calculation
+- [ ] T024 [US2] Implement `app/[locale]/products/[slug]/page.tsx`: look up the product by slug in `lib/products.ts` (not-found state if missing or `active: false`), render localized description, image, `researchAreas` list, `purity`/`coaUrl` when present, `disclaimer-banner.tsx`, and `vial-selector.tsx` (FR-003)
+- [ ] T025 [US2] Wire an "Add to quote request" action on the product page that calls `lib/cart-store.ts` to add `{ productId, vialId, quantity }`; disable/block the action with a clear inline message when no vial is selected (Acceptance Scenario 3)
+- [ ] T026 [P] [US2] Build `components/quote-summary.tsx` showing current quote-cart line items (product name, vial label, quantity — no price/subtotal) and item count; mount it from the header (T019) and the product page
 
-**Checkpoint**: Catalog browsing + product detail + cart-building are fully functional together.
+**Checkpoint**: Catalog browsing + product detail + quote-cart building are fully functional together, in both languages.
 
 ---
 
 ## Phase 5: User Story 3 - Age & Research-Use Acknowledgment Gate (Priority: P1)
 
-**Goal**: A customer cannot submit an order without explicitly acknowledging they are 18+ and that products are for research/laboratory use only, not for human consumption.
+**Goal**: A customer cannot submit a quote request without explicitly acknowledging they are 18+ and that products are for research/laboratory use only, not for human consumption.
 
-**Independent Test**: With ≥1 item in the cart, go to `/order`, attempt to submit without checking the acknowledgment control, and confirm the action is rejected with a clear message; check it and confirm the acknowledgment-specific block is lifted.
+**Independent Test**: With ≥1 item in the quote-cart, go to `/[locale]/quote`, attempt to submit without checking the acknowledgment control, and confirm the action is rejected with a clear localized message; check it and confirm the block is lifted.
 
 ### Implementation for User Story 3
 
-- [ ] T021 [US3] Implement `app/order/page.tsx` skeleton: render `cart-summary.tsx`, block navigation here with a message if the cart is empty (FR-008 empty-order case), and add the 18+/research-use acknowledgment checkbox control
-- [ ] T022 [US3] Implement `app/order/actions.ts` Server Action `submitOrder` (stub): parse input through `lib/order-schema.ts` (T009) and return `{ ok: false, error: { code: "VALIDATION_ERROR", ... } }` per contracts/submit-order.md when `ageAndResearchUseAck` is false/missing or `lineItems` is empty — full email-sending behavior completes in US4
-- [ ] T023 [US3] Wire the order page's submit control to call `submitOrder` and, on a `VALIDATION_ERROR` naming the acknowledgment field, highlight the checkbox and show the required message without clearing other form state (Acceptance Scenarios 1–2)
+- [ ] T027 [US3] Implement `app/[locale]/quote/page.tsx` skeleton: render `quote-summary.tsx`, block navigation here with a localized message if the cart is empty (FR-008 empty-request case), and add the 18+/research-use acknowledgment checkbox control
+- [ ] T028 [US3] Implement `app/[locale]/quote/actions.ts` Server Action `submitQuoteRequest` (stub): parse input through `lib/quote-schema.ts` (T014) and return `{ ok: false, error: { code: "VALIDATION_ERROR", ... } }` per contracts/submit-quote-request.md when `ageAndResearchUseAck` is false/missing or `lineItems` is empty — full email-sending behavior completes in US4
+- [ ] T029 [US3] Wire the quote page's submit control to call `submitQuoteRequest` and, on a `VALIDATION_ERROR` naming the acknowledgment field, highlight the checkbox and show the required localized message without clearing other form state (Acceptance Scenarios 1–2)
 
-**Checkpoint**: The acknowledgment gate is independently verifiable even before the full contact/shipping form exists.
+**Checkpoint**: The acknowledgment gate is independently verifiable even before the full contact form exists.
 
 ---
 
-## Phase 6: User Story 4 - Submit an Order Request (Priority: P1)
+## Phase 6: User Story 4 - Submit a Quote Request (Priority: P1)
 
-**Goal**: A customer completes contact/shipping details and submits their order; the business receives it by email; no payment is processed anywhere.
+**Goal**: A customer completes contact details and submits their quote request; the business receives it by email with no price shown or collected anywhere.
 
-**Independent Test**: Add a variant to the cart, fill the order form with valid contact/shipping data, check the acknowledgment, submit, and confirm both an on-screen confirmation and an order email are delivered per contracts/submit-order.md.
+**Independent Test**: Add a vial to the quote-cart, fill the form with valid contact data + country, check the acknowledgment, submit, and confirm both an on-screen confirmation and a notification email are delivered per contracts/submit-quote-request.md.
 
 ### Implementation for User Story 4
 
-- [ ] T024 [US4] Extend `app/order/page.tsx` with the contact/shipping form (`customerName`, `customerEmail`, optional `customerPhone`, `shippingAddress.{line1,line2,city,region,postalCode,country}`) using React Hook Form + `@hookform/resolvers/zod` bound to `lib/order-schema.ts`
-- [ ] T025 [US4] Implement `lib/email.ts`: Resend client wrapper `sendOrderEmail(order, resolvedLineItems)` sending one email to `ORDER_NOTIFICATION_EMAIL` containing line items (name, variant label, quantity, resolved price, subtotal, order total), contact info, shipping address, the acknowledgment flag, and a server-generated `submittedAt` timestamp (contracts/submit-order.md "Side Effects on Success")
-- [ ] T026 [US4] Complete `app/order/actions.ts` `submitOrder`: re-resolve every `productId`/`variantId` against `lib/products.ts` server-side (never trust client-submitted price/labels), compute authoritative totals, call `lib/email.ts` (T025), and return `OrderResult` per contracts/submit-order.md; map a per-item "no longer available" case to a `VALIDATION_ERROR` naming the affected line item (Edge Cases)
-- [ ] T027 [US4] Implement `app/order/confirmation/page.tsx`; on successful `submitOrder` response, clear the cart via `lib/cart-store.ts` and route the customer here (contracts/submit-order.md)
-- [ ] T028 [US4] Implement duplicate-submission guard on the order form using `useFormStatus`/`useTransition` pending state to disable the submit control while a request is in flight (FR-011)
-- [ ] T029 [US4] Handle the `EMAIL_DELIVERY_FAILED` result: show a clear retry message and preserve all entered form data on screen (FR-012)
-- [ ] T030 [US4] Render `fieldErrors` from a `VALIDATION_ERROR` `OrderResult` as inline, field-level messages next to the relevant form controls (FR-008)
+- [ ] T030 [US4] Extend `app/[locale]/quote/page.tsx` with the contact form (`customerName`, `customerEmail`, optional `customerPhone`, `country`, optional `notes`) using React Hook Form + `@hookform/resolvers/zod` bound to `lib/quote-schema.ts`
+- [ ] T031 [US4] Implement `lib/email.ts`: Resend client wrapper `sendQuoteRequestEmail(request, resolvedLineItems)` sending one email to `ORDER_NOTIFICATION_EMAIL` containing line items (product name, vial label, quantity — no price), contact info, country, notes, locale, the acknowledgment flag, and a server-generated `submittedAt` timestamp; if `RESEND_API_KEY` is unset, log the payload to the server console instead of sending (dev fallback per quickstart.md)
+- [ ] T032 [US4] Complete `app/[locale]/quote/actions.ts` `submitQuoteRequest`: re-resolve every `productId`/`vialId` against `lib/products.ts` server-side (never trust client-submitted labels), call `lib/email.ts` (T031), and return `QuoteRequestResult` per contracts/submit-quote-request.md; map a per-item "no longer available" case to a `VALIDATION_ERROR` naming the affected line item (Edge Cases)
+- [ ] T033 [US4] Implement `app/[locale]/quote/confirmation/page.tsx` with localized copy explaining the business will follow up with pricing; on successful `submitQuoteRequest` response, clear the cart via `lib/cart-store.ts` and route the customer here
+- [ ] T034 [US4] Implement duplicate-submission guard on the quote form using `useFormStatus`/`useTransition` pending state to disable the submit control while a request is in flight (FR-011)
+- [ ] T035 [US4] Handle the `EMAIL_DELIVERY_FAILED` result: show a clear localized retry message and preserve all entered form data on screen (FR-012)
+- [ ] T036 [US4] Render `fieldErrors` from a `VALIDATION_ERROR` `QuoteRequestResult` as inline, localized field-level messages next to the relevant form controls (FR-008)
 
-**Checkpoint**: All four user stories work together end-to-end: browse → view/select → acknowledge → submit → confirmation email.
+**Checkpoint**: All four user stories work together end-to-end in both languages: browse → view/select → acknowledge → submit → confirmation email.
 
 ---
 
@@ -124,14 +130,14 @@ description: "Task list for Peptide Storefront (Catalog + Order Capture)"
 
 **Purpose**: Verification and hardening across all stories
 
-- [ ] T031 [P] Responsive polish pass on `app/order/page.tsx` and `app/order/confirmation/page.tsx` per `/impeccable` guidance; verify no horizontal scrolling from 320px–1920px (FR-013, SC-005)
-- [ ] T032 [P] Accessibility pass across `app/page.tsx`, `app/products/[slug]/page.tsx`, and `app/order/page.tsx`: semantic landmarks, labeled form controls, keyboard-navigable variant selector and checkbox, sufficient color contrast, alt text on product images (Principle III)
-- [ ] T033 [P] Vitest unit tests for `lib/order-schema.ts` covering every rule in data-model.md's Validation Summary, in `tests/unit/order-schema.test.ts`
-- [ ] T034 [P] Vitest unit tests for `lib/cart-store.ts` (add/update/remove/clear), in `tests/unit/cart-store.test.ts`
-- [ ] T035 Playwright end-to-end test in `tests/e2e/order-flow.spec.ts` covering quickstart.md scenarios 1–4 (browse → product detail → acknowledgment gate → submit → confirmation)
-- [ ] T036 Manual verification of quickstart.md scenarios 5–7 (field validation errors, duplicate-submission guard, email-failure path with an invalid `RESEND_API_KEY`)
-- [ ] T037 [P] Add root `README.md` documenting local setup, required env vars, and pointers to `.specify/memory/constitution.md` and `specs/001-peptide-storefront/`
-- [ ] T038 Configure `RESEND_API_KEY` and `ORDER_NOTIFICATION_EMAIL` as Vercel project environment variables, deploy a preview, and confirm `npm run build` succeeds and the live preview passes quickstart.md scenario 4
+- [ ] T037 [P] Responsive polish pass on `app/[locale]/quote/page.tsx` and `app/[locale]/quote/confirmation/page.tsx` in both directions; verify no horizontal scrolling from 320px–1920px (FR-013, SC-005)
+- [ ] T038 [P] Accessibility pass across all pages: semantic landmarks, labeled form controls, keyboard-navigable vial selector and checkbox, sufficient color contrast, alt text on product images, correct `lang`/`dir` propagation (Principle III)
+- [ ] T039 [P] Vitest unit tests for `lib/quote-schema.ts` covering every rule in data-model.md's Validation Summary, in `tests/unit/quote-schema.test.ts`
+- [ ] T040 [P] Vitest unit tests for `lib/cart-store.ts` (add/update/remove/clear), in `tests/unit/cart-store.test.ts`
+- [ ] T041 Playwright end-to-end test in `tests/e2e/quote-flow.spec.ts` covering quickstart.md scenarios 1–4, run against both `/en` and `/ar`
+- [ ] T042 Manual verification of quickstart.md scenarios 5–7 (field validation errors, duplicate-submission guard, email-failure path)
+- [ ] T043 [P] Add root `README.md` documenting local setup, required env vars, the dev email-fallback behavior, and pointers to `.specify/memory/constitution.md` and `specs/001-peptide-storefront/`
+- [ ] T044 Configure `RESEND_API_KEY` and `ORDER_NOTIFICATION_EMAIL` as Vercel project environment variables, deploy a preview, and confirm `npm run build` succeeds and the live preview passes quickstart.md scenario 4 in both locales
 
 ---
 
@@ -140,42 +146,43 @@ description: "Task list for Peptide Storefront (Catalog + Order Capture)"
 ### Phase Dependencies
 
 - **Setup (Phase 1)**: No dependencies — start immediately
-- **Foundational (Phase 2)**: Depends on Setup — BLOCKS all user stories
+- **Foundational (Phase 2)**: Depends on Setup — BLOCKS all user stories (locale routing/messages are load-bearing for every page)
 - **User Story 1 (Phase 3)**: Depends only on Foundational
-- **User Story 2 (Phase 4)**: Depends only on Foundational (T017–T020 touch different files than US1; can run in parallel with Phase 3 if staffed)
-- **User Story 3 (Phase 5)**: Depends on Foundational (needs `lib/cart-store.ts`, `lib/order-schema.ts`) and on `cart-summary.tsx` from US2 (T020) to render the order page's cart view
-- **User Story 4 (Phase 6)**: Depends on User Story 3's `app/order/page.tsx` skeleton and `submitOrder` stub (T021–T022)
+- **User Story 2 (Phase 4)**: Depends only on Foundational (can run in parallel with Phase 3 if staffed)
+- **User Story 3 (Phase 5)**: Depends on Foundational and on `quote-summary.tsx` from US2 (T026)
+- **User Story 4 (Phase 6)**: Depends on User Story 3's `app/[locale]/quote/page.tsx` skeleton and `submitQuoteRequest` stub (T027–T028)
 - **Polish (Phase 7)**: Depends on all four user stories being complete
 
 ### Within Each User Story
 
-- US1: `product-card.tsx` (T014) before the catalog page that renders it (T015); responsive polish (T016) last
-- US2: `variant-selector.tsx` (T017) before the product page (T018); add-to-order wiring (T019) after; `cart-summary.tsx` (T020) can be built in parallel with T017–T019
-- US3: order page skeleton (T021) and the Server Action stub (T022) can be built in parallel, then wired together (T023)
-- US4: form fields (T024) and email wrapper (T025) can be built in parallel, then both feed the completed Server Action (T026); confirmation page, duplicate-guard, and error handling (T027–T030) follow
+- US1: `product-card.tsx` (T020) before the catalog page that renders it (T021); RTL/responsive polish (T022) last
+- US2: `vial-selector.tsx` (T023) before the product page (T024); add-to-quote wiring (T025) after; `quote-summary.tsx` (T026) can be built in parallel with T023–T025
+- US3: order page skeleton (T027) and the Server Action stub (T028) can be built in parallel, then wired together (T029)
+- US4: form fields (T030) and email wrapper (T031) can be built in parallel, then both feed the completed Server Action (T032); confirmation page, duplicate-guard, and error handling (T033–T036) follow
 
 ### Parallel Opportunities
 
-- Setup: T003, T004, T005, T006 in parallel after T001–T002
-- Foundational: T011 and T012 in parallel after T008–T010
+- Setup: T003–T006 in parallel after T001–T002
+- Foundational: T011/T012 (message files) in parallel; T016/T017/T018 in parallel after T013–T015
 - Once Foundational completes: Phase 3 (US1) and Phase 4 (US2) can proceed in parallel
-- Polish: T031–T034 and T037 in parallel; T035–T036 and T038 run after the app is feature-complete
+- Polish: T037–T040 and T043 in parallel; T041–T042 and T044 run after the app is feature-complete
 
 ---
 
 ## Parallel Example: Foundational Phase
 
 ```bash
-# After T008-T010 (types, schema, catalog data) land:
-Task: "Build components/disclaimer-banner.tsx rendering the standard research-use disclaimer"
-Task: "Build lib/cart-store.ts: React context + localStorage-backed cart state"
+# After T013-T015 (types, schema, catalog data) land:
+Task: "Build components/disclaimer-banner.tsx rendering the localized research-use disclaimer"
+Task: "Build lib/cart-store.ts: React context + localStorage-backed quote-cart state"
+Task: "Build components/locale-switcher.tsx"
 ```
 
 ## Parallel Example: User Story 2
 
 ```bash
-Task: "Build components/variant-selector.tsx with quantity 1-20 and subtotal calculation"
-Task: "Build components/cart-summary.tsx showing cart line items and running total"
+Task: "Build components/vial-selector.tsx with quantity 1-20, no price/subtotal"
+Task: "Build components/quote-summary.tsx showing quote-cart line items"
 ```
 
 ---
@@ -185,27 +192,29 @@ Task: "Build components/cart-summary.tsx showing cart line items and running tot
 ### MVP First (User Story 1 Only)
 
 1. Complete Phase 1: Setup
-2. Complete Phase 2: Foundational (CRITICAL — blocks all stories)
+2. Complete Phase 2: Foundational (CRITICAL — blocks all stories; includes i18n plumbing)
 3. Complete Phase 3: User Story 1 (Browse Catalog)
-4. **STOP and VALIDATE**: Load the catalog, confirm disclaimer + responsive layout
-5. Deploy/demo if ready — this alone proves out hosting, data model, and design direction
+4. **STOP and VALIDATE**: Load `/en` and `/ar`, confirm disclaimer + responsive + RTL layout
+5. Deploy/demo if ready — this alone proves out hosting, i18n, data model, and design direction
 
 ### Incremental Delivery
 
-1. Setup + Foundational → foundation ready
-2. Add US1 (Browse Catalog) → validate → demo
-3. Add US2 (Product Detail & Variant Selection) → validate → demo
+1. Setup + Foundational → foundation ready (locale routing + data working)
+2. Add US1 (Browse Catalog) → validate in both languages → demo
+3. Add US2 (Product Detail & Vial Selection) → validate → demo
 4. Add US3 (Acknowledgment Gate) → validate the block/unblock behavior → demo
-5. Add US4 (Submit Order) → validate end-to-end email delivery → this completes the commercial flow
+5. Add US4 (Submit Quote Request) → validate end-to-end email delivery → this completes the commercial flow
 6. Polish (Phase 7) → responsive/accessibility/test hardening → deploy to Vercel
 
 ### Notes
 
-- All four user stories are P1 because each is a mandatory link in the single
-  purchase-request chain described in spec.md; there is no meaningful partial
-  product without all four, but they remain independently testable per the
-  Independent Test criteria above.
-- Principle I (Legal & Compliance First) and Principle II (No Payment
-  Processing) apply across every phase — no task in this list introduces a
-  payment field, and the acknowledgment gate (US3) is enforced server-side
-  (T022/T026), not just in the UI.
+- All four user stories are P1 because each is a mandatory link in the
+  single quote-request chain described in spec.md; there is no meaningful
+  partial product without all four, but they remain independently testable
+  per the Independent Test criteria above.
+- Principle I (Legal & Compliance First), Principle II (No Payment
+  Processing), Principle III (Bilingual/RTL), and Principle V (no
+  published pricing) apply across every phase — no task in this list
+  introduces a payment field or a price/subtotal, every page task includes
+  both locales, and the acknowledgment gate (US3) is enforced server-side
+  (T028/T032), not just in the UI.

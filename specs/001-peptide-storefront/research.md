@@ -66,6 +66,41 @@ each choice and the alternatives considered, for future maintainers.
 - **Alternatives considered**: CSS Modules / styled-components — rejected,
   no reason to diverge from the Next.js + Tailwind default pairing.
 
+## Internationalization: `next-intl`
+
+- **Decision**: `next-intl` for locale routing (`/en`, `/ar`) and message
+  catalogs, with a `middleware.ts` handling locale detection/redirect and
+  `app/[locale]/layout.tsx` setting `<html lang dir>` (`dir="rtl"` for
+  Arabic).
+- **Rationale**: `next-intl` is the standard App Router i18n library —
+  handles routing, message loading, and pluralization with minimal config;
+  avoids hand-rolling locale detection/redirect logic.
+- **Alternatives considered**: Manual locale context + two static page
+  trees — rejected as more code to maintain for the same result; the
+  official `next-intl` App Router pattern is well-documented and small.
+
+## RTL layout strategy
+
+- **Decision**: Use Tailwind's logical-property utilities (`ps-`/`pe-`,
+  `start-`/`end-`, `text-start`) instead of physical `pl-`/`pr-`/`text-left`
+  wherever direction-sensitive, plus `dir="rtl"` on `<html>` for Arabic so
+  the browser flips default block/inline flow automatically.
+- **Rationale**: This is the lowest-maintenance way to get correct mirrored
+  layout without duplicating styles per direction.
+- **Alternatives considered**: Separate RTL stylesheet overrides — rejected
+  as extra surface to keep in sync with every future style change.
+
+## Pricing model: quote-request, no published prices
+
+- **Decision**: No price field anywhere in the data model or UI; the flow
+  is explicitly a "request a quote" submission, not a priced cart.
+- **Rationale**: The real product content the business provided has no
+  prices — it uses a "Contact us for more information" call to action. The
+  user confirmed this over the earlier price-per-vial assumption.
+- **Alternatives considered**: Price-per-vial with computed subtotal
+  (original plan) — superseded once real content and the user's explicit
+  choice ruled it out.
+
 ## Testing: Vitest + React Testing Library + Playwright
 
 - **Decision**: Vitest/RTL for unit/component tests (schema validation,
