@@ -141,6 +141,22 @@ description: "Task list for Peptide Storefront (Catalog + Quote-Request Capture,
 
 ---
 
+## Phase 8: Clarification Updates (2026-09-18)
+
+**Purpose**: Bring the built code in line with the spec clarifications (spec.md "Clarifications" section, FR-004, FR-009, FR-011a, Edge Cases). Earlier tasks that mention a 1–20 quantity, optional phone, or country-only address are superseded by these and by data-model.md.
+
+- [ ] T045 [P] [US2] Lower the per-line quantity cap from 20 to 10 in `lib/quote-schema.ts` (`1 <= quantity <= 10`, data-model.md) and add a schema rule rejecting duplicate `productId`+`vialId` pairs in `lineItems`
+- [ ] T046 [P] [US2] Lower the cap to 10 in `lib/cart-store.tsx`: the clamp in `updateQuantity` (`Math.min(20, ...)`) and the merge branch of `addItem` (summed quantity for an existing `productId`+`vialId` line must be capped at 10, not just added)
+- [ ] T047 [P] [US2] Change `max={20}` to `max={10}` on the quantity inputs in `components/vial-selector.tsx` and `components/quote-summary.tsx`, and make the out-of-range message name the maximum of 10 in `messages/en.json` and `messages/ar.json` (keep both files key-for-key in sync)
+- [ ] T048 [P] [US4] Create `lib/rate-limit.ts`: in-memory fixed-window per-IP limiter `checkRateLimit(ip): boolean` (e.g. 5 submissions per 10 minutes; prune expired entries so the map cannot grow unbounded)
+- [ ] T049 [US4] Update `app/[locale]/quote/actions.ts`: read the client IP from `headers()` (`x-forwarded-for`, first entry); call `checkRateLimit` first and return `{ ok: false, error: { code: "RATE_LIMITED", message } }` when exceeded; if the honeypot `website` field is non-empty return `{ ok: true }` without sending email; add `RATE_LIMITED` to the result type in `types/catalog.ts` (depends on T048)
+- [ ] T050 [US4] Add the honeypot to `components/quote-form.tsx`: a visually hidden `website` input (`tabIndex={-1}`, `autoComplete="off"`, `aria-hidden`, not announced to screen readers), included in the submitted payload and declared optional in `lib/quote-schema.ts`; render the `RATE_LIMITED` error with a localized retry-later message that preserves entered data (add `errors.rateLimited` to `messages/en.json` and `messages/ar.json`)
+- [ ] T051 [US4] Confirm `lib/email.ts` sends only to `ORDER_NOTIFICATION_EMAIL` (no customer copy) and omits the honeypot field from the emailed payload; confirm the cart is cleared only after `{ ok: true }` from a real send path (FR-009, Edge Cases persistence)
+- [ ] T052 [P] Update `tests/unit/quote-schema.test.ts` for quantity 10/11 boundaries and duplicate-pair rejection; update `tests/unit/cart-store.test.ts` for merge capped at 10 (call `__resetCartStoreForTests()` in `beforeEach`); add `tests/unit/rate-limit.test.ts` for the window and limit behavior
+- [ ] T053 Extend `tests/e2e/quote-flow.spec.ts` for quickstart.md scenarios 7–8 (honeypot silent discard, quantity 11 blocked, duplicate add merges to a single line) in both `/en` and `/ar`
+
+---
+
 ## Dependencies & Execution Order
 
 ### Phase Dependencies
@@ -152,6 +168,7 @@ description: "Task list for Peptide Storefront (Catalog + Quote-Request Capture,
 - **User Story 3 (Phase 5)**: Depends on Foundational and on `quote-summary.tsx` from US2 (T026)
 - **User Story 4 (Phase 6)**: Depends on User Story 3's `app/[locale]/quote/page.tsx` skeleton and `submitQuoteRequest` stub (T027–T028)
 - **Polish (Phase 7)**: Depends on all four user stories being complete
+- **Clarification Updates (Phase 8)**: Depends on Phases 1–7 (modifies existing code). T049 depends on T048; T050 depends on T049 and T045 (schema); T052–T053 run last
 
 ### Within Each User Story
 
@@ -166,6 +183,7 @@ description: "Task list for Peptide Storefront (Catalog + Quote-Request Capture,
 - Foundational: T011/T012 (message files) in parallel; T016/T017/T018 in parallel after T013–T015
 - Once Foundational completes: Phase 3 (US1) and Phase 4 (US2) can proceed in parallel
 - Polish: T037–T040 and T043 in parallel; T041–T042 and T044 run after the app is feature-complete
+- Clarification Updates: T045, T046, T047, T048 touch different files and can run in parallel; T049–T051 then run in order
 
 ---
 
