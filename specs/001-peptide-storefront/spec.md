@@ -16,6 +16,16 @@ consumption, framed around 'research areas of interest' rather than
 therapeutic claims, with an 18+ and research-use acknowledgment required
 before submission."
 
+## Clarifications
+
+### Session 2026-09-18
+
+- Q: How should the public quote form be protected against spam/bot submissions? → A: Hidden honeypot field plus a per-IP submission rate limit; no CAPTCHA.
+- Q: Should in-progress quote selections persist across reloads/return visits? → A: Yes, persisted in the browser's local storage; cleared after successful submission.
+- Q: What is the maximum quantity per line item? → A: 10 (minimum 1); the current implementation allows 20 and must be lowered to match.
+- Q: What happens when a product+vial already in the quote request is added again? → A: Quantities merge into the existing line, capped at 10.
+- Q: Does the customer also get a confirmation email? → A: No; on-screen confirmation only, and only the business is emailed.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Browse Product Catalog (Priority: P1)
@@ -151,11 +161,14 @@ step anywhere in the flow.
   unavailable while a customer is mid-request? System MUST surface which
   item is affected and let the customer adjust before resubmitting.
 - What happens if a customer navigates away and returns before submitting?
-  In-progress selections are not guaranteed to persist across a full page
-  reload (see Assumptions).
+  In-progress selections MUST persist in the visitor's browser across
+  reloads and return visits, and MUST be cleared after a successful
+  submission. If browser storage is unavailable, the flow still works
+  for the current page session.
 - How does the system handle extremely large quantities entered for a
-  line item? System MUST enforce a sane minimum (1) and reasonable maximum
-  per line item and reject out-of-range values with a clear message.
+  line item? System MUST enforce a minimum of 1 and a maximum of 10 per
+  line item, on both client and server, and reject out-of-range values
+  with a clear message.
 - What happens on very narrow (≥320px) or very wide (up to 1920px)
   viewports, in either language? Layout MUST remain fully usable with no
   horizontal scrolling or overlapping content at any breakpoint in that
@@ -178,7 +191,9 @@ step anywhere in the flow.
   full research-area description, available vial size(s), and any
   available purity information.
 - **FR-004**: Users MUST be able to select a vial size and a quantity and
-  add that selection as a line item to their quote request.
+  add that selection as a line item to their quote request. Adding a
+  product+vial already in the request MUST merge into the existing line
+  (one line per product+vial), summing quantities capped at 10.
 - **FR-005**: Users MUST be able to review their full quote request (all
   line items, vials, and quantities) before submitting it. No price or
   subtotal is calculated or displayed anywhere in the product or
@@ -199,13 +214,19 @@ step anywhere in the flow.
   quote request (line items, vials, quantities, contact info, country, any
   notes, and the recorded acknowledgment) to the business via email, and
   MUST show the customer an on-screen confirmation explaining the business
-  will follow up with pricing. System MUST NOT process any payment or
+  will follow up with pricing. No confirmation or copy email is sent to
+  the customer; the business is the only email recipient. System MUST NOT
+  process any payment or
   display any price as part of this flow.
 - **FR-010**: System MUST NOT collect, store, transmit, or display any
   payment card, other payment credential, or product price anywhere in the
   product or quote-request flow.
 - **FR-011**: System MUST prevent duplicate submissions resulting from
   repeated/rapid submit actions on the same request.
+- **FR-011a**: System MUST include a hidden honeypot field in the quote
+  form and silently discard submissions that fill it, and MUST apply a
+  per-IP rate limit to submissions, showing a clear retry-later message
+  when exceeded. No CAPTCHA or third-party challenge is used.
 - **FR-012**: If notification email delivery fails, System MUST inform the
   customer clearly and preserve their entered data on screen so they can
   retry without re-entering everything.
