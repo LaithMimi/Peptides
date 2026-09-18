@@ -19,7 +19,7 @@ export async function submitQuoteRequest(
   if (!parsed.success) {
     const fieldErrors: Record<string, string> = {};
     for (const issue of parsed.error.issues) {
-      const key = issue.path[0]?.toString() ?? "form";
+      const key = issue.path.length > 0 ? issue.path.join(".") : "form";
       const code = typeof issue.message === "string" ? issue.message : "required";
       fieldErrors[key] = translateErrorCode(code, t);
     }

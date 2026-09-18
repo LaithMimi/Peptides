@@ -15,12 +15,21 @@ export const lineItemSchema = z
     { message: "itemUnavailable" }
   );
 
+export const addressSchema = z.object({
+  line1: z.string().trim().min(1, { message: "required" }),
+  line2: z.string().trim().optional().nullable(),
+  city: z.string().trim().min(1, { message: "required" }),
+  region: z.string().trim().min(1, { message: "required" }),
+  postalCode: z.string().trim().min(1, { message: "required" }),
+  country: z.string().trim().min(1, { message: "required" }),
+});
+
 export const quoteRequestSchema = z.object({
   lineItems: z.array(lineItemSchema).min(1, { message: "emptyCart" }),
   customerName: z.string().trim().min(1, { message: "required" }),
   customerEmail: z.string().trim().email({ message: "invalidEmail" }),
-  customerPhone: z.string().trim().optional().nullable(),
-  country: z.string().trim().min(1, { message: "required" }),
+  customerPhone: z.string().trim().min(1, { message: "required" }),
+  shippingAddress: addressSchema,
   notes: z.string().trim().optional().nullable(),
   ageAndResearchUseAck: z.literal(true, {
     error: "ackRequired",

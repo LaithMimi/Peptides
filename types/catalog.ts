@@ -33,12 +33,21 @@ export interface ResolvedLineItem extends LineItem {
   vialLabel: string;
 }
 
+export interface Address {
+  line1: string;
+  line2?: string | null;
+  city: string;
+  region: string;
+  postalCode: string;
+  country: string;
+}
+
 export interface QuoteRequestInput {
   lineItems: LineItem[];
   customerName: string;
   customerEmail: string;
-  customerPhone?: string | null;
-  country: string;
+  customerPhone: string;
+  shippingAddress: Address;
   notes?: string | null;
   ageAndResearchUseAck: boolean;
   locale: Locale;

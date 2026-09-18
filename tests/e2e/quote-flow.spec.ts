@@ -24,7 +24,12 @@ test.describe("quote request flow (English)", () => {
     // surface a validation error and not navigate away.
     await page.getByLabel("Full name").fill("Jane Researcher");
     await page.getByLabel("Email address").fill("jane@example.com");
-    await page.getByLabel("Country / region").fill("United States");
+    await page.getByLabel("Phone number").fill("+1 555 0100");
+    await page.getByLabel("Address line 1").fill("123 Lab Way");
+    await page.getByLabel("City").fill("Cambridge");
+    await page.getByLabel("State / region").fill("MA");
+    await page.getByLabel("Postal code").fill("02139");
+    await page.getByLabel("Country").fill("United States");
     await page.getByRole("button", { name: "Submit quote request" }).click();
     await expect(page).toHaveURL(/\/en\/quote$/);
 

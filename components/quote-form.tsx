@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type FieldPath } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
@@ -48,7 +48,14 @@ export function QuoteForm() {
       customerName: "",
       customerEmail: "",
       customerPhone: "",
-      country: "",
+      shippingAddress: {
+        line1: "",
+        line2: "",
+        city: "",
+        region: "",
+        postalCode: "",
+        country: "",
+      },
       notes: "",
       ageAndResearchUseAck: undefined as unknown as true,
     },
@@ -82,17 +89,22 @@ export function QuoteForm() {
     }
 
     if (result.error.code === "VALIDATION_ERROR" && result.error.fieldErrors) {
-      const formFields = new Set<keyof QuoteContactFormValues>([
+      const knownFieldPaths = new Set([
         "customerName",
         "customerEmail",
         "customerPhone",
-        "country",
+        "shippingAddress.line1",
+        "shippingAddress.line2",
+        "shippingAddress.city",
+        "shippingAddress.region",
+        "shippingAddress.postalCode",
+        "shippingAddress.country",
         "notes",
         "ageAndResearchUseAck",
       ]);
       for (const [field, message] of Object.entries(result.error.fieldErrors)) {
-        if (formFields.has(field as keyof QuoteContactFormValues)) {
-          setError(field as keyof QuoteContactFormValues, { message });
+        if (knownFieldPaths.has(field)) {
+          setError(field as FieldPath<QuoteContactFormValues>, { message });
         }
       }
     }
@@ -139,7 +151,7 @@ export function QuoteForm() {
       </Field>
 
       <Field
-        label={`${t("phoneLabel")} (${t("phoneOptional")})`}
+        label={t("phoneLabel")}
         htmlFor="customerPhone"
         error={translateFieldError(errors.customerPhone?.message)}
       >
@@ -151,14 +163,91 @@ export function QuoteForm() {
         />
       </Field>
 
-      <Field
-        label={t("countryLabel")}
-        htmlFor="country"
-        help={t("countryHelp")}
-        error={translateFieldError(errors.country?.message)}
-      >
-        <input id="country" type="text" {...register("country")} className={inputClass} />
-      </Field>
+      <fieldset className="flex flex-col gap-4 border-t border-dashed border-border pt-5">
+        <legend className="-mt-[1.9rem] bg-surface px-0 font-serif text-sm font-semibold uppercase tracking-wide text-navy">
+          {t("addressSectionTitle")}
+        </legend>
+
+        <Field
+          label={t("addressLine1Label")}
+          htmlFor="addressLine1"
+          error={translateFieldError(errors.shippingAddress?.line1?.message)}
+        >
+          <input
+            id="addressLine1"
+            type="text"
+            {...register("shippingAddress.line1")}
+            className={inputClass}
+          />
+        </Field>
+
+        <Field
+          label={`${t("addressLine2Label")} (${t("addressLine2Optional")})`}
+          htmlFor="addressLine2"
+          error={translateFieldError(errors.shippingAddress?.line2?.message)}
+        >
+          <input
+            id="addressLine2"
+            type="text"
+            {...register("shippingAddress.line2")}
+            className={inputClass}
+          />
+        </Field>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Field
+            label={t("cityLabel")}
+            htmlFor="addressCity"
+            error={translateFieldError(errors.shippingAddress?.city?.message)}
+          >
+            <input
+              id="addressCity"
+              type="text"
+              {...register("shippingAddress.city")}
+              className={inputClass}
+            />
+          </Field>
+
+          <Field
+            label={t("regionLabel")}
+            htmlFor="addressRegion"
+            error={translateFieldError(errors.shippingAddress?.region?.message)}
+          >
+            <input
+              id="addressRegion"
+              type="text"
+              {...register("shippingAddress.region")}
+              className={inputClass}
+            />
+          </Field>
+
+          <Field
+            label={t("postalCodeLabel")}
+            htmlFor="addressPostalCode"
+            error={translateFieldError(errors.shippingAddress?.postalCode?.message)}
+          >
+            <input
+              id="addressPostalCode"
+              type="text"
+              {...register("shippingAddress.postalCode")}
+              className={inputClass}
+            />
+          </Field>
+
+          <Field
+            label={t("countryLabel")}
+            htmlFor="addressCountry"
+            error={translateFieldError(errors.shippingAddress?.country?.message)}
+          >
+            <input
+              id="addressCountry"
+              type="text"
+              {...register("shippingAddress.country")}
+              className={inputClass}
+            />
+          </Field>
+        </div>
+      </fieldset>
 
       <Field
         label={`${t("notesLabel")} (${t("notesOptional")})`}

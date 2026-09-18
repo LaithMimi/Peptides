@@ -32,9 +32,10 @@ insider, community feel rather than a faceless shop.
 
 Visitor browses the catalog (English or Arabic) → opens a product → selects
 a vial size + quantity → adds it to a quote-cart → fills in contact details
-(name, email, phone optional, country, notes) → confirms an 18+/research-use
-acknowledgment → submits. The business receives the request by email and
-replies directly with pricing and next steps. No account, session, or
+(name, email, phone, full shipping address, optional notes) → confirms an
+18+/research-use acknowledgment → submits. The business receives the
+request by email, with everything needed to ship once a quote is accepted,
+and replies directly with pricing and next steps. No account, session, or
 payment step exists anywhere in this flow.
 
 ## Capabilities and Constraints

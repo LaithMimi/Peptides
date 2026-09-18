@@ -188,8 +188,10 @@ step anywhere in the flow.
   research/laboratory use only, not for human consumption, and MUST block
   submission until this acknowledgment is given.
 - **FR-007**: System MUST collect customer contact information (name,
-  email; phone optional), a country/region (for shipping feasibility), and
-  an optional free-text note, as part of quote-request submission.
+  email, phone — all required) and a full shipping address (address
+  line 1, optional address line 2, city, state/region, postal code,
+  country — all except line 2 required), plus an optional free-text
+  note, as part of quote-request submission.
 - **FR-008**: System MUST validate required fields (non-empty required
   fields, valid email format, at least one line item) and block submission
   with clear, field-level errors when validation fails.
@@ -225,8 +227,9 @@ step anywhere in the flow.
 - **Vial**: A specific size/strength option of a product (e.g., "10 mg").
   No price field exists on this entity.
 - **Quote Request**: A single submitted request — customer contact info
-  (name, email, optional phone), country/region, optional note, one or more
-  line items (product + vial + quantity), the recorded 18+/research-use
+  (name, email, phone), a full shipping address (line 1, optional line 2,
+  city, region, postal code, country), optional note, one or more line
+  items (product + vial + quantity), the recorded 18+/research-use
   acknowledgment, and a submission timestamp. Contains no payment or
   pricing information.
 - **Line Item**: A single product/vial/quantity selection within a quote
@@ -267,9 +270,10 @@ step anywhere in the flow.
   in-app; the business determines and communicates pricing after reviewing
   a submitted quote request, consistent with the no-payment-gateway,
   no-published-price scope.
-- Full shipping address (street/city/postal code) is not collected at
-  quote-request time — only country/region, to gauge shipping feasibility;
-  the business collects a full address later once a quote is accepted.
+- A full shipping address (street, city, region, postal code, country) and
+  a phone number are collected at quote-request time — required fields —
+  since the business ships directly once a quote is accepted and needs
+  both to do so without a follow-up round trip.
 - Notification emails are delivered via a transactional email service to
   the business; the specific provider is an implementation detail decided
   during planning.

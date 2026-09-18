@@ -5,8 +5,15 @@ const validInput = {
   lineItems: [{ productId: "tb-500", vialId: "10mg", quantity: 2 }],
   customerName: "Jane Researcher",
   customerEmail: "jane@example.com",
-  customerPhone: null,
-  country: "United States",
+  customerPhone: "+1 555 0100",
+  shippingAddress: {
+    line1: "123 Lab Way",
+    line2: null,
+    city: "Cambridge",
+    region: "MA",
+    postalCode: "02139",
+    country: "United States",
+  },
   notes: null,
   ageAndResearchUseAck: true as const,
   locale: "en" as const,
@@ -69,7 +76,23 @@ describe("quoteRequestSchema", () => {
   });
 
   it("rejects an empty country", () => {
-    const result = quoteRequestSchema.safeParse({ ...validInput, country: "" });
+    const result = quoteRequestSchema.safeParse({
+      ...validInput,
+      shippingAddress: { ...validInput.shippingAddress, country: "" },
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects a missing phone number", () => {
+    const result = quoteRequestSchema.safeParse({ ...validInput, customerPhone: "" });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects an incomplete shipping address", () => {
+    const result = quoteRequestSchema.safeParse({
+      ...validInput,
+      shippingAddress: { ...validInput.shippingAddress, line1: "" },
+    });
     expect(result.success).toBe(false);
   });
 

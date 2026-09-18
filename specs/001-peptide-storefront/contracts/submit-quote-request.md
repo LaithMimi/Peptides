@@ -19,8 +19,15 @@ price.**
   }>;
   customerName: string;
   customerEmail: string;
-  customerPhone?: string | null;
-  country: string;
+  customerPhone: string;
+  shippingAddress: {
+    line1: string;
+    line2?: string | null;
+    city: string;
+    region: string;
+    postalCode: string;
+    country: string;
+  };
   notes?: string | null;
   ageAndResearchUseAck: boolean;
   locale: "en" | "ar";
@@ -70,9 +77,10 @@ preserve entered data):
 
 - Exactly one email is sent to the business notification address
   (`ORDER_NOTIFICATION_EMAIL` env var) containing: all line items (product
-  name, vial label, quantity — no price), customer contact info, country,
-  any notes, the recorded acknowledgment, the submission locale, and a
-  server-generated `submittedAt` timestamp.
+  name, vial label, quantity — no price), customer contact info (name,
+  email, phone), the full shipping address, any notes, the recorded
+  acknowledgment, the submission locale, and a server-generated
+  `submittedAt` timestamp.
 - The client-side quote-cart is cleared and the customer is routed to
   `app/[locale]/quote/confirmation`.
 

@@ -63,12 +63,23 @@ Never persisted — exists only as the payload sent to the email step.
 | `lineItems` | `LineItem[]` | At least 1 (FR-008: cannot submit an empty request) |
 | `customerName` | string | Required, non-empty |
 | `customerEmail` | string | Required, valid email format |
-| `customerPhone` | string \| null | Optional |
-| `country` | string | Required (used only to gauge shipping feasibility — see Assumptions) |
+| `customerPhone` | string | Required, non-empty (the business ships directly once a quote is accepted and needs a reachable number) |
+| `shippingAddress` | `Address` | Required (see below) |
 | `notes` | string \| null | Optional free-text note from the customer |
 | `ageAndResearchUseAck` | boolean | Must be `true` — server rejects the request if `false`/missing (FR-006, Principle I) |
 | `locale` | "en" \| "ar" | The language the request was submitted in, included so the business can reply in kind |
 | `submittedAt` | ISO datetime string | Set server-side at processing time, not client-supplied |
+
+### Address (embedded in Quote Request as `shippingAddress`)
+
+| Field | Type | Rules |
+|---|---|---|
+| `line1` | string | Required, non-empty |
+| `line2` | string \| null | Optional |
+| `city` | string | Required, non-empty |
+| `region` | string | Required, non-empty (state/province) |
+| `postalCode` | string | Required, non-empty |
+| `country` | string | Required, non-empty |
 
 ## Validation Summary (enforced in `lib/quote-schema.ts`, shared client+server)
 
@@ -77,7 +88,9 @@ Never persisted — exists only as the payload sent to the email step.
   product/vial in `lib/products.ts` (re-checked server-side)
 - `1 <= quantity <= 20` per line item
 - `customerEmail` matches standard email format
-- `customerName` and `country` non-empty
+- `customerName` and `customerPhone` non-empty
+- `shippingAddress.{line1,city,region,postalCode,country}` all non-empty
+  (`line2` is the only optional address field)
 - `ageAndResearchUseAck === true` (hard requirement; request rejected
   otherwise — this is the server-side enforcement of Principle I, not just
   a disabled button in the UI)
