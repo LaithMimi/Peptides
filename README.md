@@ -1,4 +1,4 @@
-# Aether Peptides — storefront
+# Pep Club — storefront
 
 A responsive, bilingual (English + Arabic/RTL) catalog site for research
 peptides. There is no payment gateway and no published pricing — visitors
@@ -7,8 +7,10 @@ pricing and next steps.
 
 See `.specify/memory/constitution.md` for the project's non-negotiable
 principles (legal/compliance framing, no payment processing, bilingual UI,
-no published pricing) and `specs/001-peptide-storefront/` for the full
-spec, plan, and task breakdown this app was built from.
+no published pricing), `specs/001-peptide-storefront/` for the full spec,
+plan, and task breakdown this app was built from, `PRODUCT.md` for the
+brand/product context, and `DESIGN.md` for the visual system ("the
+Vial-Label System") this UI implements.
 
 ## Getting started
 

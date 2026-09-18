@@ -19,7 +19,7 @@ export function LocaleSwitcher() {
 
   return (
     <div
-      className="inline-flex items-center gap-1 rounded-full border border-border bg-surface p-1"
+      className="inline-flex items-center gap-1 rounded-full border-2 border-navy bg-surface p-1"
       role="group"
       aria-label={t("language")}
     >
@@ -36,10 +36,10 @@ export function LocaleSwitcher() {
               });
             }}
             aria-pressed={active}
-            className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
+            className={`rounded-full px-3 py-1 font-mono text-xs font-semibold tracking-wide transition-colors ${
               active
-                ? "bg-primary text-primary-foreground"
-                : "text-muted hover:text-foreground"
+                ? "bg-navy text-navy-foreground"
+                : "text-muted hover:text-navy"
             }`}
           >
             {LOCALE_LABELS[loc] ?? loc}

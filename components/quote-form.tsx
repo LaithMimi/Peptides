@@ -100,9 +100,15 @@ export function QuoteForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+      className="flex flex-col gap-5 rounded-xl border border-border-strong bg-surface p-5 sm:p-6"
+    >
       <div>
-        <h2 className="text-lg font-semibold text-foreground">{t("title")}</h2>
+        <h2 className="font-serif text-xl font-semibold uppercase tracking-wide text-navy">
+          {t("title")}
+        </h2>
         <p className="mt-1 text-sm text-muted">{t("intro")}</p>
       </div>
 
@@ -172,7 +178,7 @@ export function QuoteForm() {
         <input
           type="checkbox"
           {...register("ageAndResearchUseAck")}
-          className="mt-1 size-4 shrink-0 rounded border-border text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+          className="mt-1 size-4 shrink-0 rounded border-border-strong text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
         />
         <span>{t("ackLabel")}</span>
       </label>
@@ -191,7 +197,7 @@ export function QuoteForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex w-fit items-center justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="inline-flex w-fit items-center justify-center rounded-full bg-accent px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
       >
         {isSubmitting ? t("submitting") : t("submit")}
       </button>
@@ -200,7 +206,7 @@ export function QuoteForm() {
 }
 
 const inputClass =
-  "w-full rounded-md border border-border bg-surface px-3 py-2 text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary";
+  "w-full rounded-md border border-border-strong bg-surface-raised px-3 py-2 text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent";
 
 function Field({
   label,
@@ -217,7 +223,10 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={htmlFor} className="text-sm font-medium text-foreground">
+      <label
+        htmlFor={htmlFor}
+        className="font-mono text-xs font-semibold uppercase tracking-widest text-muted"
+      >
         {label}
       </label>
       {children}

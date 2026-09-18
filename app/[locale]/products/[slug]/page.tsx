@@ -1,10 +1,11 @@
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getActiveProducts, getProductById } from "@/lib/products";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 import { VialSelector } from "@/components/vial-selector";
+import { VialGlyph } from "@/components/vial-glyph";
+import { LtrValue } from "@/components/ltr-value";
 import type { Locale } from "@/i18n/routing";
 
 export function generateStaticParams() {
@@ -29,7 +30,10 @@ export default async function ProductPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <Link href="/" className="w-fit text-sm font-medium text-primary hover:underline">
+      <Link
+        href="/"
+        className="w-fit font-mono text-xs font-semibold uppercase tracking-widest text-accent hover:underline"
+      >
         <span aria-hidden="true" className="me-1 inline-block rtl:rotate-180">
           ←
         </span>
@@ -37,20 +41,22 @@ export default async function ProductPage({
       </Link>
 
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        <div className="aspect-square w-full overflow-hidden rounded-xl border border-border bg-surface">
-          <Image
-            src={product.image}
-            alt=""
-            width={600}
-            height={600}
-            priority
-            className="h-full w-full object-cover"
-          />
+        <div className="flex aspect-square w-full flex-col items-center justify-center gap-4 rounded-2xl border-2 border-navy bg-surface-raised p-8">
+          <VialGlyph className="size-28 text-accent" />
+          <p className="font-serif text-2xl font-semibold uppercase tracking-wide text-navy">
+            {product.name}
+          </p>
+          <div className="mt-2 rounded-full border border-border-strong bg-surface px-4 py-1 font-mono text-xs uppercase tracking-widest text-muted">
+            <LtrValue>
+              {product.vials.map((v) => v.label).join(" / ")}
+              {product.purity ? ` · ${product.purity}` : ""}
+            </LtrValue>
+          </div>
         </div>
 
         <div className="flex flex-col gap-5">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+            <h1 className="font-serif text-2xl font-semibold uppercase tracking-wide text-navy sm:text-3xl">
               {product.name}
             </h1>
             <p className="mt-1 text-muted">{translation.tagline}</p>
@@ -58,23 +64,31 @@ export default async function ProductPage({
 
           <p className="text-foreground">{translation.description}</p>
 
-          <dl className="grid grid-cols-2 gap-4 text-sm">
+          <dl className="grid grid-cols-2 gap-4 border-y border-dashed border-border py-4 text-sm">
             <div>
-              <dt className="font-medium text-muted">{t("vialLabel")}</dt>
-              <dd className="text-foreground">
-                {product.vials.map((v) => v.label).join(", ")}
+              <dt className="font-mono text-xs font-semibold uppercase tracking-widest text-muted">
+                {t("vialLabel")}
+              </dt>
+              <dd className="mt-1 font-mono text-foreground">
+                <LtrValue>{product.vials.map((v) => v.label).join(", ")}</LtrValue>
               </dd>
             </div>
             {product.purity && (
               <div>
-                <dt className="font-medium text-muted">{t("purityLabel")}</dt>
-                <dd className="text-foreground">{product.purity}</dd>
+                <dt className="font-mono text-xs font-semibold uppercase tracking-widest text-muted">
+                  {t("purityLabel")}
+                </dt>
+                <dd className="mt-1 font-mono text-foreground">
+                  <LtrValue>{product.purity}</LtrValue>
+                </dd>
               </div>
             )}
           </dl>
 
           <div>
-            <h2 className="font-medium text-foreground">{t("researchAreasTitle")}</h2>
+            <h2 className="font-serif text-sm font-semibold uppercase tracking-wide text-navy">
+              {t("researchAreasTitle")}
+            </h2>
             <ul className="mt-2 list-disc space-y-1 ps-5 text-foreground">
               {translation.researchAreas.map((area) => (
                 <li key={area}>{area}</li>

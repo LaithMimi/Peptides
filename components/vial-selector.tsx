@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { Vial } from "@/types/catalog";
 import { useCart } from "@/lib/cart-store";
+import { LtrValue } from "@/components/ltr-value";
 
 export function VialSelector({
   productId,
@@ -33,9 +34,9 @@ export function VialSelector({
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 rounded-xl border border-border-strong bg-surface p-5">
       <fieldset>
-        <legend className="text-sm font-medium text-foreground">
+        <legend className="font-mono text-xs font-semibold uppercase tracking-widest text-muted">
           {t("selectVial")}
         </legend>
         <div className="mt-2 flex flex-wrap gap-2">
@@ -44,10 +45,10 @@ export function VialSelector({
             return (
               <label
                 key={vial.id}
-                className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                className={`cursor-pointer rounded-full border-2 px-4 py-2 font-serif text-sm font-semibold uppercase tracking-wide transition-colors ${
                   active
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border bg-surface text-foreground hover:border-primary"
+                    ? "border-navy bg-navy text-navy-foreground"
+                    : "border-border-strong bg-surface-raised text-navy hover:border-navy"
                 }`}
               >
                 <input
@@ -62,7 +63,7 @@ export function VialSelector({
                   }}
                   className="sr-only"
                 />
-                {vial.label}
+                <LtrValue>{vial.label}</LtrValue>
               </label>
             );
           })}
@@ -70,7 +71,10 @@ export function VialSelector({
       </fieldset>
 
       <div className="flex items-center gap-3">
-        <label htmlFor="quantity" className="text-sm font-medium text-foreground">
+        <label
+          htmlFor="quantity"
+          className="font-mono text-xs font-semibold uppercase tracking-widest text-muted"
+        >
           {t("quantityLabel")}
         </label>
         <input
@@ -84,7 +88,7 @@ export function VialSelector({
             setQuantity(Number.isFinite(next) ? Math.max(1, Math.min(20, next)) : 1);
             setAdded(false);
           }}
-          className="w-20 rounded-md border border-border bg-surface px-3 py-1.5 text-foreground"
+          className="w-20 rounded-md border border-border-strong bg-surface-raised px-3 py-1.5 font-mono text-foreground"
         />
       </div>
 
@@ -94,7 +98,7 @@ export function VialSelector({
         </p>
       )}
       {added && !error && (
-        <p role="status" className="text-sm text-primary">
+        <p role="status" className="text-sm font-medium text-accent">
           {t("addedToQuote")}
         </p>
       )}
@@ -102,7 +106,7 @@ export function VialSelector({
       <button
         type="button"
         onClick={handleAdd}
-        className="inline-flex w-fit items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
+        className="inline-flex w-fit items-center justify-center rounded-full bg-accent px-5 py-2.5 font-serif text-sm font-semibold uppercase tracking-wide text-accent-foreground transition-opacity hover:opacity-90"
       >
         {t("addToQuote")}
       </button>

@@ -1,36 +1,43 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useCart } from "@/lib/cart-store";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 
 export function SiteHeader() {
-  const tSite = useTranslations("site");
   const tNav = useTranslations("nav");
   const { items } = useCart();
   const count = items.reduce((sum, i) => sum + i.quantity, 0);
 
   return (
-    <header className="border-b border-border bg-surface">
-      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
-        <Link href="/" className="text-lg font-semibold text-foreground">
-          {tSite("name")}
+    <header className="border-b-4 border-double border-navy bg-surface">
+      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+        <Link href="/" className="flex items-center" aria-label="Pep Club — home">
+          <Image
+            src="/brand/pep-club-logo.jpeg"
+            alt="Pep Club — Premium Peptides"
+            width={168}
+            height={168}
+            priority
+            className="brand-mark h-14 w-14 object-contain sm:h-16 sm:w-16"
+          />
         </Link>
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-2 sm:gap-4">
           <Link
             href="/"
-            className="text-sm font-medium text-foreground hover:text-primary"
+            className="rounded px-2 py-1 font-serif text-sm font-semibold uppercase tracking-wide text-navy hover:text-accent"
           >
             {tNav("catalog")}
           </Link>
           <Link
             href="/quote"
-            className="relative text-sm font-medium text-foreground hover:text-primary"
+            className="relative rounded px-2 py-1 font-serif text-sm font-semibold uppercase tracking-wide text-navy hover:text-accent"
           >
             {tNav("quote")}
             {count > 0 && (
-              <span className="ms-1 inline-flex min-w-5 items-center justify-center rounded-full bg-accent px-1.5 py-0.5 text-xs font-semibold text-accent-foreground">
+              <span className="ms-1 inline-flex min-w-5 items-center justify-center rounded-full bg-accent px-1.5 py-0.5 font-sans text-xs font-semibold text-accent-foreground">
                 {count}
               </span>
             )}

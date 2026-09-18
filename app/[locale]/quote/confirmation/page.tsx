@@ -11,15 +11,20 @@ export default async function QuoteConfirmationPage({
   const t = await getTranslations("confirmation");
 
   return (
-    <div className="mx-auto flex max-w-xl flex-col items-center gap-4 py-12 text-center">
-      <div className="flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
-        <CheckIcon className="size-7" />
+    <div className="mx-auto flex max-w-xl flex-col items-center gap-4 rounded-2xl border-2 border-dashed border-border-strong py-14 text-center">
+      <div
+        className="flex size-20 -rotate-6 items-center justify-center rounded-full border-4 border-double border-stamp text-stamp"
+        aria-hidden="true"
+      >
+        <CheckIcon className="size-8" />
       </div>
-      <h1 className="text-2xl font-semibold text-foreground">{t("title")}</h1>
-      <p className="text-muted">{t("body")}</p>
+      <h1 className="font-serif text-2xl font-semibold uppercase tracking-wide text-navy">
+        {t("title")}
+      </h1>
+      <p className="max-w-sm text-muted">{t("body")}</p>
       <Link
         href="/"
-        className="mt-2 inline-flex items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+        className="mt-2 inline-flex items-center justify-center rounded-full bg-navy px-6 py-2.5 font-serif text-sm font-semibold uppercase tracking-wide text-navy-foreground transition-opacity hover:opacity-90"
       >
         {t("backToCatalog")}
       </Link>

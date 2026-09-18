@@ -4,6 +4,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useCart } from "@/lib/cart-store";
 import { getProductById } from "@/lib/products";
+import { LtrValue } from "@/components/ltr-value";
 import type { Locale } from "@/i18n/routing";
 
 export function QuoteSummary({ showLink = true }: { showLink?: boolean }) {
@@ -13,11 +14,11 @@ export function QuoteSummary({ showLink = true }: { showLink?: boolean }) {
 
   if (items.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed border-border p-6 text-center">
+      <div className="rounded-xl border-2 border-dashed border-border-strong p-6 text-center">
         <p className="text-muted">{t("empty")}</p>
         <Link
           href="/"
-          className="mt-3 inline-block text-sm font-medium text-primary hover:underline"
+          className="mt-3 inline-block font-serif text-sm font-semibold text-accent hover:underline"
         >
           {t("browseCatalog")}
         </Link>
@@ -26,9 +27,11 @@ export function QuoteSummary({ showLink = true }: { showLink?: boolean }) {
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      <h2 className="font-semibold text-foreground">{t("itemsTitle")}</h2>
-      <ul className="flex flex-col gap-2">
+    <div className="flex flex-col gap-3 rounded-xl border border-border-strong bg-surface p-5">
+      <h2 className="font-mono text-xs font-semibold uppercase tracking-widest text-muted">
+        {t("itemsTitle")}
+      </h2>
+      <ul className="flex flex-col divide-y divide-dashed divide-border">
         {items.map((item) => {
           const product = getProductById(item.productId);
           const vial = product?.vials.find((v) => v.id === item.vialId);
@@ -37,12 +40,14 @@ export function QuoteSummary({ showLink = true }: { showLink?: boolean }) {
           return (
             <li
               key={`${item.productId}-${item.vialId}`}
-              className="flex items-center justify-between gap-3 rounded-lg border border-border bg-surface px-4 py-3"
+              className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
             >
               <div>
-                <p className="font-medium text-foreground">{product.name}</p>
-                <p className="text-sm text-muted">
-                  {vial.label} · {translation.tagline}
+                <p className="font-serif font-semibold uppercase tracking-wide text-navy">
+                  {product.name}
+                </p>
+                <p className="font-mono text-xs text-muted">
+                  <LtrValue>{vial.label}</LtrValue> · {translation.tagline}
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -62,12 +67,12 @@ export function QuoteSummary({ showLink = true }: { showLink?: boolean }) {
                       Number(e.target.value) || 1
                     )
                   }
-                  className="w-16 rounded-md border border-border bg-background px-2 py-1 text-sm text-foreground"
+                  className="w-16 rounded-md border border-border-strong bg-surface-raised px-2 py-1 font-mono text-sm text-foreground"
                 />
                 <button
                   type="button"
                   onClick={() => removeItem(item.productId, item.vialId)}
-                  className="text-sm font-medium text-danger hover:underline"
+                  className="font-mono text-xs font-semibold uppercase tracking-wide text-danger hover:underline"
                 >
                   {t("remove")}
                 </button>
@@ -79,7 +84,7 @@ export function QuoteSummary({ showLink = true }: { showLink?: boolean }) {
       {showLink && (
         <Link
           href="/quote"
-          className="mt-2 inline-flex w-fit items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+          className="mt-2 inline-flex w-fit items-center justify-center rounded-full bg-navy px-5 py-2.5 font-serif text-sm font-semibold uppercase tracking-wide text-navy-foreground transition-opacity hover:opacity-90"
         >
           {t("goToQuote")}
         </Link>

@@ -82,6 +82,20 @@ message namespace before displaying it. Don't render
 `errors.<field>?.message` directly; it will leak the raw code to the UI in
 both languages.
 
+## Brand & design system
+
+The site is **Pep Club** ("Premium Peptides"), not a generic placeholder —
+see `PRODUCT.md` for product/brand truth and `DESIGN.md` for the visual
+system ("the Vial-Label System": warm paper ground, deep navy + one blue
+accent from the logo, die-cut label-shaped cards as the one repeating UI
+unit). Read `DESIGN.md` before adding or restyling any UI — it records
+concrete Do's/Don'ts (e.g., no kicker/eyebrow lines above headings, no
+fabricated batch/lot data, bidi-isolate Latin values like "10 mg" inside
+Arabic text via `components/ltr-value.tsx`). This project uses the
+`/impeccable` design skill (`.claude` skill, loaded from
+`~/.claude/skills/impeccable`); load its `reference/craft-floor.md` before
+any further UI work.
+
 ## Spec Kit workflow
 
 This project is planned with [GitHub Spec Kit](https://github.com/github/spec-kit)

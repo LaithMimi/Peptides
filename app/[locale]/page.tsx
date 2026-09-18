@@ -14,19 +14,19 @@ export default async function CatalogPage({
   const products = getActiveProducts();
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+    <div className="flex flex-col gap-10">
+      <div className="rounded-2xl border-2 border-navy bg-surface-raised p-6 sm:p-10">
+        <h1 className="font-serif text-3xl font-semibold uppercase tracking-wide text-navy sm:text-4xl">
           {t("title")}
         </h1>
-        <p className="max-w-2xl text-muted">{t("subtitle")}</p>
+        <p className="mt-3 max-w-2xl text-muted">{t("subtitle")}</p>
       </div>
 
       <DisclaimerBanner />
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((product, index) => (
-          <ProductCard key={product.id} product={product} priority={index === 0} />
+      <div className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </div>

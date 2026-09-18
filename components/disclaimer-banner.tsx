@@ -5,8 +5,8 @@ export function DisclaimerBanner({ variant = "default" }: { variant?: "default" 
 
   if (variant === "compact") {
     return (
-      <p className="text-sm text-muted flex items-start gap-2">
-        <FlaskIcon className="mt-0.5 size-4 shrink-0 text-primary" />
+      <p className="flex items-start gap-2 font-mono text-xs uppercase tracking-wide text-muted">
+        <SealIcon className="mt-0.5 size-4 shrink-0 text-accent" />
         <span>{t("short")}</span>
       </p>
     );
@@ -15,32 +15,33 @@ export function DisclaimerBanner({ variant = "default" }: { variant?: "default" 
   return (
     <div
       role="note"
-      className="flex items-start gap-3 rounded-lg border border-border bg-surface px-4 py-3 text-sm text-foreground"
+      className="flex items-start gap-3 rounded border-2 border-dashed border-border-strong bg-surface px-4 py-3"
     >
-      <FlaskIcon className="mt-0.5 size-5 shrink-0 text-primary" />
+      <SealIcon className="mt-0.5 size-5 shrink-0 text-accent" />
       <div>
-        <p className="font-medium">{t("short")}</p>
-        <p className="mt-1 text-muted">{t("long")}</p>
+        <p className="font-mono text-xs font-semibold uppercase tracking-wider text-navy">
+          {t("short")}
+        </p>
+        <p className="mt-1 text-sm text-muted">{t("long")}</p>
       </div>
     </div>
   );
 }
 
-function FlaskIcon({ className }: { className?: string }) {
+function SealIcon({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.75"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
       aria-hidden="true"
     >
-      <path d="M9 3h6" />
-      <path d="M10 3v6.2a2 2 0 0 1-.4 1.2L4.9 17.7A2 2 0 0 0 6.5 21h11a2 2 0 0 0 1.6-3.3l-4.7-7.3a2 2 0 0 1-.4-1.2V3" />
-      <path d="M7.5 15h9" />
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="m9 12 2 2 4-4" />
     </svg>
   );
 }

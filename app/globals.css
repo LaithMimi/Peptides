@@ -1,34 +1,51 @@
 @import "tailwindcss";
 
+/*
+  Pep Club — "Vial-Label System"
+  Palette matched directly to the brand logo (public/brand/pep-club-logo.jpeg):
+  white/off-white ground, deep navy ink ("PEP", icon outline), a medium
+  royal/cornflower blue accent ("CLUB", the molecule node), and a very
+  light gray for subtle edges/shadows. See PRODUCT.md / DESIGN.md.
+*/
+
 :root {
-  --background: #f7faf9;
+  --background: #ffffff;
   --surface: #ffffff;
-  --foreground: #10201c;
-  --muted: #5b6b67;
-  --border: #dbe6e2;
-  --primary: #0f5e56;
-  --primary-foreground: #f7faf9;
-  --accent: #b6852c;
-  --accent-foreground: #fffaf0;
-  --danger: #b3261e;
-  --danger-bg: #fdecea;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --surface-raised: #f5f5f5;
+  --foreground: #0a1933;
+  --muted: #5c6b85;
+  --border: #f5f5f5;
+  --border-strong: #e2e2e2;
+
+  --navy: #0a1933;
+  --navy-foreground: #ffffff;
+  --accent: #4281c9;
+  --accent-foreground: #ffffff;
+
+  --danger: #a23b2e;
+  --danger-bg: #fbeae7;
+
+  --font-serif: var(--font-fraunces);
+  --font-sans: var(--font-dm-sans);
+  --font-mono: var(--font-plex-mono);
   --font-arabic: var(--font-noto-kufi);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
+  --color-border-strong: var(--border-strong);
+  --color-navy: var(--navy);
+  --color-navy-foreground: var(--navy-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-danger: var(--danger);
   --color-danger-bg: var(--danger-bg);
+  --font-serif: var(--font-serif);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-arabic: var(--font-arabic);
@@ -36,17 +53,23 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0b1614;
-    --surface: #101f1c;
-    --foreground: #eaf3f1;
-    --muted: #9db3ae;
-    --border: #1e332e;
-    --primary: #3fbfae;
-    --primary-foreground: #05130f;
-    --accent: #e3b04b;
-    --accent-foreground: #241a04;
-    --danger: #f2867d;
-    --danger-bg: #2b1310;
+    /* Night variant of the same logo palette: navy becomes the ground,
+       off-white becomes the ink, cornflower blue stays the one accent. */
+    --background: #061630;
+    --surface: #0d2140;
+    --surface-raised: #122a4d;
+    --foreground: #f5f5f5;
+    --muted: #a9b4c6;
+    --border: #1b3050;
+    --border-strong: #2a4570;
+
+    --navy: #f5f5f5;
+    --navy-foreground: #061630;
+    --accent: #6fa3de;
+    --accent-foreground: #071427;
+
+    --danger: #e69485;
+    --danger-bg: #2c1712;
   }
 }
 
@@ -58,4 +81,17 @@ body {
 
 html[dir="rtl"] body {
   font-family: var(--font-arabic), var(--font-sans), Arial, sans-serif;
+}
+
+/* The logo file already sits on white; multiply keeps that background
+   transparent-looking against the page without a pre-cut asset. */
+.brand-mark {
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-color-scheme: dark) {
+  .brand-mark {
+    mix-blend-mode: screen;
+    filter: invert(1) hue-rotate(180deg);
+  }
 }
