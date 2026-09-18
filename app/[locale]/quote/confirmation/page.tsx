@@ -13,7 +13,7 @@ export default async function QuoteConfirmationPage({
   return (
     <div className="mx-auto flex max-w-xl flex-col items-center gap-4 rounded-2xl border-2 border-dashed border-border-strong py-14 text-center">
       <div
-        className="flex size-20 -rotate-6 items-center justify-center rounded-full border-4 border-double border-stamp text-stamp"
+        className="flex size-20 -rotate-6 items-center justify-center rounded-full border-4 border-double border-accent text-accent"
         aria-hidden="true"
       >
         <CheckIcon className="size-8" />

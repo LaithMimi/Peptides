@@ -2,17 +2,16 @@
 name: Pep Club
 description: A boutique apothecary catalog built from one repeating unit — the die-cut vial label — not a clinical warehouse or a neon research-chemical site.
 colors:
-  paper: "#f5efdf"
-  surface: "#fbf7ec"
-  surface-raised: "#fffdf6"
-  ink-navy: "#171f30"
-  muted-ink: "#6b6252"
-  hairline: "#ddd2b5"
-  hairline-strong: "#c9bb97"
-  accent-blue: "#4d7fd6"
-  stamp-amber: "#9c6b2e"
+  paper: "#ffffff"
+  surface: "#ffffff"
+  surface-raised: "#f5f5f5"
+  ink-navy: "#0a1933"
+  muted-ink: "#5c6b85"
+  hairline: "#f5f5f5"
+  hairline-strong: "#e2e2e2"
+  accent-blue: "#4281c9"
   danger: "#a23b2e"
-  danger-bg: "#f6e6df"
+  danger-bg: "#fbeae7"
 typography:
   display:
     fontFamily: "Fraunces, Georgia, serif"
@@ -69,8 +68,8 @@ dashboard — and won on both audience identification and product clarity:
 it reads as boutique, verified, and curated rather than either a sterile
 clinical site or a neon "research-chemical" warehouse. The palette and mark
 are drawn directly from the brand logo (`public/brand/pep-club-logo.jpeg`):
-deep navy ink and a single blue accent, set on warm paper rather than
-clinical white.
+deep navy ink and a single cornflower-blue accent, set on the logo's own
+white/off-white ground rather than an invented paper tone.
 
 This is a Persuade-mode catalog (the visitor decides whether to trust the
 site enough to submit a quote) wrapping an Operate-mode form (the quote
@@ -83,7 +82,8 @@ that role everywhere a product image would normally sit.
 **Key Characteristics:**
 - One repeating label unit (rounded plate + seal + hairline rule + mono
   data line) builds cards, chips, form sections, and the confirmation panel
-- Warm paper ground, never clinical white
+- White/off-white ground matched to the brand logo, navy ink, one
+  cornflower-blue accent — no invented tertiary colors
 - Serif small-caps identity type paired with monospace for anything that
   is actually data (vial size, purity, quantity) — never monospace as
   costume
@@ -94,39 +94,39 @@ that role everywhere a product image would normally sit.
 
 ## Colors
 
-Warm and paper-toned at rest, with navy carrying nearly all identity
-weight and blue reserved strictly for action and verification.
+Matched directly to the brand logo — white/off-white at rest, with navy
+carrying nearly all identity weight and cornflower blue reserved strictly
+for action and verification. No invented colors outside this set.
 
 ### Primary
-- **Ink Navy** (`#171f30`): headings, primary buttons, footer band, the
+- **Ink Navy** (`#0a1933`): headings, primary buttons, footer band, the
   chosen state of pills/toggles. Carries the brand's identity weight —
-  this is the color from the logo's wordmark.
+  this is the color from the logo's "PEP" wordmark and icon outline.
 
 ### Secondary
-- **Accent Blue** (`#4d7fd6`): the logo's accent dot. Used only for the
-  primary CTA ("Add to quote request" / "Submit quote request"), the seal
-  icon in the disclaimer, and links — never for large fields. **The Rare
-  Accent Rule.** Blue marks the one action on a page; if more than one
-  element needs it, something else should be carrying that weight instead.
-
-### Tertiary
-- **Stamp Amber** (`#9c6b2e`): reserved for exactly one moment — the
-  confirmation page's approval seal. It does not appear anywhere else in
-  the system; introducing it elsewhere would dilute what makes that
-  moment read as a stamp.
+- **Accent Blue** (`#4281c9`): the logo's "CLUB" wordmark and molecule
+  node, a medium royal/cornflower blue. Used only for the primary CTA
+  ("Add to quote request" / "Submit quote request"), the confirmation
+  seal, and links — never for large fields. **The Rare Accent Rule.**
+  Blue marks the one action on a page; if more than one element needs
+  it, something else should be carrying that weight instead.
 
 ### Neutral
-- **Paper** (`#f5efdf`): page background. Warm, not clinical.
-- **Surface** (`#fbf7ec`): card and component background, a half-step
-  lighter than paper.
-- **Surface Raised** (`#fffdf6`): the lightest tier, used for panels that
-  should read as sitting above the page (hero card, product image panel).
-- **Muted Ink** (`#6b6252`): secondary text — tinted warm from the ink,
-  never gray.
-- **Hairline** (`#ddd2b5`): dashed dividers and rest-state chip borders.
-- **Hairline Strong** (`#c9bb97`): solid card borders, the label's "die
-  cut" edge.
-- **Danger** (`#a23b2e`) / **Danger Background** (`#f6e6df`): validation
+- **Background** (`#ffffff`): page background — the logo's own white
+  ground, not an invented paper tone.
+- **Surface** (`#ffffff`): card and component background, flush with the
+  page; separation comes from border weight, not a tint shift.
+- **Surface Raised** (`#f5f5f5`): the very light gray tier, used for
+  panels that should read as recessed or subtly set apart (hero card,
+  product image panel, input fields).
+- **Muted Ink** (`#5c6b85`): secondary text — a desaturated tint of the
+  ink navy.
+- **Hairline** (`#f5f5f5`): dashed dividers and rest-state chip borders —
+  deliberately subtle, matching the logo's light-gray edge/shadow tone.
+- **Hairline Strong** (`#e2e2e2`): solid card borders, the label's "die
+  cut" edge — a touch deeper than Hairline so structure stays legible on
+  white.
+- **Danger** (`#a23b2e`) / **Danger Background** (`#fbeae7`): validation
   and submission errors only.
 
 ### Named Rules
@@ -253,7 +253,7 @@ independent rotation per card (±1.4° max, deterministic per product id via
   validation code ever reaches the UI in either language.
 
 ### Navigation
-- Cream header band, 4px double navy rule as its bottom edge (a
+- White header band, 4px double navy rule as its bottom edge (a
   "label-plate" seam rather than a plain 1px divider). Nav links in
   Fraunces uppercase tracking; the active quote-count badge is a small
   accent-filled circle. The locale switcher is the same pill-chip
@@ -277,8 +277,8 @@ echo the logo's own dot-chain "P" mark.
 - **Do** bidi-isolate any Latin/numeric value rendered inside Arabic copy
   with `components/ltr-value.tsx` — vial sizes and purity values reverse
   visually otherwise.
-- **Do** reserve Accent Blue for the single primary action on a page.
-- **Do** keep the confirmation Stamp Amber exclusive to that one moment.
+- **Do** reserve Accent Blue for the single primary action on a page —
+  including the confirmation seal, its one non-CTA appearance.
 
 ### Don't:
 - **Don't** add a kicker/eyebrow line above any heading, ever — this was
