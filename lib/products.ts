@@ -8,7 +8,7 @@ export const products: Product[] = [
   {
     id: "tb-500",
     name: "TB-500",
-    image: "/products/tb-500.jpg",
+    image: "/products/tb-500.jpeg",
     purity: "≥ 99%",
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
@@ -41,8 +41,8 @@ export const products: Product[] = [
   {
     id: "ipamorelin",
     name: "Ipamorelin",
-    image: "/products/ipamorelin.jpg",
-    purity: null,
+    image: "/products/ipamorelin.jpeg",
+    purity: "≥ 99%",
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
     active: true,
@@ -74,8 +74,8 @@ export const products: Product[] = [
   {
     id: "cjc-1295",
     name: "CJC-1295",
-    image: "/products/cjc-1295.jpg",
-    purity: null,
+    image: "/products/cjc-1295.jpeg",
+    purity: "≥ 99%",
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
     active: true,
@@ -107,8 +107,8 @@ export const products: Product[] = [
   {
     id: "retatrutide",
     name: "Retatrutide",
-    image: "/products/retatrutide.jpg",
-    purity: null,
+    image: "/products/retatrutide.jpeg",
+    purity: "≥ 99%",
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
     active: true,
@@ -140,7 +140,7 @@ export const products: Product[] = [
   {
     id: "bpc-157",
     name: "BPC-157",
-    image: "/products/bpc-157.jpg",
+    image: "/products/bpc-157.jpeg",
     purity: "≥ 99%",
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
@@ -173,10 +173,10 @@ export const products: Product[] = [
   {
     id: "ghk-cu",
     name: "GHK-Cu",
-    image: "/products/ghk-cu.jpg",
-    purity: null,
+    image: "/products/ghk-cu.jpeg",
+    purity: "≥ 99%",
     coaUrl: null,
-    vials: [{ id: "100mg", label: "100 mg" }],
+    vials: [{ id: "10mg", label: "10 mg" }],
     active: true,
     translations: {
       en: {
@@ -206,8 +206,8 @@ export const products: Product[] = [
   {
     id: "mots-c",
     name: "MOTS-C",
-    image: "/products/mots-c.jpg",
-    purity: null,
+    image: "/products/mots-c.jpeg",
+    purity: "≥ 99%",
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
     active: true,
@@ -239,8 +239,8 @@ export const products: Product[] = [
   {
     id: "kpv",
     name: "KPV",
-    image: "/products/kpv.jpg",
-    purity: null,
+    image: "/products/kpv.jpeg",
+    purity: "≥ 99%",
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
     active: true,
@@ -272,8 +272,8 @@ export const products: Product[] = [
   {
     id: "selank",
     name: "Selank",
-    image: "/products/selank.jpg",
-    purity: null,
+    image: "/products/selank.jpeg",
+    purity: "≥ 99%",
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
     active: true,
@@ -305,8 +305,8 @@ export const products: Product[] = [
   {
     id: "semax",
     name: "Semax",
-    image: "/products/semax.jpg",
-    purity: null,
+    image: "/products/semax.jpeg",
+    purity: "≥ 99%",
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
     active: true,
