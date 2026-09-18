@@ -158,8 +158,9 @@ as a "technical" costume on prose.
   section headings (quote form title, confirmation title).
 - **Body** (DM Sans, 400, 0.875–1rem): descriptions, research-area lists,
   form help text.
-- **Label** (Plex Mono, 500, 0.65–0.75rem, uppercase, tracked 0.1em):
-  field labels, vial-size/purity values, quantity, nav micro-labels.
+- **Label** (Plex Mono, 500, 0.75rem, uppercase, tracked 0.1em):
+  field labels, vial-size/purity values, quantity, nav micro-labels, and
+  the landing hero's trust-marker chips.
 
 ### Named Rules
 **The Kicker Ban.** No small-caps label ever sits directly above a
@@ -259,6 +260,23 @@ independent rotation per card (±1.4° max, deterministic per product id via
   accent-filled circle. The locale switcher is the same pill-chip
   language as vial selectors, for visual consistency across every choice
   control in the system.
+
+### Trust Markers
+Three short, strictly factual chips under the landing hero's subtitle
+(curated catalog / quote-based with no on-site payment / English and
+Arabic). Pill, 1px `border-strong`, `surface` fill, mono uppercase label.
+Every chip must be verifiably true of the site as built — never a claim
+about verification, certification, or customers the business hasn't
+confirmed.
+
+### Feedback Section
+A two-column landing-page block (heading + vial glyph left, form card
+right; stacks on mobile) after the catalog grid, opened by a dashed top
+rule. The form reuses the shared `components/form-field.tsx` field and
+input styles so it matches the quote form exactly; success replaces the
+form in place with a dashed-border status panel rather than navigating
+away. It is a feedback *collection* form — the site has no real
+testimonials, so no testimonial or review content may be shown here.
 
 ### Vial Glyph (signature component)
 The brand's stand-in for product photography (`components/vial-glyph.tsx`):

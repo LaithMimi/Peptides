@@ -75,3 +75,56 @@ export async function sendQuoteRequestEmail({
     return { ok: false };
   }
 }
+
+interface SendFeedbackEmailArgs {
+  name?: string | null;
+  email: string;
+  message: string;
+  locale: string;
+  submittedAt: string;
+}
+
+export async function sendFeedbackEmail({
+  name,
+  email,
+  message,
+  locale,
+  submittedAt,
+}: SendFeedbackEmailArgs): Promise<{ ok: true } | { ok: false }> {
+  const apiKey = process.env.RESEND_API_KEY;
+  const notificationEmail = process.env.ORDER_NOTIFICATION_EMAIL;
+
+  const senderName = name && name.trim().length > 0 ? name : "(no name given)";
+  const bodyText = [
+    `New feedback (submitted ${submittedAt}, locale: ${locale})`,
+    "",
+    `From: ${senderName} <${email}>`,
+    "",
+    "Message:",
+    message,
+  ].join("\n");
+
+  if (!apiKey || !notificationEmail) {
+    console.log("[feedback email — dev fallback, no RESEND_API_KEY]\n" + bodyText);
+    return { ok: true };
+  }
+
+  try {
+    const resend = new Resend(apiKey);
+    const { error } = await resend.emails.send({
+      from: "Feedback <onboarding@resend.dev>",
+      to: notificationEmail,
+      replyTo: email,
+      subject: `New feedback from ${senderName}`,
+      text: bodyText,
+    });
+    if (error) {
+      console.error("Resend error sending feedback email", error);
+      return { ok: false };
+    }
+    return { ok: true };
+  } catch (err) {
+    console.error("Failed to send feedback email", err);
+    return { ok: false };
+  }
+}

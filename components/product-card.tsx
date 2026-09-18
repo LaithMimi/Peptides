@@ -25,7 +25,7 @@ export function ProductCard({ product }: { product: Product }) {
         />
       </div>
       <div className="flex flex-1 flex-col gap-1 px-5 pb-5 pt-1">
-        <span className="font-mono text-[10px] uppercase tracking-widest text-muted">
+        <span className="font-mono text-xs uppercase tracking-widest text-muted">
           <LtrValue>{product.vials[0]?.label}</LtrValue>
         </span>
         <h3 className="font-serif text-lg font-semibold uppercase tracking-wide text-navy">

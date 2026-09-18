@@ -71,7 +71,26 @@
     "ackRequired": "You must confirm this before submitting.",
     "itemUnavailable": "One of the items in your request is no longer available: {name}. Please remove or update it.",
     "emailFailed": "We couldn't send your quote request just now. Please try again — your information has been kept.",
-    "genericSubmit": "Something went wrong submitting your request. Please try again."
+    "genericSubmit": "Something went wrong submitting your request. Please try again.",
+    "feedbackFailed": "We couldn't send your feedback just now. Please try again — your message has been kept."
+  },
+  "feedback": {
+    "title": "Tell us what you think",
+    "intro": "Missing a compound, or something unclear on the site? Send us a note.",
+    "nameLabel": "Name",
+    "nameOptional": "optional",
+    "emailLabel": "Email address",
+    "messageLabel": "Your feedback",
+    "messagePlaceholder": "What would make Pep Club better for you?",
+    "submit": "Send feedback",
+    "submitting": "Sending…",
+    "successTitle": "Thank you",
+    "successBody": "Your feedback has been sent."
+  },
+  "trust": {
+    "curated": "Curated catalog",
+    "quoteBased": "Quote-based, no payment on site",
+    "bilingual": "English and Arabic"
   },
   "confirmation": {
     "title": "Quote request received",
