@@ -29,7 +29,6 @@ export async function sendQuoteRequestEmail({
     addr.line1,
     addr.line2,
     `${addr.city}, ${addr.region} ${addr.postalCode}`,
-    addr.country,
   ].filter((line): line is string => !!line && line.trim().length > 0);
 
   const bodyText = [

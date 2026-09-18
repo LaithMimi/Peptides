@@ -30,6 +30,7 @@ export function QuoteForm() {
   const knownErrorCodes = new Set([
     "required",
     "invalidEmail",
+    "invalidPhone",
     "emptyCart",
     "ackRequired",
   ]);
@@ -55,7 +56,6 @@ export function QuoteForm() {
         city: "",
         region: "",
         postalCode: "",
-        country: "",
       },
       notes: "",
       ageAndResearchUseAck: undefined as unknown as true,
@@ -99,7 +99,6 @@ export function QuoteForm() {
         "shippingAddress.city",
         "shippingAddress.region",
         "shippingAddress.postalCode",
-        "shippingAddress.country",
         "notes",
         "ageAndResearchUseAck",
       ]);
@@ -231,19 +230,6 @@ export function QuoteForm() {
               id="addressPostalCode"
               type="text"
               {...register("shippingAddress.postalCode")}
-              className={inputClass}
-            />
-          </Field>
-
-          <Field
-            label={t("countryLabel")}
-            htmlFor="addressCountry"
-            error={translateFieldError(errors.shippingAddress?.country?.message)}
-          >
-            <input
-              id="addressCountry"
-              type="text"
-              {...register("shippingAddress.country")}
               className={inputClass}
             />
           </Field>

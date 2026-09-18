@@ -80,7 +80,7 @@ function translateErrorCode(
   code: string,
   t: (key: string, values?: Record<string, string | number>) => string
 ): string {
-  const known = ["required", "invalidEmail", "emptyCart", "ackRequired"];
+  const known = ["required", "invalidEmail", "invalidPhone", "emptyCart", "ackRequired"];
   if (known.includes(code)) {
     return t(code);
   }
