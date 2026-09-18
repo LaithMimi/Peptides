@@ -12,7 +12,6 @@ const validInput = {
     city: "Cambridge",
     region: "MA",
     postalCode: "02139",
-    country: "United States",
   },
   notes: null,
   ageAndResearchUseAck: true as const,
@@ -72,14 +71,6 @@ describe("quoteRequestSchema", () => {
 
   it("rejects an empty customer name", () => {
     const result = quoteRequestSchema.safeParse({ ...validInput, customerName: "" });
-    expect(result.success).toBe(false);
-  });
-
-  it("rejects an empty country", () => {
-    const result = quoteRequestSchema.safeParse({
-      ...validInput,
-      shippingAddress: { ...validInput.shippingAddress, country: "" },
-    });
     expect(result.success).toBe(false);
   });
 

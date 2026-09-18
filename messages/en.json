@@ -54,7 +54,6 @@
     "cityLabel": "City",
     "regionLabel": "State / region",
     "postalCodeLabel": "Postal code",
-    "countryLabel": "Country",
     "notesLabel": "Notes",
     "notesOptional": "optional",
     "notesPlaceholder": "Anything else we should know about your request?",

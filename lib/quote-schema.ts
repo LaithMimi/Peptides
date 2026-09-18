@@ -29,7 +29,6 @@ export const addressSchema = z.object({
   city: z.string().trim().min(1, { message: "required" }),
   region: z.string().trim().min(1, { message: "required" }),
   postalCode: z.string().trim().min(1, { message: "required" }),
-  country: z.string().trim().min(1, { message: "required" }),
 });
 
 export const quoteRequestSchema = z.object({

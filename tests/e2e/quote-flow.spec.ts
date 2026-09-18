@@ -29,7 +29,6 @@ test.describe("quote request flow (English)", () => {
     await page.getByLabel("City").fill("Cambridge");
     await page.getByLabel("State / region").fill("MA");
     await page.getByLabel("Postal code").fill("02139");
-    await page.getByLabel("Country").fill("United States");
     await page.getByRole("button", { name: "Submit quote request" }).click();
     await expect(page).toHaveURL(/\/en\/quote$/);
 
