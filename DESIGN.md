@@ -67,7 +67,7 @@ against six catalog challengers — closest being an aviation-instrument
 dashboard — and won on both audience identification and product clarity:
 it reads as boutique, verified, and curated rather than either a sterile
 clinical site or a neon "research-chemical" warehouse. The palette and mark
-are drawn directly from the brand logo (`public/brand/pep-club-logo.jpeg`):
+are drawn directly from the brand logo (`public/brand/pep-club-logo.png`):
 deep navy ink and a single cornflower-blue accent, set on the logo's own
 white/off-white ground rather than an invented paper tone.
 

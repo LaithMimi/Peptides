@@ -16,7 +16,7 @@ export function SiteHeader() {
       <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center" aria-label="Pep Club — home">
           <Image
-            src="/brand/pep-club-logo.jpeg"
+            src="/brand/pep-club-logo.png"
             alt="Pep Club — Premium Peptides"
             width={168}
             height={168}
