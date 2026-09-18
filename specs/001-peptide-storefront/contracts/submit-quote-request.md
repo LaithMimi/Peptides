@@ -19,7 +19,8 @@ price.**
   }>;
   customerName: string;
   customerEmail: string;
-  customerPhone: string;
+  customerPhone: string; // valid international number (E.164)
+  phoneVerificationToken: string; // from verifyPhoneCode, see phone-verification.md
   shippingAddress: {
     line1: string;
     line2?: string | null;
@@ -73,6 +74,7 @@ preserve entered data):
 | Empty `lineItems` | `VALIDATION_ERROR` | Block submission; show "add at least one item" |
 | `productId`/`vialId` no longer resolves (removed/inactive) | `VALIDATION_ERROR` | Identify the affected line item so the customer can adjust (Edge Cases) |
 | Resend API call fails/times out | `EMAIL_DELIVERY_FAILED` | Show retry message; preserve form state (FR-012) |
+| `phoneVerificationToken` missing, tampered, expired, or issued for a different number than `customerPhone` | `VALIDATION_ERROR` (field `customerPhone`, code `phoneNotVerified`) | Show "verify your phone number"; reopen the code step; keep other data (FR-007a) |
 | Per-IP rate limit exceeded (checked first, before validation) | `RATE_LIMITED` | Show localized retry-later message; preserve form state (FR-011a) |
 | Honeypot `website` non-empty | `{ ok: true }` (no email sent) | Behaves like success so bots get no signal; nothing is sent (FR-011a) |
 
@@ -81,7 +83,7 @@ preserve entered data):
 - Exactly one email is sent to the business notification address
   (`ORDER_NOTIFICATION_EMAIL` env var) containing: all line items (product
   name, vial label, quantity — no price), customer contact info (name,
-  email, phone), the full shipping address, any notes, the recorded
+  email, phone marked as verified by one-time code), the full shipping address, any notes, the recorded
   acknowledgment, the submission locale, and a server-generated
   `submittedAt` timestamp.
 - No email is sent to the customer; the business is the only recipient.

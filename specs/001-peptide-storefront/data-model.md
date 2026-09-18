@@ -67,7 +67,8 @@ Never persisted — exists only as the payload sent to the email step.
 | `lineItems` | `LineItem[]` | At least 1 (FR-008: cannot submit an empty request) |
 | `customerName` | string | Required, non-empty |
 | `customerEmail` | string | Required, valid email format |
-| `customerPhone` | string | Required, non-empty (the business ships directly once a quote is accepted and needs a reachable number) |
+| `customerPhone` | string | Required; a valid international number, stored/sent in E.164 form (e.g. `+15550100`), parsed and validated with `libphonenumber-js` (the business ships directly once a quote is accepted and needs a reachable number) |
+| `phoneVerificationToken` | string | Required; signed token proving `customerPhone` passed OTP verification (see Phone Verification Token). Server rejects the request if missing, tampered, expired, or issued for a different number (FR-007a). Not included in the emailed payload |
 | `shippingAddress` | `Address` | Required (see below) |
 | `notes` | string \| null | Optional free-text note from the customer |
 | `ageAndResearchUseAck` | boolean | Must be `true` — server rejects the request if `false`/missing (FR-006, Principle I) |
@@ -86,6 +87,21 @@ Never persisted — exists only as the payload sent to the email step.
 | `postalCode` | string | Required, non-empty |
 | `country` | string | Required, non-empty |
 
+## Phone Verification Token (transient, never stored)
+
+Minted by `verifyPhoneCode` after Twilio reports `approved`; held in client
+form state only; checked by `submitQuoteRequest`. Format:
+`base64url(JSON payload) + "." + base64url(HMAC-SHA256(PHONE_TOKEN_SECRET, payload))`.
+
+| Field | Type | Rules |
+|---|---|---|
+| `p` | string | E.164 phone number that was verified; MUST equal the submitted `customerPhone` |
+| `exp` | integer | Unix seconds; `now + 30 min` at issue; expired tokens are rejected |
+
+Code generation, expiry (Twilio default 10 min) and wrong-attempt limits live
+in Twilio Verify, not in this app. Rate-limit counters (send per IP, send per
+phone, check per IP) are in-memory only in `lib/rate-limit.ts`.
+
 ## Validation Summary (enforced in `lib/quote-schema.ts`, shared client+server)
 
 - `lineItems.length >= 1`
@@ -93,7 +109,10 @@ Never persisted — exists only as the payload sent to the email step.
   product/vial in `lib/products.ts` (re-checked server-side)
 - `1 <= quantity <= 10` per line item, and no duplicate `productId`+`vialId` pairs
 - `customerEmail` matches standard email format
-- `customerName` and `customerPhone` non-empty
+- `customerName` non-empty
+- `customerPhone` is a valid international number (E.164) AND
+  `phoneVerificationToken` is valid, unexpired, and issued for exactly that
+  number (server-side enforcement of FR-007a)
 - `shippingAddress.{line1,city,region,postalCode,country}` all non-empty
   (`line2` is the only optional address field)
 - `ageAndResearchUseAck === true` (hard requirement; request rejected
