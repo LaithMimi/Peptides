@@ -1,7 +1,5 @@
 import type { Product } from "@/types/catalog";
 
-const PLACEHOLDER_IMAGE = "/products/placeholder.svg";
-
 /**
  * Static catalog data. No price field exists anywhere on this entity per
  * constitution Principle V — customers request a quote instead.
@@ -10,7 +8,7 @@ export const products: Product[] = [
   {
     id: "tb-500",
     name: "TB-500",
-    image: PLACEHOLDER_IMAGE,
+    image: "/products/tb-500.jpg",
     purity: "≥ 99%",
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
@@ -43,7 +41,7 @@ export const products: Product[] = [
   {
     id: "ipamorelin",
     name: "Ipamorelin",
-    image: PLACEHOLDER_IMAGE,
+    image: "/products/ipamorelin.jpg",
     purity: null,
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
@@ -76,7 +74,7 @@ export const products: Product[] = [
   {
     id: "cjc-1295",
     name: "CJC-1295",
-    image: PLACEHOLDER_IMAGE,
+    image: "/products/cjc-1295.jpg",
     purity: null,
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
@@ -109,7 +107,7 @@ export const products: Product[] = [
   {
     id: "retatrutide",
     name: "Retatrutide",
-    image: PLACEHOLDER_IMAGE,
+    image: "/products/retatrutide.jpg",
     purity: null,
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
@@ -142,7 +140,7 @@ export const products: Product[] = [
   {
     id: "bpc-157",
     name: "BPC-157",
-    image: PLACEHOLDER_IMAGE,
+    image: "/products/bpc-157.jpg",
     purity: "≥ 99%",
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
@@ -175,7 +173,7 @@ export const products: Product[] = [
   {
     id: "ghk-cu",
     name: "GHK-Cu",
-    image: PLACEHOLDER_IMAGE,
+    image: "/products/ghk-cu.jpg",
     purity: null,
     coaUrl: null,
     vials: [{ id: "100mg", label: "100 mg" }],
@@ -208,7 +206,7 @@ export const products: Product[] = [
   {
     id: "mots-c",
     name: "MOTS-C",
-    image: PLACEHOLDER_IMAGE,
+    image: "/products/mots-c.jpg",
     purity: null,
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
@@ -241,7 +239,7 @@ export const products: Product[] = [
   {
     id: "kpv",
     name: "KPV",
-    image: PLACEHOLDER_IMAGE,
+    image: "/products/kpv.jpg",
     purity: null,
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
@@ -274,7 +272,7 @@ export const products: Product[] = [
   {
     id: "selank",
     name: "Selank",
-    image: PLACEHOLDER_IMAGE,
+    image: "/products/selank.jpg",
     purity: null,
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
@@ -307,7 +305,7 @@ export const products: Product[] = [
   {
     id: "semax",
     name: "Semax",
-    image: PLACEHOLDER_IMAGE,
+    image: "/products/semax.jpg",
     purity: null,
     coaUrl: null,
     vials: [{ id: "10mg", label: "10 mg" }],
