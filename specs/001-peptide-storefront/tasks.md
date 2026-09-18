@@ -25,12 +25,12 @@ description: "Task list for Peptide Storefront (Catalog + Quote-Request Capture,
 **Purpose**: Project initialization and basic structure
 
 - [X] T001 Scaffold Next.js 15 App Router project with TypeScript and Tailwind CSS at repository root
-- [ ] T002 Install feature dependencies: `zod`, `react-hook-form`, `@hookform/resolvers`, `resend`, `next-intl`
-- [ ] T003 [P] Install dev/test dependencies: `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `@vitejs/plugin-react`, `jsdom`, `@playwright/test`
-- [ ] T004 [P] Create `.env.local.example` documenting `RESEND_API_KEY` and `ORDER_NOTIFICATION_EMAIL`
-- [ ] T005 [P] Configure `vitest.config.ts` and a test setup file for jsdom + Testing Library matchers
-- [ ] T006 [P] Configure `playwright.config.ts` pointing at `http://localhost:3000`
-- [ ] T007 Add `test`, `test:e2e` scripts to `package.json`
+- [X] T002 Install feature dependencies: `zod`, `react-hook-form`, `@hookform/resolvers`, `resend`, `next-intl`
+- [X] T003 [P] Install dev/test dependencies: `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `@vitejs/plugin-react`, `jsdom`, `@playwright/test`
+- [X] T004 [P] Create `.env.local.example` documenting `RESEND_API_KEY` and `ORDER_NOTIFICATION_EMAIL`
+- [X] T005 [P] Configure `vitest.config.ts` and a test setup file for jsdom + Testing Library matchers
+- [X] T006 [P] Configure `playwright.config.ts` pointing at `http://localhost:3000`
+- [X] T007 Add `test`, `test:e2e` scripts to `package.json`
 
 ---
 
@@ -40,18 +40,18 @@ description: "Task list for Peptide Storefront (Catalog + Quote-Request Capture,
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T008 Create `i18n/routing.ts` defining supported locales (`en`, `ar`), default locale `en`, and the `next-intl` routing config
-- [ ] T009 Create `i18n/request.ts` (next-intl request config loading the right message file per locale)
-- [ ] T010 Create `middleware.ts` at repo root using `next-intl`'s middleware for locale detection/redirect (root `/` → default locale)
-- [ ] T011 [P] Create `messages/en.json` with all UI strings (nav labels, disclaimer text, form labels/placeholders, button text, error messages, confirmation copy)
-- [ ] T012 [P] Create `messages/ar.json` with the same keys, Arabic translations, adapted from the research-area phrasing the business provided
-- [ ] T013 Define `Product`, `ProductTranslation`, `Vial`, `LineItem`, `QuoteRequestInput`, `QuoteRequestResult` types in `types/catalog.ts` per data-model.md field tables (no price field anywhere)
-- [ ] T014 Create shared Zod schema in `lib/quote-schema.ts` implementing data-model.md's "Validation Summary": `lineItems.length >= 1`; each line item's `productId`/`vialId` must resolve against `lib/products.ts`; `1 <= quantity <= 20`; `customerEmail` valid email format; `customerName` and `country` non-empty; `ageAndResearchUseAck === true` (hard requirement, rejected otherwise)
-- [ ] T015 Create static catalog data module `lib/products.ts` with the 10 real products (TB-500, Ipamorelin, CJC-1295, Retatrutide, BPC-157, GHK-Cu, MOTS-C, KPV, Selank, Semax), each `active: true`, an image placeholder, `purity` where given (e.g., "≥ 99%" for TB-500/BPC-157), one `Vial` per product (label = the vial size provided, e.g. "10 mg"/"100 mg"), and `translations.en`/`translations.ar` with tagline/description/researchAreas/disclaimer adapted from the business-provided content (research-area framing, no therapeutic claims — Principle I)
-- [ ] T016 [P] Build `components/disclaimer-banner.tsx` rendering the localized "research/laboratory use only — not for human consumption" disclaimer via next-intl messages (FR-002, Principle I)
-- [ ] T017 [P] Build `lib/cart-store.ts`: React context + `localStorage`-backed quote-cart state with add/update-quantity/remove-line-item/clear operations (no price/subtotal logic)
-- [ ] T018 [P] Build `components/locale-switcher.tsx` linking between `/en` and `/ar` equivalents of the current page
-- [ ] T019 Implement `app/[locale]/layout.tsx`: set `<html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>`, mount `NextIntlClientProvider`, render header (site name, `locale-switcher.tsx`, cart link) and footer, and mount the cart context provider from T017
+- [X] T008 Create `i18n/routing.ts` defining supported locales (`en`, `ar`), default locale `en`, and the `next-intl` routing config
+- [X] T009 Create `i18n/request.ts` (next-intl request config loading the right message file per locale)
+- [X] T010 Create `proxy.ts` at repo root using `next-intl`'s middleware for locale detection/redirect (root `/` → default locale; named `proxy.ts` per the Next.js 16 convention, not the deprecated `middleware.ts`)
+- [X] T011 [P] Create `messages/en.json` with all UI strings (nav labels, disclaimer text, form labels/placeholders, button text, error messages, confirmation copy)
+- [X] T012 [P] Create `messages/ar.json` with the same keys, Arabic translations, adapted from the research-area phrasing the business provided
+- [X] T013 Define `Product`, `ProductTranslation`, `Vial`, `LineItem`, `QuoteRequestInput`, `QuoteRequestResult` types in `types/catalog.ts` per data-model.md field tables (no price field anywhere)
+- [X] T014 Create shared Zod schema in `lib/quote-schema.ts` implementing data-model.md's "Validation Summary": `lineItems.length >= 1`; each line item's `productId`/`vialId` must resolve against `lib/products.ts`; `1 <= quantity <= 20`; `customerEmail` valid email format; `customerName` and `country` non-empty; `ageAndResearchUseAck === true` (hard requirement, rejected otherwise)
+- [X] T015 Create static catalog data module `lib/products.ts` with the 10 real products (TB-500, Ipamorelin, CJC-1295, Retatrutide, BPC-157, GHK-Cu, MOTS-C, KPV, Selank, Semax), each `active: true`, an image placeholder, `purity` where given (e.g., "≥ 99%" for TB-500/BPC-157), one `Vial` per product (label = the vial size provided, e.g. "10 mg"/"100 mg"), and `translations.en`/`translations.ar` with tagline/description/researchAreas/disclaimer adapted from the business-provided content (research-area framing, no therapeutic claims — Principle I)
+- [X] T016 [P] Build `components/disclaimer-banner.tsx` rendering the localized "research/laboratory use only — not for human consumption" disclaimer via next-intl messages (FR-002, Principle I)
+- [X] T017 [P] Build `lib/cart-store.ts`: React context + `localStorage`-backed quote-cart state with add/update-quantity/remove-line-item/clear operations (no price/subtotal logic)
+- [X] T018 [P] Build `components/locale-switcher.tsx` linking between `/en` and `/ar` equivalents of the current page
+- [X] T019 Implement `app/[locale]/layout.tsx`: set `<html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>`, mount `NextIntlClientProvider`, render header (site name, `locale-switcher.tsx`, cart link) and footer, and mount the cart context provider from T017
 
 **Checkpoint**: Foundation ready — user story implementation can now begin
 
@@ -65,9 +65,9 @@ description: "Task list for Peptide Storefront (Catalog + Quote-Request Capture,
 
 ### Implementation for User Story 1
 
-- [ ] T020 [P] [US1] Build `components/product-card.tsx` displaying a product's name, image, and localized tagline (uses `translations.<locale>.tagline`)
-- [ ] T021 [US1] Implement `app/[locale]/page.tsx` catalog page: fetch all `active: true` products from `lib/products.ts`, render via `product-card.tsx` in a responsive grid, and include `disclaimer-banner.tsx` (FR-001, FR-002)
-- [ ] T022 [US1] Apply responsive, direction-aware grid/spacing to `app/[locale]/page.tsx` using Tailwind logical properties (`ps-`/`pe-`/`text-start`, per research.md's RTL strategy); verify no horizontal scrolling and correct mirroring on `/ar` from 320px–1920px (FR-013, FR-014, SC-005)
+- [X] T020 [P] [US1] Build `components/product-card.tsx` displaying a product's name, image, and localized tagline (uses `translations.<locale>.tagline`)
+- [X] T021 [US1] Implement `app/[locale]/page.tsx` catalog page: fetch all `active: true` products from `lib/products.ts`, render via `product-card.tsx` in a responsive grid, and include `disclaimer-banner.tsx` (FR-001, FR-002)
+- [X] T022 [US1] Apply responsive, direction-aware grid/spacing to `app/[locale]/page.tsx` using Tailwind logical properties (`ps-`/`pe-`/`text-start`, per research.md's RTL strategy); verify no horizontal scrolling and correct mirroring on `/ar` from 320px–1920px (FR-013, FR-014, SC-005)
 
 **Checkpoint**: Catalog is fully browsable in both languages and independently testable/demoable.
 
@@ -81,10 +81,10 @@ description: "Task list for Peptide Storefront (Catalog + Quote-Request Capture,
 
 ### Implementation for User Story 2
 
-- [ ] T023 [P] [US2] Build `components/vial-selector.tsx`: vial choice control (radio/select, localized labels where needed) + quantity input constrained to `1 <= quantity <= 20` (data-model.md) — no price/subtotal calculation
-- [ ] T024 [US2] Implement `app/[locale]/products/[slug]/page.tsx`: look up the product by slug in `lib/products.ts` (not-found state if missing or `active: false`), render localized description, image, `researchAreas` list, `purity`/`coaUrl` when present, `disclaimer-banner.tsx`, and `vial-selector.tsx` (FR-003)
-- [ ] T025 [US2] Wire an "Add to quote request" action on the product page that calls `lib/cart-store.ts` to add `{ productId, vialId, quantity }`; disable/block the action with a clear inline message when no vial is selected (Acceptance Scenario 3)
-- [ ] T026 [P] [US2] Build `components/quote-summary.tsx` showing current quote-cart line items (product name, vial label, quantity — no price/subtotal) and item count; mount it from the header (T019) and the product page
+- [X] T023 [P] [US2] Build `components/vial-selector.tsx`: vial choice control (radio/select, localized labels where needed) + quantity input constrained to `1 <= quantity <= 20` (data-model.md) — no price/subtotal calculation
+- [X] T024 [US2] Implement `app/[locale]/products/[slug]/page.tsx`: look up the product by slug in `lib/products.ts` (not-found state if missing or `active: false`), render localized description, image, `researchAreas` list, `purity`/`coaUrl` when present, `disclaimer-banner.tsx`, and `vial-selector.tsx` (FR-003)
+- [X] T025 [US2] Wire an "Add to quote request" action on the product page that calls `lib/cart-store.ts` to add `{ productId, vialId, quantity }`; disable/block the action with a clear inline message when no vial is selected (Acceptance Scenario 3)
+- [X] T026 [P] [US2] Build `components/quote-summary.tsx` showing current quote-cart line items (product name, vial label, quantity — no price/subtotal) and item count; mount it from the header (T019) and the product page
 
 **Checkpoint**: Catalog browsing + product detail + quote-cart building are fully functional together, in both languages.
 
@@ -98,9 +98,9 @@ description: "Task list for Peptide Storefront (Catalog + Quote-Request Capture,
 
 ### Implementation for User Story 3
 
-- [ ] T027 [US3] Implement `app/[locale]/quote/page.tsx` skeleton: render `quote-summary.tsx`, block navigation here with a localized message if the cart is empty (FR-008 empty-request case), and add the 18+/research-use acknowledgment checkbox control
-- [ ] T028 [US3] Implement `app/[locale]/quote/actions.ts` Server Action `submitQuoteRequest` (stub): parse input through `lib/quote-schema.ts` (T014) and return `{ ok: false, error: { code: "VALIDATION_ERROR", ... } }` per contracts/submit-quote-request.md when `ageAndResearchUseAck` is false/missing or `lineItems` is empty — full email-sending behavior completes in US4
-- [ ] T029 [US3] Wire the quote page's submit control to call `submitQuoteRequest` and, on a `VALIDATION_ERROR` naming the acknowledgment field, highlight the checkbox and show the required localized message without clearing other form state (Acceptance Scenarios 1–2)
+- [X] T027 [US3] Implement `app/[locale]/quote/page.tsx` skeleton: render `quote-summary.tsx`, block navigation here with a localized message if the cart is empty (FR-008 empty-request case), and add the 18+/research-use acknowledgment checkbox control
+- [X] T028 [US3] Implement `app/[locale]/quote/actions.ts` Server Action `submitQuoteRequest` (stub): parse input through `lib/quote-schema.ts` (T014) and return `{ ok: false, error: { code: "VALIDATION_ERROR", ... } }` per contracts/submit-quote-request.md when `ageAndResearchUseAck` is false/missing or `lineItems` is empty — full email-sending behavior completes in US4
+- [X] T029 [US3] Wire the quote page's submit control to call `submitQuoteRequest` and, on a `VALIDATION_ERROR` naming the acknowledgment field, highlight the checkbox and show the required localized message without clearing other form state (Acceptance Scenarios 1–2)
 
 **Checkpoint**: The acknowledgment gate is independently verifiable even before the full contact form exists.
 
@@ -114,13 +114,13 @@ description: "Task list for Peptide Storefront (Catalog + Quote-Request Capture,
 
 ### Implementation for User Story 4
 
-- [ ] T030 [US4] Extend `app/[locale]/quote/page.tsx` with the contact form (`customerName`, `customerEmail`, optional `customerPhone`, `country`, optional `notes`) using React Hook Form + `@hookform/resolvers/zod` bound to `lib/quote-schema.ts`
-- [ ] T031 [US4] Implement `lib/email.ts`: Resend client wrapper `sendQuoteRequestEmail(request, resolvedLineItems)` sending one email to `ORDER_NOTIFICATION_EMAIL` containing line items (product name, vial label, quantity — no price), contact info, country, notes, locale, the acknowledgment flag, and a server-generated `submittedAt` timestamp; if `RESEND_API_KEY` is unset, log the payload to the server console instead of sending (dev fallback per quickstart.md)
-- [ ] T032 [US4] Complete `app/[locale]/quote/actions.ts` `submitQuoteRequest`: re-resolve every `productId`/`vialId` against `lib/products.ts` server-side (never trust client-submitted labels), call `lib/email.ts` (T031), and return `QuoteRequestResult` per contracts/submit-quote-request.md; map a per-item "no longer available" case to a `VALIDATION_ERROR` naming the affected line item (Edge Cases)
-- [ ] T033 [US4] Implement `app/[locale]/quote/confirmation/page.tsx` with localized copy explaining the business will follow up with pricing; on successful `submitQuoteRequest` response, clear the cart via `lib/cart-store.ts` and route the customer here
-- [ ] T034 [US4] Implement duplicate-submission guard on the quote form using `useFormStatus`/`useTransition` pending state to disable the submit control while a request is in flight (FR-011)
-- [ ] T035 [US4] Handle the `EMAIL_DELIVERY_FAILED` result: show a clear localized retry message and preserve all entered form data on screen (FR-012)
-- [ ] T036 [US4] Render `fieldErrors` from a `VALIDATION_ERROR` `QuoteRequestResult` as inline, localized field-level messages next to the relevant form controls (FR-008)
+- [X] T030 [US4] Extend `app/[locale]/quote/page.tsx` with the contact form (`customerName`, `customerEmail`, optional `customerPhone`, `country`, optional `notes`) using React Hook Form + `@hookform/resolvers/zod` bound to `lib/quote-schema.ts`
+- [X] T031 [US4] Implement `lib/email.ts`: Resend client wrapper `sendQuoteRequestEmail(request, resolvedLineItems)` sending one email to `ORDER_NOTIFICATION_EMAIL` containing line items (product name, vial label, quantity — no price), contact info, country, notes, locale, the acknowledgment flag, and a server-generated `submittedAt` timestamp; if `RESEND_API_KEY` is unset, log the payload to the server console instead of sending (dev fallback per quickstart.md)
+- [X] T032 [US4] Complete `app/[locale]/quote/actions.ts` `submitQuoteRequest`: re-resolve every `productId`/`vialId` against `lib/products.ts` server-side (never trust client-submitted labels), call `lib/email.ts` (T031), and return `QuoteRequestResult` per contracts/submit-quote-request.md; map a per-item "no longer available" case to a `VALIDATION_ERROR` naming the affected line item (Edge Cases)
+- [X] T033 [US4] Implement `app/[locale]/quote/confirmation/page.tsx` with localized copy explaining the business will follow up with pricing; on successful `submitQuoteRequest` response, clear the cart via `lib/cart-store.ts` and route the customer here
+- [X] T034 [US4] Implement duplicate-submission guard on the quote form using `useFormStatus`/`useTransition` pending state to disable the submit control while a request is in flight (FR-011)
+- [X] T035 [US4] Handle the `EMAIL_DELIVERY_FAILED` result: show a clear localized retry message and preserve all entered form data on screen (FR-012)
+- [X] T036 [US4] Render `fieldErrors` from a `VALIDATION_ERROR` `QuoteRequestResult` as inline, localized field-level messages next to the relevant form controls (FR-008)
 
 **Checkpoint**: All four user stories work together end-to-end in both languages: browse → view/select → acknowledge → submit → confirmation email.
 
@@ -130,14 +130,14 @@ description: "Task list for Peptide Storefront (Catalog + Quote-Request Capture,
 
 **Purpose**: Verification and hardening across all stories
 
-- [ ] T037 [P] Responsive polish pass on `app/[locale]/quote/page.tsx` and `app/[locale]/quote/confirmation/page.tsx` in both directions; verify no horizontal scrolling from 320px–1920px (FR-013, SC-005)
-- [ ] T038 [P] Accessibility pass across all pages: semantic landmarks, labeled form controls, keyboard-navigable vial selector and checkbox, sufficient color contrast, alt text on product images, correct `lang`/`dir` propagation (Principle III)
-- [ ] T039 [P] Vitest unit tests for `lib/quote-schema.ts` covering every rule in data-model.md's Validation Summary, in `tests/unit/quote-schema.test.ts`
-- [ ] T040 [P] Vitest unit tests for `lib/cart-store.ts` (add/update/remove/clear), in `tests/unit/cart-store.test.ts`
-- [ ] T041 Playwright end-to-end test in `tests/e2e/quote-flow.spec.ts` covering quickstart.md scenarios 1–4, run against both `/en` and `/ar`
-- [ ] T042 Manual verification of quickstart.md scenarios 5–7 (field validation errors, duplicate-submission guard, email-failure path)
-- [ ] T043 [P] Add root `README.md` documenting local setup, required env vars, the dev email-fallback behavior, and pointers to `.specify/memory/constitution.md` and `specs/001-peptide-storefront/`
-- [ ] T044 Configure `RESEND_API_KEY` and `ORDER_NOTIFICATION_EMAIL` as Vercel project environment variables, deploy a preview, and confirm `npm run build` succeeds and the live preview passes quickstart.md scenario 4 in both locales
+- [X] T037 [P] Responsive polish pass on `app/[locale]/quote/page.tsx` and `app/[locale]/quote/confirmation/page.tsx` in both directions; verify no horizontal scrolling from 320px–1920px (FR-013, SC-005)
+- [X] T038 [P] Accessibility pass across all pages: semantic landmarks, labeled form controls, keyboard-navigable vial selector and checkbox, sufficient color contrast, alt text on product images, correct `lang`/`dir` propagation (Principle III)
+- [X] T039 [P] Vitest unit tests for `lib/quote-schema.ts` covering every rule in data-model.md's Validation Summary, in `tests/unit/quote-schema.test.ts`
+- [X] T040 [P] Vitest unit tests for `lib/cart-store.ts` (add/update/remove/clear), in `tests/unit/cart-store.test.ts`
+- [X] T041 Playwright end-to-end test in `tests/e2e/quote-flow.spec.ts` covering quickstart.md scenarios 1–4, run against both `/en` and `/ar`
+- [X] T042 Manual verification of quickstart.md scenarios 5–7 (field validation errors, duplicate-submission guard, email-failure path). Scenarios 5 (invalid-email inline error) and the acknowledgment gate were verified live via browser; the duplicate-submit guard was verified by code review (`disabled={isSubmitting}`); the `EMAIL_DELIVERY_FAILED` path was verified by code review only — it shares the exact same `submitError` rendering path already exercised for validation errors, but was not exercised against a real invalid `RESEND_API_KEY` since no live key was configured this session.
+- [X] T043 [P] Add root `README.md` documenting local setup, required env vars, the dev email-fallback behavior, and pointers to `.specify/memory/constitution.md` and `specs/001-peptide-storefront/`
+- [ ] T044 Configure `RESEND_API_KEY` and `ORDER_NOTIFICATION_EMAIL` as Vercel project environment variables, deploy a preview, and confirm `npm run build` succeeds and the live preview passes quickstart.md scenario 4 in both locales — **not done**: requires the user's Vercel account/credentials and a real Resend API key.
 
 ---
 

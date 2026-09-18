@@ -113,7 +113,7 @@ app/
 │       ├── actions.ts                 # Server Action: validate + send quote email
 │       └── confirmation/
 │           └── page.tsx                # Post-submit confirmation (or failure) state
-└── middleware.ts                 # next-intl middleware for locale detection/routing
+└── proxy.ts                      # next-intl middleware for locale detection/routing (Next.js 16 "proxy" convention)
 
 components/
 ├── product-card.tsx

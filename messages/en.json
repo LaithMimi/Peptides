@@ -1,0 +1,80 @@
+{
+  "site": {
+    "name": "Aether Peptides",
+    "tagline": "Research peptides for laboratory use"
+  },
+  "nav": {
+    "catalog": "Catalog",
+    "quote": "Quote Request",
+    "language": "Language",
+    "cartCount": "{count, plural, =0 {No items} one {# item} other {# items}}"
+  },
+  "disclaimer": {
+    "short": "For Research Use Only — Not for Human Use.",
+    "long": "All products listed on this site are intended strictly for research and laboratory use. They are not drugs, dietary supplements, or cosmetics, and are not for human or veterinary use, consumption, or administration in any form."
+  },
+  "catalog": {
+    "title": "Research Peptide Catalog",
+    "subtitle": "Explore compounds currently of interest across recovery, growth-hormone, metabolic, and cognitive research.",
+    "viewDetails": "View research details"
+  },
+  "product": {
+    "backToCatalog": "Back to catalog",
+    "purityLabel": "Purity",
+    "vialLabel": "Vial size",
+    "researchAreasTitle": "Research areas",
+    "selectVial": "Select a vial size",
+    "quantityLabel": "Quantity",
+    "addToQuote": "Add to quote request",
+    "selectVialFirst": "Please select a vial size before adding to your quote request.",
+    "addedToQuote": "Added to your quote request.",
+    "notFoundTitle": "Product not found",
+    "notFoundBody": "This product is not currently available."
+  },
+  "quoteCart": {
+    "title": "Your quote request",
+    "empty": "Your quote request is empty. Browse the catalog to add products.",
+    "browseCatalog": "Browse catalog",
+    "itemsTitle": "Items",
+    "remove": "Remove",
+    "quantity": "Qty",
+    "viewQuote": "View quote request",
+    "goToQuote": "Continue to quote request"
+  },
+  "quoteForm": {
+    "title": "Submit your quote request",
+    "intro": "Tell us what you're interested in and how to reach you. Our team will follow up directly with pricing and availability — no payment is collected here.",
+    "nameLabel": "Full name",
+    "emailLabel": "Email address",
+    "phoneLabel": "Phone number",
+    "phoneOptional": "optional",
+    "countryLabel": "Country / region",
+    "countryHelp": "Used only to check shipping feasibility.",
+    "notesLabel": "Notes",
+    "notesOptional": "optional",
+    "notesPlaceholder": "Anything else we should know about your request?",
+    "ackLabel": "I confirm I am 18 years of age or older and that these products are for research and laboratory use only, not for human consumption.",
+    "submit": "Submit quote request",
+    "submitting": "Submitting…",
+    "emptyCartTitle": "No items in your quote request",
+    "emptyCartBody": "Add at least one product before submitting a quote request."
+  },
+  "errors": {
+    "required": "This field is required.",
+    "invalidEmail": "Please enter a valid email address.",
+    "emptyCart": "Please add at least one item to your quote request.",
+    "ackRequired": "You must confirm this before submitting.",
+    "itemUnavailable": "One of the items in your request is no longer available: {name}. Please remove or update it.",
+    "emailFailed": "We couldn't send your quote request just now. Please try again — your information has been kept.",
+    "genericSubmit": "Something went wrong submitting your request. Please try again."
+  },
+  "confirmation": {
+    "title": "Quote request received",
+    "body": "Thank you — we've received your request. Our team will follow up by email with pricing and next steps shortly.",
+    "backToCatalog": "Back to catalog"
+  },
+  "footer": {
+    "disclaimer": "For Research Use Only — Not for Human Use. Not for diagnostic or therapeutic use in humans or animals.",
+    "rights": "All rights reserved."
+  }
+}
