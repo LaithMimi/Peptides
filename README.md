@@ -29,6 +29,9 @@ RTL version).
 |---|---|---|
 | `RESEND_API_KEY` | No (dev) / Yes (prod) | Resend API key used to email quote requests to the business. If unset, `lib/email.ts` logs the request to the server console instead of sending — the full flow is testable locally without a real key. |
 | `ORDER_NOTIFICATION_EMAIL` | Yes (to actually receive requests) | The business inbox that receives quote-request notification emails. |
+| `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_VERIFY_SERVICE_SID` | No (dev) / Yes (prod) | Twilio Verify credentials used to text a one-time code to the customer's phone. If all three are unset **and** `NODE_ENV` is not `production`, the code is printed to the server console and `000000` is accepted. In production (including Vercel previews) missing values make phone verification fail closed, so quote requests cannot be submitted. |
+| `PHONE_TOKEN_SECRET` | Yes (prod) | Long random string used to sign the "phone verified" token. Required in production. |
+| `OTP_SEND_LIMIT_PER_IP`, `OTP_SEND_LIMIT_PER_PHONE`, `OTP_CHECK_LIMIT_PER_IP` | No | Optional overrides for the OTP rate limits (defaults 3 per 10 min, 3 per hour, 10 per 10 min). |
 
 Set these as Vercel project environment variables for deployed
 environments (`vercel env add`).

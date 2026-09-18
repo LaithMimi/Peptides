@@ -34,7 +34,13 @@ Run a single Playwright test: `npx playwright test quote-flow.spec.ts`.
 No database and no external services are required for local dev.
 `lib/email.ts` logs quote-request emails to the server console when
 `RESEND_API_KEY` is unset, so the full flow works without any API key —
-see `.env.local.example`.
+see `.env.local.example`. Phone verification (SMS one-time code via Twilio
+Verify, `lib/otp.ts`) has the same kind of dev fallback: with no `TWILIO_*`
+variables and `NODE_ENV !== "production"` the code is logged to the console
+and `000000` is accepted. In production it fails closed (no fallback), so
+never loosen that check. Submission also requires the signed token from
+`lib/phone-token.ts`; the server rejects a request without a token issued
+for that exact number.
 
 ## Architecture
 
@@ -50,10 +56,11 @@ directly without prop-drilling messages. Both message files
 (`messages/en.json`, `messages/ar.json`) **must stay key-for-key in sync**;
 adding a UI string means adding it to both.
 
-**No database — one Server Action**: `lib/products.ts` is the entire
+**No database — a few Server Actions**: `lib/products.ts` is the entire
 product catalog as a static array (no price field — see constraint above).
-`app/[locale]/quote/actions.ts` (`"use server"`) is the *only* server-side
-logic in the app: it re-validates the submission against
+The only server-side logic is in `app/[locale]/quote/` (`"use server"`):
+`otp-actions.ts` sends/checks the phone one-time code, and `actions.ts`
+handles the submission. `actions.ts` re-validates the submission against
 `lib/quote-schema.ts` (the same Zod schema the client form uses via
 `@hookform/resolvers/zod`), re-resolves every line item's product/vial
 against `lib/products.ts` server-side (never trusts client-submitted

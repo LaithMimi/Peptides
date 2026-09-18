@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { getProductById } from "./products";
+import { parsePhone } from "./phone";
 
 export const MAX_LINE_QUANTITY = 10;
 
@@ -38,7 +39,14 @@ export const quoteRequestSchema = z.object({
     ),
   customerName: z.string().trim().min(1, { message: "required" }),
   customerEmail: z.string().trim().email({ message: "invalidEmail" }),
-  customerPhone: z.string().trim().min(1, { message: "required" }),
+  customerPhone: z
+    .string()
+    .trim()
+    .min(1, { message: "required" })
+    .refine((value) => parsePhone(value) !== null, { message: "invalidPhone" }),
+  phoneVerificationToken: z
+    .string()
+    .min(1, { message: "phoneNotVerified" }),
   shippingAddress: addressSchema,
   notes: z.string().trim().optional().nullable(),
   ageAndResearchUseAck: z.literal(true, {
@@ -59,6 +67,7 @@ export type QuoteRequestFormValues = z.infer<typeof quoteRequestSchema>;
 export const quoteContactFormSchema = quoteRequestSchema.omit({
   lineItems: true,
   locale: true,
+  phoneVerificationToken: true,
 });
 
 export type QuoteContactFormValues = z.infer<typeof quoteContactFormSchema>;

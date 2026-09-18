@@ -4,6 +4,8 @@ import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { quoteRequestSchema } from "@/lib/quote-schema";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { parsePhone } from "@/lib/phone";
+import { verifyPhoneToken } from "@/lib/phone-token";
 import { getProductById } from "@/lib/products";
 import { sendQuoteRequestEmail } from "@/lib/email";
 import type {
@@ -19,7 +21,7 @@ export async function submitQuoteRequest(
 
   const forwardedFor = (await headers()).get("x-forwarded-for");
   const ip = forwardedFor?.split(",")[0]?.trim() || "unknown";
-  if (!checkRateLimit(ip)) {
+  if (!checkRateLimit(`submit:${ip}`)) {
     return {
       ok: false,
       error: { code: "RATE_LIMITED", message: t("rateLimited") },
@@ -50,7 +52,22 @@ export async function submitQuoteRequest(
     };
   }
 
-  const data = parsed.data;
+  const normalizedPhone = parsePhone(parsed.data.customerPhone);
+  if (
+    !normalizedPhone ||
+    !verifyPhoneToken(parsed.data.phoneVerificationToken, normalizedPhone)
+  ) {
+    return {
+      ok: false,
+      error: {
+        code: "VALIDATION_ERROR",
+        fieldErrors: { customerPhone: t("phoneNotVerified") },
+        message: t("phoneNotVerified"),
+      },
+    };
+  }
+
+  const data = { ...parsed.data, customerPhone: normalizedPhone };
 
   const resolvedLineItems: ResolvedLineItem[] = [];
   for (const item of data.lineItems) {
@@ -97,7 +114,14 @@ function translateErrorCode(
   code: string,
   t: (key: string, values?: Record<string, string | number>) => string
 ): string {
-  const known = ["required", "invalidEmail", "emptyCart", "ackRequired"];
+  const known = [
+    "required",
+    "invalidEmail",
+    "emptyCart",
+    "ackRequired",
+    "invalidPhone",
+    "phoneNotVerified",
+  ];
   if (known.includes(code)) {
     return t(code);
   }

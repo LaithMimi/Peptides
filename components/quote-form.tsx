@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useForm, type FieldPath } from "react-hook-form";
+import { useForm, useWatch, type FieldPath } from "react-hook-form";
+import { PhoneVerification } from "@/components/phone-verification";
+import { parsePhone } from "@/lib/phone";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
@@ -20,6 +22,10 @@ export function QuoteForm() {
   const router = useRouter();
   const { items, clear } = useCart();
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [verifiedPhone, setVerifiedPhone] = useState<{
+    token: string;
+    phone: string;
+  } | null>(null);
 
   // Both the client-side Zod schema and the server action's field errors
   // use short codes ("required", "invalidEmail", "ackRequired", ...) as
@@ -31,6 +37,8 @@ export function QuoteForm() {
     "invalidEmail",
     "emptyCart",
     "ackRequired",
+    "invalidPhone",
+    "phoneNotVerified",
   ]);
   function translateFieldError(message: string | undefined): string | undefined {
     if (!message) return undefined;
@@ -41,6 +49,8 @@ export function QuoteForm() {
     register,
     handleSubmit,
     setError,
+    clearErrors,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<QuoteContactFormValues>({
     resolver: zodResolver(quoteContactFormSchema),
@@ -62,6 +72,13 @@ export function QuoteForm() {
     },
   });
 
+  const currentPhone = (useWatch({ control, name: "customerPhone" }) ?? "").trim();
+  // A token only counts for the exact number it was issued for.
+  const phoneToken =
+    verifiedPhone && verifiedPhone.phone === currentPhone
+      ? verifiedPhone.token
+      : null;
+
   // The quote-cart summary above this form already shows the "empty" state
   // with a link back to the catalog (see components/quote-summary.tsx), so
   // the form itself simply doesn't render when there's nothing to submit.
@@ -77,8 +94,15 @@ export function QuoteForm() {
       return;
     }
 
+    if (!phoneToken) {
+      setError("customerPhone", { message: "phoneNotVerified" });
+      return;
+    }
+
     const result = await submitQuoteRequest({
       ...values,
+      customerPhone: parsePhone(values.customerPhone) ?? values.customerPhone,
+      phoneVerificationToken: phoneToken,
       lineItems: items,
       locale,
     });
@@ -106,7 +130,12 @@ export function QuoteForm() {
       for (const [field, message] of Object.entries(result.error.fieldErrors)) {
         if (knownFieldPaths.has(field)) {
           setError(field as FieldPath<QuoteContactFormValues>, { message });
+        } else if (field === "phoneVerificationToken") {
+          setError("customerPhone", { message });
         }
+      }
+      if (result.error.fieldErrors.customerPhone) {
+        setVerifiedPhone(null);
       }
     }
     setSubmitError(result.error.message);
@@ -154,15 +183,27 @@ export function QuoteForm() {
       <Field
         label={t("phoneLabel")}
         htmlFor="customerPhone"
+        help={t("phoneHelp")}
         error={translateFieldError(errors.customerPhone?.message)}
       >
         <input
           id="customerPhone"
           type="tel"
+          dir="ltr"
+          autoComplete="tel"
           {...register("customerPhone")}
           className={inputClass}
         />
       </Field>
+      <PhoneVerification
+        phone={currentPhone}
+        locale={locale}
+        onVerified={(token, _expiresAt, phone) => {
+          setVerifiedPhone({ token, phone });
+          clearErrors("customerPhone");
+        }}
+        onReset={() => setVerifiedPhone(null)}
+      />
 
       <fieldset className="flex flex-col gap-4 border-t border-dashed border-border pt-5">
         <legend className="-mt-[1.9rem] bg-surface px-0 font-serif text-sm font-semibold uppercase tracking-wide text-navy">

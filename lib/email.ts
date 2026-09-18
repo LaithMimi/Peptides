@@ -40,7 +40,7 @@ export async function sendQuoteRequestEmail({
     "",
     `Name: ${request.customerName}`,
     `Email: ${request.customerEmail}`,
-    `Phone: ${request.customerPhone}`,
+    `Phone: ${request.customerPhone} (verified by one-time code)`,
     "Shipping address:",
     ...addressLines.map((line) => `  ${line}`),
     `Notes: ${orFallback(request.notes, "(none)")}`,
