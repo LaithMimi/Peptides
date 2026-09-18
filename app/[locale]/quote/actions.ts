@@ -1,7 +1,9 @@
 "use server";
 
+import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { quoteRequestSchema } from "@/lib/quote-schema";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { getProductById } from "@/lib/products";
 import { sendQuoteRequestEmail } from "@/lib/email";
 import type {
@@ -14,6 +16,21 @@ export async function submitQuoteRequest(
   input: QuoteRequestInput
 ): Promise<QuoteRequestResult> {
   const t = await getTranslations({ locale: input.locale, namespace: "errors" });
+
+  const forwardedFor = (await headers()).get("x-forwarded-for");
+  const ip = forwardedFor?.split(",")[0]?.trim() || "unknown";
+  if (!checkRateLimit(ip)) {
+    return {
+      ok: false,
+      error: { code: "RATE_LIMITED", message: t("rateLimited") },
+    };
+  }
+
+  // Honeypot: real users never see this field. Answer as if it succeeded so
+  // bots get no signal, but send nothing.
+  if (input.website && input.website.trim().length > 0) {
+    return { ok: true };
+  }
 
   const parsed = quoteRequestSchema.safeParse(input);
   if (!parsed.success) {

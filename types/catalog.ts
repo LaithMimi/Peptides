@@ -50,10 +50,14 @@ export interface QuoteRequestInput {
   shippingAddress: Address;
   notes?: string | null;
   ageAndResearchUseAck: boolean;
+  website?: string;
   locale: Locale;
 }
 
-export type QuoteRequestErrorCode = "VALIDATION_ERROR" | "EMAIL_DELIVERY_FAILED";
+export type QuoteRequestErrorCode =
+  | "VALIDATION_ERROR"
+  | "EMAIL_DELIVERY_FAILED"
+  | "RATE_LIMITED";
 
 export interface QuoteRequestError {
   code: QuoteRequestErrorCode;
