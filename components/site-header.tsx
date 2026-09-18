@@ -21,7 +21,7 @@ export function SiteHeader() {
             width={168}
             height={168}
             priority
-            className="brand-mark h-14 w-14 object-contain sm:h-16 sm:w-16"
+            className="brand-mark h-20 w-20 object-contain sm:h-28 sm:w-28"
           />
         </Link>
         <nav className="flex items-center gap-2 sm:gap-4">
