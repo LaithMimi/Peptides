@@ -15,7 +15,7 @@ price.**
   lineItems: Array<{
     productId: string;
     vialId: string;
-    quantity: number; // 1–20
+    quantity: number; // 1–10
   }>;
   customerName: string;
   customerEmail: string;
@@ -30,6 +30,7 @@ price.**
   };
   notes?: string | null;
   ageAndResearchUseAck: boolean;
+  website?: string; // honeypot: must be empty/absent
   locale: "en" | "ar";
 }
 ```
@@ -56,7 +57,7 @@ preserve entered data):
 {
   ok: false;
   error: {
-    code: "VALIDATION_ERROR" | "EMAIL_DELIVERY_FAILED";
+    code: "VALIDATION_ERROR" | "EMAIL_DELIVERY_FAILED" | "RATE_LIMITED";
     fieldErrors?: Record<string, string>; // when code === "VALIDATION_ERROR"
     message: string; // human-readable, localized, shown to the customer
   }
@@ -72,6 +73,8 @@ preserve entered data):
 | Empty `lineItems` | `VALIDATION_ERROR` | Block submission; show "add at least one item" |
 | `productId`/`vialId` no longer resolves (removed/inactive) | `VALIDATION_ERROR` | Identify the affected line item so the customer can adjust (Edge Cases) |
 | Resend API call fails/times out | `EMAIL_DELIVERY_FAILED` | Show retry message; preserve form state (FR-012) |
+| Per-IP rate limit exceeded (checked first, before validation) | `RATE_LIMITED` | Show localized retry-later message; preserve form state (FR-011a) |
+| Honeypot `website` non-empty | `{ ok: true }` (no email sent) | Behaves like success so bots get no signal; nothing is sent (FR-011a) |
 
 ### Side Effects on Success
 
@@ -81,6 +84,7 @@ preserve entered data):
   email, phone), the full shipping address, any notes, the recorded
   acknowledgment, the submission locale, and a server-generated
   `submittedAt` timestamp.
+- No email is sent to the customer; the business is the only recipient.
 - The client-side quote-cart is cleared and the customer is routed to
   `app/[locale]/quote/confirmation`.
 

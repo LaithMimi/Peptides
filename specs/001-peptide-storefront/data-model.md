@@ -48,7 +48,11 @@ the quote-request email payload.
 |---|---|---|
 | `productId` | string | Must reference an existing active product |
 | `vialId` | string | Must reference an existing vial of that product |
-| `quantity` | integer | 1 ≤ quantity ≤ 20 (sane per-line max, edge case in spec.md) |
+| `quantity` | integer | 1 ≤ quantity ≤ 10 (per-line max, clarified 2026-09-18) |
+
+One line per `productId`+`vialId` pair: re-adding an existing pair merges
+into the existing line (quantities summed, capped at 10). The list persists
+in browser storage until a successful submission clears it.
 
 No subtotal is derived — there is no price to multiply.
 
@@ -67,6 +71,7 @@ Never persisted — exists only as the payload sent to the email step.
 | `shippingAddress` | `Address` | Required (see below) |
 | `notes` | string \| null | Optional free-text note from the customer |
 | `ageAndResearchUseAck` | boolean | Must be `true` — server rejects the request if `false`/missing (FR-006, Principle I) |
+| `website` | string | Honeypot field, rendered hidden; MUST be empty. Non-empty means bot: request is silently discarded, never emailed (FR-011a). Not part of the emailed payload |
 | `locale` | "en" \| "ar" | The language the request was submitted in, included so the business can reply in kind |
 | `submittedAt` | ISO datetime string | Set server-side at processing time, not client-supplied |
 
@@ -86,7 +91,7 @@ Never persisted — exists only as the payload sent to the email step.
 - `lineItems.length >= 1`
 - Every `lineItems[].productId` + `vialId` resolves to a real, active
   product/vial in `lib/products.ts` (re-checked server-side)
-- `1 <= quantity <= 20` per line item
+- `1 <= quantity <= 10` per line item, and no duplicate `productId`+`vialId` pairs
 - `customerEmail` matches standard email format
 - `customerName` and `customerPhone` non-empty
 - `shippingAddress.{line1,city,region,postalCode,country}` all non-empty

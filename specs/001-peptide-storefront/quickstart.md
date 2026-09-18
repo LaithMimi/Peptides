@@ -65,7 +65,18 @@ Each scenario maps to an acceptance scenario in `spec.md`. Run each in both
 6. **Duplicate submission guard (FR-011)** — Click submit multiple times
    rapidly; confirm only one request is sent/logged.
 
-7. **Email failure path (FR-012)** — Temporarily set an invalid
+7. **Spam guard (FR-011a)** — Using devtools, fill the hidden `website`
+   field and submit: confirm a normal-looking success but no email/console
+   log. Then submit valid requests repeatedly from one client until the
+   limit is hit and confirm the localized retry-later message appears with
+   form data retained.
+
+8. **Quantity cap and merge (FR-004)** — Set quantity to 11: blocked. Add the
+   same product+vial twice (e.g., 6 then 6): the cart shows one line with
+   quantity 10 (capped). Reload the page: the cart is still there; after a
+   successful submit it is empty.
+
+9. **Email failure path (FR-012)** — Temporarily set an invalid
    `RESEND_API_KEY` (with a value present, so the real send path is
    exercised instead of the dev console fallback), submit a request, and
    confirm the customer sees a clear failure message with their data still

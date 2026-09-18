@@ -1,6 +1,6 @@
 # Implementation Plan: Peptide Storefront (Catalog + Quote-Request Capture)
 
-**Branch**: `001-peptide-storefront` | **Date**: 2026-09-17 (amended) | **Spec**: [spec.md](./spec.md)
+**Branch**: `001-peptide-storefront` | **Date**: 2026-09-18 (amended after clarifications) | **Spec**: [spec.md](./spec.md)
 
 **Input**: Feature specification from `/specs/001-peptide-storefront/spec.md`
 
@@ -17,7 +17,7 @@ processing, no published pricing, no database, no admin dashboard.
 
 **Language/Version**: TypeScript 5.x, Node.js 22 (Vercel default runtime)
 
-**Primary Dependencies**: Next.js 15 (App Router), React 19, Tailwind CSS,
+**Primary Dependencies**: Next.js 16 (App Router), React 19, Tailwind CSS,
 `next-intl` (locale routing + RTL), Zod (form/schema validation), Resend
 (transactional email), React Hook Form
 
@@ -67,7 +67,8 @@ queue/pipeline)
   controls in both languages.
 - **Principle IV (Simple, Maintainable Stack)**: PASS — no database, no
   auth, no admin dashboard, no queue; static per-locale data module + one
-  email send.
+  email send. The spam guard (honeypot + per-IP rate limit, FR-011a) is
+  in-process code with no new dependency or external service; no CAPTCHA.
 - **Principle V (Transparent Product Info, Quote-Request Pricing)**: PASS —
   data model requires name, vial size, and research-area copy per product;
   no price field exists anywhere; the quote-request flow is presented
@@ -126,7 +127,8 @@ components/
 lib/
 ├── products.ts                  # Static product + vial catalog data (per-locale content)
 ├── quote-schema.ts              # Zod schema shared by client + Server Action
-├── email.ts                     # Resend client wrapper (send quote-request email)
+├── email.ts                     # Resend client wrapper (send quote-request email to business only)
+├── rate-limit.ts                # In-memory per-IP fixed-window limiter for the quote action (FR-011a)
 └── cart-store.ts                # Client-side quote-cart state (React context + localStorage)
 
 types/

@@ -6,7 +6,7 @@ each choice and the alternatives considered, for future maintainers.
 
 ## Framework: Next.js (App Router) + TypeScript, on Vercel
 
-- **Decision**: Next.js 15 App Router, TypeScript, deployed on Vercel.
+- **Decision**: Next.js 16 App Router, TypeScript, deployed on Vercel.
 - **Rationale**: Server Actions give a built-in, type-safe way to handle
   order submission without standing up a separate API service; Vercel is
   the target deploy platform; App Router is the current recommended Next.js
@@ -57,6 +57,37 @@ each choice and the alternatives considered, for future maintainers.
 - **Alternatives considered**: Server-side session/cookie cart — rejected
   as unnecessary complexity given guest-only, single-session use.
 
+## Spam protection: honeypot + in-memory per-IP rate limit
+
+- **Decision**: A hidden honeypot field in the form (submissions that fill
+  it are silently discarded, returning a normal-looking success so bots get
+  no signal), plus a small in-memory fixed-window per-IP limiter
+  (`lib/rate-limit.ts`, e.g. 5 submissions / 10 minutes) checked at the top
+  of the Server Action. The client IP comes from the `x-forwarded-for`
+  header via `headers()`. Exceeding the limit returns
+  `RATE_LIMITED` with a localized retry-later message.
+- **Rationale**: Chosen in clarification (2026-09-18). Zero new
+  dependencies or services and no user friction, consistent with
+  Principle IV. The limiter is best-effort: state is per server instance
+  and resets on cold start, which is acceptable for a low-volume site.
+- **Alternatives considered**: CAPTCHA/Turnstile (rejected: friction, third
+  party, EN/AR support); Upstash/Redis limiter (rejected: new
+  infrastructure for this scope). Vercel Firewall rate-limit rules can be
+  layered on at the platform level later with no code change.
+
+## Duplicate line items: merge
+
+- **Decision**: The cart store keys lines by `productId+vialId`; adding an
+  existing pair adds quantities, capped at 10.
+- **Rationale**: Chosen in clarification; keeps the email unambiguous.
+
+## Customer confirmation email: none
+
+- **Decision**: Only the business is emailed; the customer sees the
+  on-screen confirmation page.
+- **Rationale**: Chosen in clarification; avoids sending mail to arbitrary
+  customer-supplied addresses (abuse vector) and a second template.
+
 ## Styling/design: Tailwind CSS + `/impeccable` skill
 
 - **Decision**: Tailwind CSS utility classes, with layout/visual decisions
@@ -69,7 +100,7 @@ each choice and the alternatives considered, for future maintainers.
 ## Internationalization: `next-intl`
 
 - **Decision**: `next-intl` for locale routing (`/en`, `/ar`) and message
-  catalogs, with a `middleware.ts` handling locale detection/redirect and
+  catalogs, with a `proxy.ts` (Next.js 16's replacement for `middleware.ts`) handling locale detection/redirect and
   `app/[locale]/layout.tsx` setting `<html lang dir>` (`dir="rtl"` for
   Arabic).
 - **Rationale**: `next-intl` is the standard App Router i18n library —
