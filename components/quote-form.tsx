@@ -29,6 +29,7 @@ export function QuoteForm() {
   const knownErrorCodes = new Set([
     "required",
     "invalidEmail",
+    "invalidPhone",
     "emptyCart",
     "ackRequired",
   ]);

@@ -67,6 +67,7 @@
   "errors": {
     "required": "This field is required.",
     "invalidEmail": "Please enter a valid email address.",
+    "invalidPhone": "Please enter a valid phone number starting with +972 or +970 (e.g. +972 59 123 4567).",
     "emptyCart": "Please add at least one item to your quote request.",
     "ackRequired": "You must confirm this before submitting.",
     "itemUnavailable": "One of the items in your request is no longer available: {name}. Please remove or update it.",
