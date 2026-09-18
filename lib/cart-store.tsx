@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import type { LineItem } from "@/types/catalog";
+import { MAX_LINE_QUANTITY } from "@/lib/quote-schema";
 
 const STORAGE_KEY = "peptides:quote-cart";
 
@@ -76,12 +77,18 @@ function addItem(item: LineItem) {
     setCart(
       cartItems.map((i) =>
         i === existing
-          ? { ...i, quantity: Math.min(20, i.quantity + item.quantity) }
+          ? {
+              ...i,
+              quantity: Math.min(MAX_LINE_QUANTITY, i.quantity + item.quantity),
+            }
           : i
       )
     );
   } else {
-    setCart([...cartItems, item]);
+    setCart([
+      ...cartItems,
+      { ...item, quantity: Math.min(MAX_LINE_QUANTITY, item.quantity) },
+    ]);
   }
 }
 
@@ -89,7 +96,7 @@ function updateQuantity(productId: string, vialId: string, quantity: number) {
   setCart(
     cartItems.map((i) =>
       i.productId === productId && i.vialId === vialId
-        ? { ...i, quantity: Math.max(1, Math.min(20, quantity)) }
+        ? { ...i, quantity: Math.max(1, Math.min(MAX_LINE_QUANTITY, quantity)) }
         : i
     )
   );

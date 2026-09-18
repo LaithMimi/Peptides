@@ -16,12 +16,12 @@ export function SiteHeader() {
       <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center" aria-label="Pep Club — home">
           <Image
-            src="/brand/pep-club-logo.jpeg"
+            src="/brand/pep-club-logo.png"
             alt="Pep Club — Premium Peptides"
             width={168}
             height={168}
             priority
-            className="brand-mark h-14 w-14 object-contain sm:h-16 sm:w-16"
+            className="brand-mark h-20 w-20 object-contain sm:h-28 sm:w-28"
           />
         </Link>
         <nav className="flex items-center gap-2 sm:gap-4">

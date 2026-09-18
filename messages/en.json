@@ -71,6 +71,7 @@
     "ackRequired": "You must confirm this before submitting.",
     "itemUnavailable": "One of the items in your request is no longer available: {name}. Please remove or update it.",
     "emailFailed": "We couldn't send your quote request just now. Please try again — your information has been kept.",
+    "rateLimited": "Too many requests from your connection. Please wait a few minutes and try again — your information has been kept.",
     "genericSubmit": "Something went wrong submitting your request. Please try again.",
     "feedbackFailed": "We couldn't send your feedback just now. Please try again — your message has been kept."
   },

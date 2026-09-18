@@ -4,6 +4,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useCart } from "@/lib/cart-store";
 import { getProductById } from "@/lib/products";
+import { MAX_LINE_QUANTITY } from "@/lib/quote-schema";
 import { LtrValue } from "@/components/ltr-value";
 import type { Locale } from "@/i18n/routing";
 
@@ -58,7 +59,7 @@ export function QuoteSummary({ showLink = true }: { showLink?: boolean }) {
                   id={`qty-${item.productId}-${item.vialId}`}
                   type="number"
                   min={1}
-                  max={20}
+                  max={MAX_LINE_QUANTITY}
                   value={item.quantity}
                   onChange={(e) =>
                     updateQuantity(

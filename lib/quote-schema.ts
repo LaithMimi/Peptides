@@ -9,11 +9,13 @@ function isValidPhone(value: string): boolean {
   return /^\+97[02]\d{8,9}$/.test(value.replace(/[\s().-]/g, ""));
 }
 
+export const MAX_LINE_QUANTITY = 10;
+
 export const lineItemSchema = z
   .object({
     productId: z.string().min(1),
     vialId: z.string().min(1),
-    quantity: z.number().int().min(1).max(20),
+    quantity: z.number().int().min(1).max(MAX_LINE_QUANTITY),
   })
   .refine(
     (item) => {
@@ -32,7 +34,15 @@ export const addressSchema = z.object({
 });
 
 export const quoteRequestSchema = z.object({
-  lineItems: z.array(lineItemSchema).min(1, { message: "emptyCart" }),
+  lineItems: z
+    .array(lineItemSchema)
+    .min(1, { message: "emptyCart" })
+    .refine(
+      (items) =>
+        new Set(items.map((i) => `${i.productId}:${i.vialId}`)).size ===
+        items.length,
+      { message: "duplicateItem" }
+    ),
   customerName: z.string().trim().min(1, { message: "required" }),
   customerEmail: z.string().trim().email({ message: "invalidEmail" }),
   customerPhone: z
@@ -45,6 +55,7 @@ export const quoteRequestSchema = z.object({
   ageAndResearchUseAck: z.literal(true, {
     error: "ackRequired",
   }),
+  website: z.string().optional(),
   locale: z.enum(["en", "ar"]),
 });
 

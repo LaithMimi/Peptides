@@ -14,7 +14,17 @@ Next.js app scaffolded per plan.md's Project Structure already exists.
   ```
   RESEND_API_KEY=re_xxx
   ORDER_NOTIFICATION_EMAIL=business-inbox@example.com
+  TWILIO_ACCOUNT_SID=ACxxx
+  TWILIO_AUTH_TOKEN=xxx
+  TWILIO_VERIFY_SERVICE_SID=VAxxx
+  PHONE_TOKEN_SECRET=<long random string>
   ```
+- Phone OTP in local dev: leave the three `TWILIO_*` variables unset and the
+  code is printed to the server console; enter `000000`. This fallback only
+  works when `NODE_ENV` is not `production` — production and Vercel previews
+  need the real variables, otherwise phone verification (and so submission)
+  is blocked by design. For a real-SMS test, create a Twilio Verify service
+  and use a number verified on a Twilio trial account.
 
 ## Setup
 
@@ -65,7 +75,36 @@ Each scenario maps to an acceptance scenario in `spec.md`. Run each in both
 6. **Duplicate submission guard (FR-011)** — Click submit multiple times
    rapidly; confirm only one request is sent/logged.
 
-7. **Email failure path (FR-012)** — Temporarily set an invalid
+7. **Spam guard (FR-011a)** — Using devtools, fill the hidden `website`
+   field and submit: confirm a normal-looking success but no email/console
+   log. Then submit valid requests repeatedly from one client until the
+   limit is hit and confirm the localized retry-later message appears with
+   form data retained.
+
+8. **Quantity cap and merge (FR-004)** — Set quantity to 11: blocked. Add the
+   same product+vial twice (e.g., 6 then 6): the cart shows one line with
+   quantity 10 (capped). Reload the page: the cart is still there; after a
+   successful submit it is empty.
+
+9. **Phone OTP (FR-007a)** — On the quote form, enter a valid international
+   number (e.g. `+15550100`) and press "Send code"; confirm the code step
+   appears (and, in dev, the code is logged to the server console). Try
+   submitting the form without verifying: it must be blocked with a
+   "verify your phone number" message. Enter a wrong code: error, still
+   blocked. Enter the right code: the number shows as verified and submit
+   works; the business email shows the phone marked verified. Edit the phone
+   after verifying: verification is cleared. Press "Send code" again within
+   60 s: blocked by the cooldown; send more than 3 codes in 10 minutes from
+   one client: `RATE_LIMITED` message. Enter an invalid number such as
+   `123`: inline error, no code sent. Repeat in `/ar` and confirm the
+   digits stay left-to-right inside the RTL layout.
+
+10. **Phone verification fails closed (FR-007a)** — With
+   `NODE_ENV=production` (`npm run build && npm start`) and no Twilio
+   variables set, press "Send code": a clear failure message is shown and
+   the form cannot be submitted; the `000000` fallback must NOT be accepted.
+
+11. **Email failure path (FR-012)** — Temporarily set an invalid
    `RESEND_API_KEY` (with a value present, so the real send path is
    exercised instead of the dev console fallback), submit a request, and
    confirm the customer sees a clear failure message with their data still

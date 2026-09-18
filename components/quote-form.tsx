@@ -58,6 +58,7 @@ export function QuoteForm() {
         postalCode: "",
       },
       notes: "",
+      website: "",
       ageAndResearchUseAck: undefined as unknown as true,
     },
   });
@@ -249,6 +250,20 @@ export function QuoteForm() {
           className={inputClass}
         />
       </Field>
+
+      <div
+        aria-hidden="true"
+        className="absolute -start-[9999px] h-0 w-0 overflow-hidden"
+      >
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          {...register("website")}
+        />
+      </div>
 
       <label className="flex items-start gap-3 text-sm text-foreground">
         <input

@@ -48,7 +48,11 @@ the quote-request email payload.
 |---|---|---|
 | `productId` | string | Must reference an existing active product |
 | `vialId` | string | Must reference an existing vial of that product |
-| `quantity` | integer | 1 ≤ quantity ≤ 20 (sane per-line max, edge case in spec.md) |
+| `quantity` | integer | 1 ≤ quantity ≤ 10 (per-line max, clarified 2026-09-18) |
+
+One line per `productId`+`vialId` pair: re-adding an existing pair merges
+into the existing line (quantities summed, capped at 10). The list persists
+in browser storage until a successful submission clears it.
 
 No subtotal is derived — there is no price to multiply.
 
@@ -63,10 +67,12 @@ Never persisted — exists only as the payload sent to the email step.
 | `lineItems` | `LineItem[]` | At least 1 (FR-008: cannot submit an empty request) |
 | `customerName` | string | Required, non-empty |
 | `customerEmail` | string | Required, valid email format |
-| `customerPhone` | string | Required, non-empty (the business ships directly once a quote is accepted and needs a reachable number) |
+| `customerPhone` | string | Required; a valid international number, stored/sent in E.164 form (e.g. `+15550100`), parsed and validated with `libphonenumber-js` (the business ships directly once a quote is accepted and needs a reachable number) |
+| `phoneVerificationToken` | string | Required; signed token proving `customerPhone` passed OTP verification (see Phone Verification Token). Server rejects the request if missing, tampered, expired, or issued for a different number (FR-007a). Not included in the emailed payload |
 | `shippingAddress` | `Address` | Required (see below) |
 | `notes` | string \| null | Optional free-text note from the customer |
 | `ageAndResearchUseAck` | boolean | Must be `true` — server rejects the request if `false`/missing (FR-006, Principle I) |
+| `website` | string | Honeypot field, rendered hidden; MUST be empty. Non-empty means bot: request is silently discarded, never emailed (FR-011a). Not part of the emailed payload |
 | `locale` | "en" \| "ar" | The language the request was submitted in, included so the business can reply in kind |
 | `submittedAt` | ISO datetime string | Set server-side at processing time, not client-supplied |
 
@@ -81,14 +87,32 @@ Never persisted — exists only as the payload sent to the email step.
 | `postalCode` | string | Required, non-empty |
 | `country` | string | Required, non-empty |
 
+## Phone Verification Token (transient, never stored)
+
+Minted by `verifyPhoneCode` after Twilio reports `approved`; held in client
+form state only; checked by `submitQuoteRequest`. Format:
+`base64url(JSON payload) + "." + base64url(HMAC-SHA256(PHONE_TOKEN_SECRET, payload))`.
+
+| Field | Type | Rules |
+|---|---|---|
+| `p` | string | E.164 phone number that was verified; MUST equal the submitted `customerPhone` |
+| `exp` | integer | Unix seconds; `now + 30 min` at issue; expired tokens are rejected |
+
+Code generation, expiry (Twilio default 10 min) and wrong-attempt limits live
+in Twilio Verify, not in this app. Rate-limit counters (send per IP, send per
+phone, check per IP) are in-memory only in `lib/rate-limit.ts`.
+
 ## Validation Summary (enforced in `lib/quote-schema.ts`, shared client+server)
 
 - `lineItems.length >= 1`
 - Every `lineItems[].productId` + `vialId` resolves to a real, active
   product/vial in `lib/products.ts` (re-checked server-side)
-- `1 <= quantity <= 20` per line item
+- `1 <= quantity <= 10` per line item, and no duplicate `productId`+`vialId` pairs
 - `customerEmail` matches standard email format
-- `customerName` and `customerPhone` non-empty
+- `customerName` non-empty
+- `customerPhone` is a valid international number (E.164) AND
+  `phoneVerificationToken` is valid, unexpired, and issued for exactly that
+  number (server-side enforcement of FR-007a)
 - `shippingAddress.{line1,city,region,postalCode,country}` all non-empty
   (`line2` is the only optional address field)
 - `ageAndResearchUseAck === true` (hard requirement; request rejected

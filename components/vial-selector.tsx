@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { Vial } from "@/types/catalog";
 import { useCart } from "@/lib/cart-store";
+import { MAX_LINE_QUANTITY } from "@/lib/quote-schema";
 import { LtrValue } from "@/components/ltr-value";
 
 export function VialSelector({
@@ -81,11 +82,15 @@ export function VialSelector({
           id="quantity"
           type="number"
           min={1}
-          max={20}
+          max={MAX_LINE_QUANTITY}
           value={quantity}
           onChange={(e) => {
             const next = Number(e.target.value);
-            setQuantity(Number.isFinite(next) ? Math.max(1, Math.min(20, next)) : 1);
+            setQuantity(
+              Number.isFinite(next)
+                ? Math.max(1, Math.min(MAX_LINE_QUANTITY, next))
+                : 1
+            );
             setAdded(false);
           }}
           className="w-20 rounded-md border border-border-strong bg-surface-raised px-3 py-1.5 font-mono text-foreground"

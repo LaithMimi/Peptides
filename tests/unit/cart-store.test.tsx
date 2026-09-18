@@ -41,18 +41,27 @@ describe("useCart", () => {
     ]);
   });
 
-  it("caps merged quantity at 20", () => {
+  it("caps merged quantity at 10 and keeps a single line", () => {
     const { result } = renderHook(() => useCart(), { wrapper });
     act(() => {
-      result.current.addItem({ productId: "tb-500", vialId: "10mg", quantity: 15 });
+      result.current.addItem({ productId: "tb-500", vialId: "10mg", quantity: 6 });
     });
     act(() => {
-      result.current.addItem({ productId: "tb-500", vialId: "10mg", quantity: 15 });
+      result.current.addItem({ productId: "tb-500", vialId: "10mg", quantity: 6 });
     });
-    expect(result.current.items[0].quantity).toBe(20);
+    expect(result.current.items).toHaveLength(1);
+    expect(result.current.items[0].quantity).toBe(10);
   });
 
-  it("updates quantity within 1-20 bounds", () => {
+  it("caps an oversized first add at 10", () => {
+    const { result } = renderHook(() => useCart(), { wrapper });
+    act(() => {
+      result.current.addItem({ productId: "tb-500", vialId: "10mg", quantity: 50 });
+    });
+    expect(result.current.items[0].quantity).toBe(10);
+  });
+
+  it("updates quantity within 1-10 bounds", () => {
     const { result } = renderHook(() => useCart(), { wrapper });
     act(() => {
       result.current.addItem({ productId: "tb-500", vialId: "10mg", quantity: 1 });
@@ -60,7 +69,7 @@ describe("useCart", () => {
     act(() => {
       result.current.updateQuantity("tb-500", "10mg", 50);
     });
-    expect(result.current.items[0].quantity).toBe(20);
+    expect(result.current.items[0].quantity).toBe(10);
     act(() => {
       result.current.updateQuantity("tb-500", "10mg", -5);
     });

@@ -61,7 +61,7 @@ payment step exists anywhere in this flow.
 
 - Name: **Pep Club**. Tagline: **Premium Peptides**. This replaces the
   placeholder name "Aether Peptides" used in the initial build.
-- Logo asset: `public/brand/pep-club-logo.jpeg` — a molecular "P" mark (a
+- Logo asset: `public/brand/pep-club-logo.png` — a molecular "P" mark (a
   chain-of-dots motif suggesting a peptide bond) in deep navy with a single
   blue accent node, paired with the wordmark "PEP CLUB" (navy + blue) and
   "PREMIUM PEPTIDES" tagline beneath. This is the confirmed identity to

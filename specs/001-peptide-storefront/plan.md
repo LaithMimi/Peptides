@@ -1,6 +1,6 @@
 # Implementation Plan: Peptide Storefront (Catalog + Quote-Request Capture)
 
-**Branch**: `001-peptide-storefront` | **Date**: 2026-09-17 (amended) | **Spec**: [spec.md](./spec.md)
+**Branch**: `001-peptide-storefront` | **Date**: 2026-09-18 (amended after clarifications) | **Spec**: [spec.md](./spec.md)
 
 **Input**: Feature specification from `/specs/001-peptide-storefront/spec.md`
 
@@ -17,9 +17,17 @@ processing, no published pricing, no database, no admin dashboard.
 
 **Language/Version**: TypeScript 5.x, Node.js 22 (Vercel default runtime)
 
-**Primary Dependencies**: Next.js 15 (App Router), React 19, Tailwind CSS,
+**Primary Dependencies**: Next.js 16 (App Router), React 19, Tailwind CSS,
 `next-intl` (locale routing + RTL), Zod (form/schema validation), Resend
-(transactional email), React Hook Form
+(transactional email), React Hook Form, `libphonenumber-js` (phone
+validation/E.164 normalization)
+
+**External Services**: Resend (email to the business); Twilio Verify (SMS
+one-time codes, called over its REST API with `fetch` — no SDK). Vercel
+Marketplace discovery (`messaging` category, 2026-09-18) offers only Resend
+(email), so no marketplace SMS/OTP provider exists; Twilio is configured
+through environment variables (`TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`,
+`TWILIO_VERIFY_SERVICE_SID`, `PHONE_TOKEN_SECRET`).
 
 **Storage**: N/A — product catalog is a local static TypeScript data module
 (with per-locale content) committed to the repo; no database in v1
@@ -67,13 +75,23 @@ queue/pipeline)
   controls in both languages.
 - **Principle IV (Simple, Maintainable Stack)**: PASS — no database, no
   auth, no admin dashboard, no queue; static per-locale data module + one
-  email send.
+  email send. The spam guard (honeypot + per-IP rate limit, FR-011a) is
+  in-process code with no new dependency or external service; no CAPTCHA.
+  Phone OTP (FR-007a) adds one external service (Twilio Verify) and one
+  small dependency (`libphonenumber-js`) but still no database, accounts, or
+  sessions: Twilio stores the code, and proof of verification is a
+  stateless signed token. Justified in Complexity Tracking.
 - **Principle V (Transparent Product Info, Quote-Request Pricing)**: PASS —
   data model requires name, vial size, and research-area copy per product;
   no price field exists anywhere; the quote-request flow is presented
   explicitly as a quote request, not a disguised purchase.
 
-No violations. Complexity Tracking table is not needed.
+Re-check after the OTP design: Principles I, II, III and V PASS (the SMS
+text contains no product names or claims; no payment or price; the code
+entry is bilingual with LTR digits inside RTL; nothing hidden from the
+customer). Principle IV PASS with justification: OTP introduces no database,
+auth/account system or queue; the one added service is recorded below.
+No unjustified violations.
 
 ## Project Structure
 
@@ -110,7 +128,8 @@ app/
 │   │       └── page.tsx             # Product detail + vial/quantity selection
 │   └── quote/
 │       ├── page.tsx                  # Quote-request review + contact form
-│       ├── actions.ts                 # Server Action: validate + send quote email
+│       ├── actions.ts                 # Server Action: validate + verify phone token + send quote email
+│       ├── otp-actions.ts             # Server Actions: sendPhoneCode, verifyPhoneCode (FR-007a)
 │       └── confirmation/
 │           └── page.tsx                # Post-submit confirmation (or failure) state
 └── proxy.ts                      # next-intl middleware for locale detection/routing (Next.js 16 "proxy" convention)
@@ -121,12 +140,17 @@ components/
 ├── disclaimer-banner.tsx
 ├── quote-form.tsx
 ├── quote-summary.tsx
+├── phone-verification.tsx       # Send code / enter code / verified state for the phone field
 └── locale-switcher.tsx
 
 lib/
 ├── products.ts                  # Static product + vial catalog data (per-locale content)
 ├── quote-schema.ts              # Zod schema shared by client + Server Action
-├── email.ts                     # Resend client wrapper (send quote-request email)
+├── email.ts                     # Resend client wrapper (send quote-request email to business only)
+├── rate-limit.ts                # In-memory fixed-window limiter (namespace/max/window params): quote submit, OTP send per IP + per phone, OTP check per IP
+├── phone.ts                     # libphonenumber-js wrapper: parse, validate, normalize to E.164
+├── otp.ts                       # Twilio Verify REST wrapper (start/check) + non-production console fallback
+├── phone-token.ts               # HMAC-signed stateless "phone verified" token: sign/verify (node:crypto)
 └── cart-store.ts                # Client-side quote-cart state (React context + localStorage)
 
 types/
@@ -144,4 +168,8 @@ as the only server-side logic (matches constitution Principle IV).
 
 ## Complexity Tracking
 
-*No constitution violations — table not needed.*
+| Addition | Why needed | Simpler alternative rejected because |
+|---|---|---|
+| Twilio Verify (external SMS service) | FR-007a requires proof the customer can receive texts at the number; the business ships by phone follow-up and needs real numbers | Format-only validation (libphonenumber) cannot show a number is reachable; self-built codes need storage (a database) or a hand-rolled signed-code scheme plus an SMS gateway anyway |
+| `libphonenumber-js` dependency | Correct international parsing/E.164 normalization is not safely hand-rolled | A regex misjudges many countries' formats (the site serves EN + AR regions) |
+| Signed stateless token (`lib/phone-token.ts`) | The submit action must know the phone was verified without a database or session | Server-side session/DB store violates Principle IV; re-checking with Twilio at submit is impossible because an approved code cannot be re-checked |

@@ -53,12 +53,36 @@ describe("quoteRequestSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("rejects quantity above 20", () => {
+  it("accepts the maximum quantity of 10", () => {
     const result = quoteRequestSchema.safeParse({
       ...validInput,
-      lineItems: [{ productId: "tb-500", vialId: "10mg", quantity: 21 }],
+      lineItems: [{ productId: "tb-500", vialId: "10mg", quantity: 10 }],
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects quantity above 10", () => {
+    const result = quoteRequestSchema.safeParse({
+      ...validInput,
+      lineItems: [{ productId: "tb-500", vialId: "10mg", quantity: 11 }],
     });
     expect(result.success).toBe(false);
+  });
+
+  it("rejects duplicate product+vial line items", () => {
+    const result = quoteRequestSchema.safeParse({
+      ...validInput,
+      lineItems: [
+        { productId: "tb-500", vialId: "10mg", quantity: 1 },
+        { productId: "tb-500", vialId: "10mg", quantity: 2 },
+      ],
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts an empty honeypot field", () => {
+    const result = quoteRequestSchema.safeParse({ ...validInput, website: "" });
+    expect(result.success).toBe(true);
   });
 
   it("rejects an invalid email format", () => {
