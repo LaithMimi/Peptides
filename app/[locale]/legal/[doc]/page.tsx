@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing, type Locale } from "@/i18n/routing";
-import { getBusiness } from "@/lib/business";
 import {
   LAST_UPDATED,
   LEGAL_SLUGS,
@@ -25,7 +24,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, doc } = await params;
   if (!isLegalSlug(doc)) return {};
-  return { title: getLegalDoc(doc, locale as Locale, getBusiness()).title };
+  return { title: getLegalDoc(doc, locale as Locale).title };
 }
 
 export default async function LegalPage({
@@ -37,7 +36,7 @@ export default async function LegalPage({
   if (!isLegalSlug(doc)) notFound();
   setRequestLocale(locale);
   const t = await getTranslations("legal");
-  const content = getLegalDoc(doc, locale as Locale, getBusiness());
+  const content = getLegalDoc(doc, locale as Locale);
 
   return (
     <article className="mx-auto flex w-full max-w-3xl flex-col gap-6">

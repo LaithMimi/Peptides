@@ -24,7 +24,7 @@ export function SiteHeader() {
             className="brand-mark h-20 w-20 object-contain sm:h-28 sm:w-28"
           />
         </Link>
-        <nav className="flex items-center gap-2 sm:gap-4">
+        <nav className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 sm:gap-x-4">
           <Link
             href="/"
             className="rounded px-2 py-1 font-serif text-sm font-semibold uppercase tracking-wide text-navy hover:text-accent"
@@ -41,6 +41,12 @@ export function SiteHeader() {
                 {count}
               </span>
             )}
+          </Link>
+          <Link
+            href="/contact"
+            className="rounded px-2 py-1 font-serif text-sm font-semibold uppercase tracking-wide text-navy hover:text-accent"
+          >
+            {tNav("contact")}
           </Link>
           <LocaleSwitcher />
         </nav>

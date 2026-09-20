@@ -7,7 +7,8 @@
     "catalog": "Catalog",
     "quote": "Quote Request",
     "language": "Language",
-    "cartCount": "{count, plural, =0 {No items} one {# item} other {# items}}"
+    "cartCount": "{count, plural, =0 {No items} one {# item} other {# items}}",
+    "contact": "Contact us"
   },
   "disclaimer": {
     "short": "For Research Use Only — Not for Human Use.",
@@ -78,10 +79,9 @@
   "errors": {
     "required": "This field is required.",
     "invalidEmail": "Please enter a valid email address.",
-    "invalidPhone": "Please enter a valid phone number starting with +972 or +970 (e.g. +972 59 123 4567).",
+    "invalidPhone": "Enter a valid phone number with the country code, e.g. +1 555 010 0100.",
     "emptyCart": "Please add at least one item to your quote request.",
     "ackRequired": "You must confirm this before submitting.",
-    "invalidPhone": "Enter a valid phone number with the country code, e.g. +1 555 010 0100.",
     "phoneNotVerified": "Please verify your phone number with the code we text you.",
     "otpSendFailed": "We couldn't send a code to that number. Please check it and try again.",
     "otpInvalidCode": "That code isn't correct. Please try again.",
@@ -113,7 +113,8 @@
       "refunds": "Refund policy",
       "cookies": "Cookie policy",
       "dataRequest": "Data request (delete or access my data)",
-      "cookieSettings": "Cookie settings"
+      "cookieSettings": "Cookie settings",
+      "contact": "Contact us"
     },
     "note": {
       "quote": "We use these details only to verify your phone and answer your quote request.",
@@ -185,5 +186,15 @@
   "footer": {
     "disclaimer": "For Research Use Only — Not for Human Use. Not for diagnostic or therapeutic use in humans or animals.",
     "rights": "All rights reserved."
+  },
+  "contact": {
+    "title": "Contact us",
+    "intro": "Questions about a product or your quote request? Reach us by phone.",
+    "location": "Location",
+    "locationValue": "Jerusalem",
+    "phone": "Phone",
+    "email": "Email",
+    "call": "Call us",
+    "note": "We follow up on quote requests directly. Please do not send medical questions — our products are for laboratory research use only."
   }
 }
