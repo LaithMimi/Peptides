@@ -62,6 +62,7 @@ export function QuoteForm({ sessionPhone }: { sessionPhone: string | null }) {
     "invalidEmail",
     "emptyCart",
     "ackRequired",
+    "tooLong",
   ]);
   function translateFieldError(message: string | undefined): string | undefined {
     if (!message) return undefined;

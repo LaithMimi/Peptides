@@ -2,6 +2,11 @@ import { z } from "zod";
 import { getProductById } from "./products";
 
 export const MAX_LINE_QUANTITY = 10;
+export const MAX_LINE_ITEMS = 50;
+export const MAX_NAME_LENGTH = 200;
+export const MAX_EMAIL_LENGTH = 254;
+export const MAX_ADDRESS_LENGTH = 500;
+export const MAX_NOTES_LENGTH = 2000;
 
 export const lineItemSchema = z
   .object({
@@ -21,20 +26,38 @@ export const quoteRequestSchema = z.object({
   lineItems: z
     .array(lineItemSchema)
     .min(1, { message: "emptyCart" })
+    .max(MAX_LINE_ITEMS, { message: "tooLong" })
     .refine(
       (items) =>
         new Set(items.map((i) => `${i.productId}:${i.vialId}`)).size ===
         items.length,
       { message: "duplicateItem" }
     ),
-  customerName: z.string().trim().min(1, { message: "required" }),
-  customerEmail: z.string().trim().email({ message: "invalidEmail" }),
-  shippingAddress: z.string().trim().min(1, { message: "required" }),
-  notes: z.string().trim().optional().nullable(),
+  customerName: z
+    .string()
+    .trim()
+    .min(1, { message: "required" })
+    .max(MAX_NAME_LENGTH, { message: "tooLong" }),
+  customerEmail: z
+    .string()
+    .trim()
+    .email({ message: "invalidEmail" })
+    .max(MAX_EMAIL_LENGTH, { message: "tooLong" }),
+  shippingAddress: z
+    .string()
+    .trim()
+    .min(1, { message: "required" })
+    .max(MAX_ADDRESS_LENGTH, { message: "tooLong" }),
+  notes: z
+    .string()
+    .trim()
+    .max(MAX_NOTES_LENGTH, { message: "tooLong" })
+    .optional()
+    .nullable(),
   ageAndResearchUseAck: z.literal(true, {
     error: "ackRequired",
   }),
-  website: z.string().optional(),
+  website: z.string().max(MAX_NAME_LENGTH).optional(),
   locale: z.enum(["en", "ar"]),
 });
 
