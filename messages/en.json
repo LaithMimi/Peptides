@@ -26,6 +26,7 @@
     "selectVial": "Select a vial size",
     "quantityLabel": "Quantity",
     "addToQuote": "Add to quote request",
+    "added": "Added",
     "selectVialFirst": "Please select a vial size before adding to your quote request.",
     "addedToQuote": "Added to your quote request.",
     "notFoundTitle": "Product not found",

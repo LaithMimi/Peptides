@@ -123,6 +123,8 @@ test.describe("quantity cap and merge", () => {
     await page.getByRole("radio", { name: "10 mg" }).check();
     await page.locator("#quantity").fill("6");
     await page.getByRole("button", { name: "Add to quote request" }).click();
+    await expect(page.getByRole("button", { name: "Added" })).toBeVisible();
+    // The button reverts once the toast dismisses.
     await page.getByRole("button", { name: "Add to quote request" }).click();
 
     await page.goto("/en/quote");
