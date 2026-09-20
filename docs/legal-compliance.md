@@ -23,7 +23,7 @@ Legend: ✅ done in code · 🟡 done, needs owner input/review · ➖ not appli
 | 13 | Accessibility alt text | ✅ | Logo and product images have alt text; decorative SVGs are `aria-hidden` |
 | 14 | Color contrast | ✅ | Accent darkened `#4281c9` → `#2f6db5` (4.0:1 → 5.3:1 on white) so accent text and white-on-accent buttons pass WCAG AA. Dark theme accent already passed. Update `DESIGN.md` if you want the change recorded there |
 | 15 | Keyboard navigation | ✅ | "Skip to main content" link, global `:focus-visible` ring, native buttons/links throughout. Not yet checked with a screen reader |
-| 16 | Business details | 🟡 | Footer + terms + privacy read `BUSINESS_*` env vars (see `.env.local.example`). **Unset = visible "[to be completed before launch]"**. Values are read at build time |
+| 16 | Business details | ➖ | The site no longer shows a legal name, address, email or jurisdiction; the only public contact detail is the phone number on `/contact`. Some jurisdictions require a business address/email on the site — check with counsel. The terms say "governed by the applicable law" with no named jurisdiction; have a lawyer set it |
 | 17 | Age consent / kids' data | ✅ | Site is 18+ only: acknowledgment checkbox, stated in terms and privacy, deletion promised if a minor's data is found. No child-directed features |
 | 18 | Unsubscribe link in emails | ➖ | The site sends no marketing or automated email to visitors; the only emails go to the business inbox. If you later email customers marketing content, you need an unsubscribe link and a consent record first |
 | 19 | License fonts/images | 🟡 | Fonts (Fraunces, DM Sans, IBM Plex Mono, Noto Kufi Arabic) are SIL OFL — free for web use. Unused create-next-app SVGs removed. **You must confirm you own or have licensed `public/brand/pep-club-logo.png` and `public/products/*.jpeg`** — the repo cannot tell |
@@ -31,7 +31,7 @@ Legend: ✅ done in code · 🟡 done, needs owner input/review · ➖ not appli
 
 ## Before you launch
 
-1. Set the five `BUSINESS_*` variables in Vercel **before building**.
+1. Add the contact email to `lib/contact.ts` when you have one, and have counsel confirm the terms need no named jurisdiction or business address.
 2. Have a lawyer review the four policies and confirm the refund windows.
 3. Confirm image/logo ownership; add real certificates of analysis (`coaUrl`) before showing any purity figure.
 4. Have a native Arabic speaker review the Arabic policy text (machine-quality draft).

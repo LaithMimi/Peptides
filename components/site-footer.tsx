@@ -1,6 +1,5 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { getBusiness } from "@/lib/business";
 import { CookieSettingsButton } from "@/components/cookie-settings-button";
 
 const linkClass =
@@ -10,7 +9,6 @@ export async function SiteFooter() {
   const t = await getTranslations("footer");
   const tl = await getTranslations("legal.footer");
   const site = await getTranslations("site");
-  const b = getBusiness();
 
   return (
     <footer className="border-t border-border-strong bg-navy text-navy-foreground">
@@ -40,6 +38,11 @@ export async function SiteFooter() {
               </Link>
             </li>
             <li>
+              <Link href="/contact" className={linkClass}>
+                {tl("contact")}
+              </Link>
+            </li>
+            <li>
               <Link href="/data-request" className={linkClass}>
                 {tl("dataRequest")}
               </Link>
@@ -49,13 +52,6 @@ export async function SiteFooter() {
             </li>
           </ul>
         </nav>
-
-        <address className="not-italic opacity-90">
-          <span className="font-semibold">{b.legalName}</span>
-          <span> · {b.address}</span>
-          <span> · {b.email}</span>
-          <span> · <span dir="ltr">{b.phone}</span></span>
-        </address>
 
         <p className="opacity-90">
           &copy; {new Date().getFullYear()} {site("name")} — {t("rights")}

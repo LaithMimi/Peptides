@@ -6,7 +6,6 @@
 // reviewed by a lawyer in the business's jurisdiction before launch.
 
 import type { Locale } from "@/i18n/routing";
-import type { Business } from "@/lib/business";
 
 export const LEGAL_SLUGS = ["privacy", "terms", "refunds", "cookies"] as const;
 export type LegalSlug = (typeof LEGAL_SLUGS)[number];
@@ -22,16 +21,16 @@ export interface LegalDoc {
   sections: LegalSection[];
 }
 
-type Builder = (b: Business) => LegalDoc;
+type Builder = () => LegalDoc;
 
 const en: Record<LegalSlug, Builder> = {
-  privacy: (b) => ({
+  privacy: () => ({
     title: "Privacy Policy",
     sections: [
       {
         heading: "Who we are",
         paragraphs: [
-          `${b.tradeName} is operated by ${b.legalName}, ${b.address}. For anything in this policy, contact us at ${b.email}.`,
+          "Pep Club operates this site. For anything in this policy, use the Contact page.",
         ],
       },
       {
@@ -84,13 +83,13 @@ const en: Record<LegalSlug, Builder> = {
       },
     ],
   }),
-  terms: (b) => ({
+  terms: () => ({
     title: "Terms of Service",
     sections: [
       {
         heading: "About these terms",
         paragraphs: [
-          `This website is operated by ${b.legalName} (“${b.tradeName}”, “we”), ${b.address}, ${b.email}, ${b.phone}. By using the site or submitting a quote request you agree to these terms.`,
+          "This website is operated by Pep Club (“we”). By using the site or submitting a quote request you agree to these terms.",
         ],
       },
       {
@@ -129,13 +128,13 @@ const en: Record<LegalSlug, Builder> = {
       {
         heading: "Governing law and changes",
         paragraphs: [
-          `These terms are governed by the laws of ${b.jurisdiction}, and its courts have jurisdiction, without removing any mandatory consumer protection in your country of residence.`,
+          "These terms are governed by the applicable law, without removing any mandatory consumer protection in your country of residence.",
           `We may update these terms; the date at the top shows the latest version (${LAST_UPDATED}).`,
         ],
       },
     ],
   }),
-  refunds: (b) => ({
+  refunds: () => ({
     title: "Refund and Returns Policy",
     sections: [
       {
@@ -172,7 +171,7 @@ const en: Record<LegalSlug, Builder> = {
         heading: "How refunds are paid",
         paragraphs: [
           "Approved refunds are returned by the same method you paid with, within 14 days of us approving them. Your statutory rights under the law of your country are not affected.",
-          `Questions: ${b.email}.`,
+          "Questions: use the Contact page.",
         ],
       },
     ],
@@ -212,13 +211,13 @@ const en: Record<LegalSlug, Builder> = {
 };
 
 const ar: Record<LegalSlug, Builder> = {
-  privacy: (b) => ({
+  privacy: () => ({
     title: "سياسة الخصوصية",
     sections: [
       {
         heading: "من نحن",
         paragraphs: [
-          `يُدار ${b.tradeName} بواسطة ${b.legalName}، ${b.address}. لأي استفسار بخصوص هذه السياسة تواصل معنا على ${b.email}.`,
+          "يُدير Pep Club هذا الموقع. لأي استفسار بخصوص هذه السياسة استخدم صفحة «اتصل بنا».",
         ],
       },
       {
@@ -271,13 +270,13 @@ const ar: Record<LegalSlug, Builder> = {
       },
     ],
   }),
-  terms: (b) => ({
+  terms: () => ({
     title: "شروط الخدمة",
     sections: [
       {
         heading: "عن هذه الشروط",
         paragraphs: [
-          `يُدير هذا الموقع ${b.legalName} («${b.tradeName}»، «نحن»)، ${b.address}، ${b.email}، ${b.phone}. باستخدامك الموقع أو إرسالك طلب عرض سعر فإنك توافق على هذه الشروط.`,
+          "يُدير هذا الموقع Pep Club («نحن»). باستخدامك الموقع أو إرسالك طلب عرض سعر فإنك توافق على هذه الشروط.",
         ],
       },
       {
@@ -316,13 +315,13 @@ const ar: Record<LegalSlug, Builder> = {
       {
         heading: "القانون الواجب التطبيق والتغييرات",
         paragraphs: [
-          `تخضع هذه الشروط لقوانين ${b.jurisdiction} وتختص بها محاكمها، دون الإخلال بأي حماية إلزامية للمستهلك في بلد إقامتك.`,
+          "تخضع هذه الشروط للقانون المعمول به، دون الإخلال بأي حماية إلزامية للمستهلك في بلد إقامتك.",
           `قد نحدّث هذه الشروط، ويبيّن التاريخ في أعلى الصفحة آخر إصدار (${LAST_UPDATED}).`,
         ],
       },
     ],
   }),
-  refunds: (b) => ({
+  refunds: () => ({
     title: "سياسة الاسترداد والإرجاع",
     sections: [
       {
@@ -359,7 +358,7 @@ const ar: Record<LegalSlug, Builder> = {
         heading: "كيف تُدفع المبالغ المستردة",
         paragraphs: [
           "تُعاد المبالغ المستردة المعتمدة بالطريقة نفسها التي دفعت بها، خلال 14 يومًا من اعتمادنا لها. لا تتأثر حقوقك القانونية بموجب قانون بلدك.",
-          `للاستفسار: ${b.email}.`,
+          "للاستفسار: استخدم صفحة «اتصل بنا».",
         ],
       },
     ],
@@ -398,8 +397,8 @@ const ar: Record<LegalSlug, Builder> = {
   }),
 };
 
-export function getLegalDoc(slug: LegalSlug, locale: Locale, business: Business): LegalDoc {
-  return (locale === "ar" ? ar : en)[slug](business);
+export function getLegalDoc(slug: LegalSlug, locale: Locale): LegalDoc {
+  return (locale === "ar" ? ar : en)[slug]();
 }
 
 export function isLegalSlug(value: string): value is LegalSlug {
