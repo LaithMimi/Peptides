@@ -9,7 +9,8 @@ colors:
   muted-ink: "#5c6b85"
   hairline: "#f5f5f5"
   hairline-strong: "#e2e2e2"
-  accent-blue: "#4281c9"
+  accent-blue: "#3671b8"
+  input-border: "#7f8ca6"
   danger: "#a23b2e"
   danger-bg: "#fbeae7"
 typography:
@@ -103,9 +104,15 @@ for action and verification. No invented colors outside this set.
   chosen state of pills/toggles. Carries the brand's identity weight —
   this is the color from the logo's "PEP" wordmark and icon outline.
 
+### Form control edge
+- **Input Border** (`#7f8ca6`, dark `#6b83a8`): the edge of inputs and the
+  checkbox, at least 3:1 against the field fill. Card and hairline edges
+  keep the lighter border tokens.
+
 ### Secondary
-- **Accent Blue** (`#4281c9`): the logo's "CLUB" wordmark and molecule
-  node, a medium royal/cornflower blue. Used only for the primary CTA
+- **Accent Blue** (`#3671b8`): the logo's "CLUB" wordmark and molecule
+  node, a medium royal/cornflower blue, deepened slightly from the logo's
+  `#4281c9` so accent text and the white-on-blue CTA reach 4.5:1 contrast. Used only for the primary CTA
   ("Add to quote request" / "Submit quote request"), the confirmation
   seal, and links — never for large fields. **The Rare Accent Rule.**
   Blue marks the one action on a page; if more than one element needs

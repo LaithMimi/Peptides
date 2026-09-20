@@ -32,11 +32,15 @@ insider, community feel rather than a faceless shop.
 
 Visitor browses the catalog (English or Arabic) → opens a product → selects
 a vial size + quantity → adds it to a quote-cart → fills in contact details
-(name, email, phone, full shipping address, optional notes) → confirms an
-18+/research-use acknowledgment → submits. The business receives the
-request by email, with everything needed to ship once a quote is accepted,
-and replies directly with pricing and next steps. No account, session, or
-payment step exists anywhere in this flow.
+(name, email, one shipping-address line, optional notes) → confirms an
+18+/research-use acknowledgment → submits. A visitor whose phone number is
+not yet verified is sent to a sign-in step on Submit (SMS one-time code) and
+returned to the same form; the verified browser is remembered for 30 days
+and their name, email and address are prefilled next time (stored only in
+their own browser). The business receives the request by email, with the
+verified phone number and everything needed to ship once a quote is
+accepted, and replies directly with pricing and next steps. There is no
+payment step anywhere in this flow.
 
 ## Capabilities and Constraints
 
@@ -49,8 +53,10 @@ payment step exists anywhere in this flow.
   never therapeutic or dosage claims.
 - An 18+ and research-use acknowledgment is required, and enforced
   server-side, before any quote request can submit.
-- No user accounts, inventory tracking, admin dashboard, or database in the
-  current scope — the notification email is the sole record of a request.
+- No user accounts, passwords, inventory tracking, admin dashboard, or
+  database in the current scope — the notification email is the sole record
+  of a request. The only sign-in is a phone-verified, 30-day signed browser
+  cookie; remembered details never leave the visitor's browser.
 - Current catalog: 10 products (TB-500, Ipamorelin, CJC-1295, Retatrutide,
   BPC-157, GHK-Cu, MOTS-C, KPV, Selank, Semax), each with one vial size
   today; the data model supports multiple vials per product.

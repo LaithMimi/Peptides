@@ -16,10 +16,11 @@
   --muted: #5c6b85;
   --border: #f5f5f5;
   --border-strong: #e2e2e2;
+  --input-border: #7f8ca6;
 
   --navy: #0a1933;
   --navy-foreground: #ffffff;
-  --accent: #4281c9;
+  --accent: #3671b8;
   --accent-foreground: #ffffff;
 
   --danger: #a23b2e;
@@ -39,6 +40,7 @@
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
+  --color-input-border: var(--input-border);
   --color-navy: var(--navy);
   --color-navy-foreground: var(--navy-foreground);
   --color-accent: var(--accent);
@@ -62,6 +64,7 @@
     --muted: #a9b4c6;
     --border: #1b3050;
     --border-strong: #2a4570;
+    --input-border: #6b83a8;
 
     --navy: #f5f5f5;
     --navy-foreground: #061630;
@@ -77,6 +80,13 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Letter-spacing pulls Arabic letters apart and breaks their joining; the
+   Latin-tuned tracking utilities are switched off under RTL. Inputs keep
+   theirs so the spaced one-time code stays legible. */
+html[dir="rtl"] :not(input):not(textarea) {
+  letter-spacing: normal !important;
 }
 
 html[dir="rtl"] body {

@@ -41,9 +41,9 @@ export function QuoteSummary({ showLink = true }: { showLink?: boolean }) {
           return (
             <li
               key={`${item.productId}-${item.vialId}`}
-              className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
+              className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 py-3 first:pt-0 last:pb-0"
             >
-              <div>
+              <div className="min-w-0">
                 <p className="font-serif font-semibold uppercase tracking-wide text-navy">
                   {product.name}
                 </p>
@@ -68,12 +68,12 @@ export function QuoteSummary({ showLink = true }: { showLink?: boolean }) {
                       Number(e.target.value) || 1
                     )
                   }
-                  className="w-16 rounded-md border border-border-strong bg-surface-raised px-2 py-1 font-mono text-sm text-foreground"
+                  className="min-h-11 w-20 rounded-md border border-input-border bg-surface-raised px-2 py-1 font-mono text-base text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
                 />
                 <button
                   type="button"
                   onClick={() => removeItem(item.productId, item.vialId)}
-                  className="font-mono text-xs font-semibold uppercase tracking-wide text-danger hover:underline"
+                  className="inline-flex min-h-11 items-center px-2 font-mono text-xs font-semibold uppercase tracking-wide text-danger hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
                 >
                   {t("remove")}
                 </button>
@@ -85,7 +85,7 @@ export function QuoteSummary({ showLink = true }: { showLink?: boolean }) {
       {showLink && (
         <Link
           href="/quote"
-          className="mt-2 inline-flex w-fit items-center justify-center rounded-full bg-navy px-5 py-2.5 font-serif text-sm font-semibold uppercase tracking-wide text-navy-foreground transition-opacity hover:opacity-90"
+          className="mt-2 inline-flex w-fit items-center justify-center min-h-11 rounded-full bg-navy px-5 py-2.5 font-serif text-sm font-semibold uppercase tracking-wide text-navy-foreground transition-opacity hover:opacity-90"
         >
           {t("goToQuote")}
         </Link>

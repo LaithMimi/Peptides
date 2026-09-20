@@ -21,7 +21,11 @@ import {
   writeDraft,
   writeProfile,
 } from "@/lib/quote-storage";
-import { Field, inputClass } from "@/components/form-field";
+import {
+  Field,
+  inputClass,
+  secondaryButtonClass as buttonClass,
+} from "@/components/form-field";
 import { LtrValue } from "@/components/ltr-value";
 
 const emptyValues = {
@@ -34,9 +38,6 @@ const emptyValues = {
 
 const noAck = undefined as unknown as true;
 
-const buttonClass =
-  "inline-flex w-fit items-center justify-center rounded-full border border-border-strong px-4 py-2 font-serif text-xs font-semibold uppercase tracking-wide text-navy transition-opacity hover:opacity-80 disabled:opacity-50";
-
 export function QuoteForm({ sessionPhone }: { sessionPhone: string | null }) {
   const t = useTranslations("quoteForm");
   const tErrors = useTranslations("errors");
@@ -44,7 +45,8 @@ export function QuoteForm({ sessionPhone }: { sessionPhone: string | null }) {
   const router = useRouter();
   const { items, clear } = useCart();
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [detailsCleared, setDetailsCleared] = useState(false);
+  const [notice, setNotice] = useState<"cleared" | "signedOut" | null>(null);
+  const noticeRef = useRef<HTMLParagraphElement>(null);
   const [signingOut, setSigningOut] = useState(false);
   const restored = useRef(false);
 
@@ -119,15 +121,19 @@ export function QuoteForm({ sessionPhone }: { sessionPhone: string | null }) {
     clearProfile();
     clearDraft();
     reset({ ...emptyValues, ageAndResearchUseAck: noAck });
-    setDetailsCleared(false);
+    setNotice("signedOut");
     router.refresh();
     setSigningOut(false);
+    // The Sign out button unmounts; land focus on the confirmation instead of
+    // dropping it to the page body.
+    noticeRef.current?.focus();
   }
 
   function handleClearDetails() {
     clearProfile();
     reset({ ...emptyValues, ageAndResearchUseAck: noAck });
-    setDetailsCleared(true);
+    setNotice("cleared");
+    noticeRef.current?.focus();
   }
 
   // The quote-cart summary above this form already shows the "empty" state
@@ -184,9 +190,15 @@ export function QuoteForm({ sessionPhone }: { sessionPhone: string | null }) {
         "notes",
         "ageAndResearchUseAck",
       ]);
+      let focused = false;
       for (const [field, message] of Object.entries(result.error.fieldErrors)) {
         if (knownFieldPaths.has(field)) {
-          setError(field as FieldPath<QuoteContactFormValues>, { message });
+          setError(
+            field as FieldPath<QuoteContactFormValues>,
+            { message },
+            { shouldFocus: !focused }
+          );
+          focused = true;
         }
       }
     }
@@ -206,9 +218,23 @@ export function QuoteForm({ sessionPhone }: { sessionPhone: string | null }) {
         <p className="mt-1 text-sm text-muted">{t("intro")}</p>
       </div>
 
+      {/* Always mounted (and focusable) so its text is announced. */}
+      <p
+        ref={noticeRef}
+        role="status"
+        tabIndex={-1}
+        className={notice ? "text-sm text-muted" : "sr-only"}
+      >
+        {notice === "cleared"
+          ? t("detailsCleared")
+          : notice === "signedOut"
+            ? t("signedOut")
+            : ""}
+      </p>
+
       {sessionPhone ? (
         <div className="flex flex-col gap-3 rounded-md border border-dashed border-border-strong px-4 py-3">
-          <p role="status" className="text-sm font-semibold text-accent">
+          <p className="text-sm font-semibold text-accent">
             <span aria-hidden="true">✓ </span>
             {t("signedInAs")} <LtrValue>{sessionPhone}</LtrValue>
           </p>
@@ -229,11 +255,6 @@ export function QuoteForm({ sessionPhone }: { sessionPhone: string | null }) {
               {t("clearDetails")}
             </button>
           </div>
-          {detailsCleared && (
-            <p role="status" className="text-sm text-muted">
-              {t("detailsCleared")}
-            </p>
-          )}
         </div>
       ) : (
         <p className="text-sm text-muted">{t("phoneVerifiedOnSubmit")}</p>
@@ -271,9 +292,9 @@ export function QuoteForm({ sessionPhone }: { sessionPhone: string | null }) {
         help={t("addressHelp")}
         error={translateFieldError(errors.shippingAddress?.message)}
       >
-        <input
+        <textarea
           id="shippingAddress"
-          type="text"
+          rows={2}
           autoComplete="street-address"
           {...register("shippingAddress")}
           className={inputClass}
@@ -308,11 +329,11 @@ export function QuoteForm({ sessionPhone }: { sessionPhone: string | null }) {
         />
       </div>
 
-      <label className="flex items-start gap-3 text-sm text-foreground">
+      <label className="flex min-h-11 items-start gap-3 py-1 text-sm text-foreground">
         <input
           type="checkbox"
           {...register("ageAndResearchUseAck")}
-          className="mt-1 size-4 shrink-0 rounded border-border-strong text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+          className="mt-1 size-4 shrink-0 rounded border-input-border text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
         />
         <span>{t("ackLabel")}</span>
       </label>

@@ -8,6 +8,7 @@ import { PhoneVerification } from "@/components/phone-verification";
 
 export function SigninForm() {
   const t = useTranslations("signIn");
+  const tCart = useTranslations("quoteCart");
   const locale = useLocale() as Locale;
   const router = useRouter();
   const { items } = useCart();
@@ -32,10 +33,10 @@ export function SigninForm() {
       <p className="text-xs text-muted">{t("cookieNote")}</p>
 
       <Link
-        href="/quote"
-        className="w-fit font-serif text-sm font-semibold text-accent hover:underline"
+        href={items.length > 0 ? "/quote" : "/"}
+        className="inline-flex min-h-11 w-fit items-center font-serif text-sm font-semibold text-accent hover:underline"
       >
-        {t("backToQuote")}
+        {items.length > 0 ? t("backToQuote") : tCart("browseCatalog")}
       </Link>
     </div>
   );

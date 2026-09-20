@@ -72,6 +72,7 @@
     "signedInAs": "Signed in as",
     "signOut": "Sign out",
     "clearDetails": "Clear my details",
+    "signedOut": "You've been signed out and your saved details were removed from this browser.",
     "detailsCleared": "Your saved details were cleared from this browser."
   },
   "errors": {
