@@ -1,10 +1,10 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getActiveProducts, getProductById } from "@/lib/products";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 import { VialSelector } from "@/components/vial-selector";
-import { VialGlyph } from "@/components/vial-glyph";
 import { LtrValue } from "@/components/ltr-value";
 import type { Locale } from "@/i18n/routing";
 
@@ -41,17 +41,16 @@ export default async function ProductPage({
       </Link>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
-        <div className="flex aspect-[16/9] w-full flex-col items-center justify-center gap-3 rounded-2xl border-2 border-navy bg-surface-raised p-6 md:sticky md:top-6 md:aspect-[4/3] md:max-h-[22rem] md:self-start">
-          <VialGlyph className="size-20 text-accent md:size-24" />
-          <p className="font-serif text-2xl font-semibold uppercase tracking-wide text-navy">
-            {product.name}
-          </p>
-          <div className="mt-2 rounded-full border border-border-strong bg-surface px-4 py-1 font-mono text-xs uppercase tracking-widest text-muted">
-            <LtrValue>
-              {product.vials.map((v) => v.label).join(" / ")}
-              {product.purity ? ` · ${product.purity}` : ""}
-            </LtrValue>
-          </div>
+        <div className="aspect-square w-full max-w-64 self-start overflow-hidden rounded-2xl border-2 border-navy bg-surface-raised max-md:mx-auto md:sticky md:top-6 md:max-w-sm">
+          <Image
+            src={product.image}
+            alt={product.name}
+            width={768}
+            height={768}
+            sizes="(min-width: 768px) 24rem, 16rem"
+            priority
+            className="h-full w-full object-cover"
+          />
         </div>
 
         <div className="flex flex-col gap-5">
