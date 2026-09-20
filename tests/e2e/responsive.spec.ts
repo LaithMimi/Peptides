@@ -5,6 +5,8 @@ const routes = [
   { path: "/ar", name: "ar-catalog" },
   { path: "/en/products/tb-500", name: "en-product" },
   { path: "/ar/products/tb-500", name: "ar-product" },
+  { path: "/en/signin", name: "en-signin" },
+  { path: "/ar/signin", name: "ar-signin" },
 ];
 
 test.use({ viewport: { width: 375, height: 800 } });

@@ -38,9 +38,13 @@ see `.env.local.example`. Phone verification (SMS one-time code via Twilio
 Verify, `lib/otp.ts`) has the same kind of dev fallback: with no `TWILIO_*`
 variables and `NODE_ENV !== "production"` the code is logged to the console
 and `000000` is accepted. In production it fails closed (no fallback), so
-never loosen that check. Submission also requires the signed token from
-`lib/phone-token.ts`; the server rejects a request without a token issued
-for that exact number.
+never loosen that check. Submission also requires a valid sign-in: after a
+correct code, `verifyPhoneCode` sets the HttpOnly `pepclub_session` cookie
+(signed, 30 days, `lib/session.ts`, secret `PHONE_TOKEN_SECRET`), and
+`submitQuoteRequest` takes the verified phone only from that cookie — it
+returns `NOT_SIGNED_IN` without one. The Playwright config blanks the
+`TWILIO_*` variables so e2e always uses the dev fallback, even if
+`.env.local` holds real credentials.
 
 ## Architecture
 
@@ -59,8 +63,8 @@ adding a UI string means adding it to both.
 **No database — a few Server Actions**: `lib/products.ts` is the entire
 product catalog as a static array (no price field — see constraint above).
 The only server-side logic is in `app/[locale]/quote/` (`"use server"`):
-`otp-actions.ts` sends/checks the phone one-time code, and `actions.ts`
-handles the submission. `actions.ts` re-validates the submission against
+`otp-actions.ts` sends/checks the phone one-time code (setting the session
+cookie) and signs out, and `actions.ts` handles the submission. `actions.ts` re-validates the submission against
 `lib/quote-schema.ts` (the same Zod schema the client form uses via
 `@hookform/resolvers/zod`), re-resolves every line item's product/vial
 against `lib/products.ts` server-side (never trusts client-submitted
@@ -68,7 +72,18 @@ labels), and calls `lib/email.ts` to notify the business. Nothing is
 persisted; a submitted quote request only ever exists as that outbound
 email.
 
-**Client-side cart, no server session**: `lib/cart-store.tsx` is a
+**Sign-in and remembered details (spec `002-phone-signin-prefill`)**:
+"signed in" only means this browser verified a phone number in the last 30
+days — no accounts, passwords or stored users. Submitting while signed out
+saves the typed values as a draft (`sessionStorage`, via
+`lib/quote-storage.ts`) and navigates to `/[locale]/signin`, which returns to
+`/quote`. After a successful submit the name, email and address are
+remembered per browser (`localStorage`, keyed to the phone) and prefilled
+only while a valid session for that same phone exists. The 18+/research-use
+acknowledgment and notes are never remembered. `app/[locale]/quote/page.tsx`
+and `signin/page.tsx` read the cookie, so those two routes are dynamic.
+
+**Client-side cart**: `lib/cart-store.tsx` is a
 singleton module-level store (not per-component React state) exposed via
 `useSyncExternalStore`, backed by `localStorage`, wrapped by
 `CartProvider`/`useCart()`. It's a module singleton so multiple components

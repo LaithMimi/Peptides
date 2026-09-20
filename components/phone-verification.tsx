@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import { LtrValue } from "@/components/ltr-value";
+import { Field, inputClass } from "@/components/form-field";
 import {
   sendPhoneCode,
   verifyPhoneCode,
@@ -14,43 +15,34 @@ type Status = "idle" | "sending" | "codeSent" | "verifying" | "verified";
 const buttonClass =
   "inline-flex w-fit items-center justify-center rounded-full border border-border-strong px-4 py-2 font-serif text-xs font-semibold uppercase tracking-wide text-navy transition-opacity hover:opacity-80 disabled:opacity-50";
 
+/**
+ * Phone number + one-time code. A correct code makes the server set the
+ * session cookie; `onSignedIn` then lets the parent navigate onward.
+ */
 export function PhoneVerification({
-  phone,
   locale,
-  onVerified,
-  onReset,
+  onSignedIn,
 }: {
-  phone: string;
   locale: Locale;
-  onVerified: (token: string, expiresAt: string, phone: string) => void;
-  onReset: () => void;
+  onSignedIn: (phone: string) => void;
 }) {
   const t = useTranslations("quoteForm");
+  const tSignIn = useTranslations("signIn");
+  const [phone, setPhone] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [cooldown, setCooldown] = useState(0);
   const [normalizedPhone, setNormalizedPhone] = useState("");
   const [workingPhone, setWorkingPhone] = useState("");
-  const expiryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const trimmedPhone = phone.trim();
 
-  function reset() {
-    if (expiryTimer.current) clearTimeout(expiryTimer.current);
-    setStatus("idle");
-    setCode("");
-    setError(null);
-    setCooldown(0);
-    setNormalizedPhone("");
-    setWorkingPhone("");
-    onReset();
-  }
-
-  // Editing the number after a code was sent or verified drops back to the
-  // idle step (derived, not reset in an effect); the parent only honors a
-  // token issued for the exact number currently in the field.
-  const stale = status !== "idle" && trimmedPhone !== workingPhone;
+  // Editing the number after a code was sent drops back to the first step
+  // (derived, not reset in an effect).
+  const stale =
+    (status === "codeSent" || status === "verifying") &&
+    trimmedPhone !== workingPhone;
   const effectiveStatus: Status = stale ? "idle" : status;
 
   useEffect(() => {
@@ -58,13 +50,6 @@ export function PhoneVerification({
     const id = setTimeout(() => setCooldown((c) => c - 1), 1000);
     return () => clearTimeout(id);
   }, [cooldown]);
-
-  useEffect(
-    () => () => {
-      if (expiryTimer.current) clearTimeout(expiryTimer.current);
-    },
-    []
-  );
 
   async function handleSend() {
     setError(null);
@@ -97,32 +82,40 @@ export function PhoneVerification({
       return;
     }
     setStatus("verified");
-    const msUntilExpiry = new Date(result.expiresAt).getTime() - Date.now();
-    if (expiryTimer.current) clearTimeout(expiryTimer.current);
-    expiryTimer.current = setTimeout(reset, Math.max(0, msUntilExpiry));
-    onVerified(result.token, result.expiresAt, trimmedPhone);
-  }
-
-  if (effectiveStatus === "verified") {
-    return (
-      <div className="flex flex-wrap items-center gap-3">
-        <p role="status" className="text-sm font-semibold text-accent">
-          <span aria-hidden="true">✓ </span>
-          {t("phoneVerified")}
-        </p>
-        <button type="button" onClick={reset} className={buttonClass}>
-          {t("changeNumber")}
-        </button>
-      </div>
-    );
+    onSignedIn(result.phone);
   }
 
   const busy = effectiveStatus === "sending" || effectiveStatus === "verifying";
   const codeStep =
     effectiveStatus === "codeSent" || effectiveStatus === "verifying";
 
+  if (effectiveStatus === "verified") {
+    return (
+      <p role="status" className="text-sm font-semibold text-accent">
+        <span aria-hidden="true">✓ </span>
+        {t("phoneVerified")}
+      </p>
+    );
+  }
+
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-4">
+      <Field
+        label={tSignIn("phoneLabel")}
+        htmlFor="signInPhone"
+        help={tSignIn("phoneHelp")}
+      >
+        <input
+          id="signInPhone"
+          type="tel"
+          dir="ltr"
+          autoComplete="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          className={inputClass}
+        />
+      </Field>
+
       {!codeStep && (
         <button
           type="button"

@@ -5,16 +5,7 @@ const validInput = {
   lineItems: [{ productId: "tb-500", vialId: "10mg", quantity: 2 }],
   customerName: "Jane Researcher",
   customerEmail: "jane@example.com",
-  customerPhone: "+14155552671",
-  phoneVerificationToken: "signed-token-placeholder",
-  shippingAddress: {
-    line1: "123 Lab Way",
-    line2: null,
-    city: "Cambridge",
-    region: "MA",
-    postalCode: "02139",
-    country: "United States",
-  },
+  shippingAddress: "123 Lab Way, Cambridge, United States",
   notes: null,
   ageAndResearchUseAck: true as const,
   locale: "en" as const,
@@ -100,58 +91,33 @@ describe("quoteRequestSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("rejects a missing phone number", () => {
-    const result = quoteRequestSchema.safeParse({ ...validInput, customerPhone: "" });
-    expect(result.success).toBe(false);
-  });
-
-  it("rejects a phone number that is not a valid international number", () => {
-    for (const bad of ["4155552671", "+1", "abc"]) {
-      const result = quoteRequestSchema.safeParse({
-        ...validInput,
-        customerPhone: bad,
-      });
-      expect(result.success).toBe(false);
+  it("does not accept a phone or token from the client (phone comes from the session)", () => {
+    const result = quoteRequestSchema.safeParse({
+      ...validInput,
+      customerPhone: "+14155552671",
+      phoneVerificationToken: "forged",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data).not.toHaveProperty("customerPhone");
+      expect(result.data).not.toHaveProperty("phoneVerificationToken");
     }
   });
 
-  it("rejects a missing phone verification token", () => {
-    const result = quoteRequestSchema.safeParse({
-      ...validInput,
-      phoneVerificationToken: "",
-    });
-    expect(result.success).toBe(false);
-  });
-
-  it("rejects an incomplete shipping address", () => {
-    const result = quoteRequestSchema.safeParse({
-      ...validInput,
-      shippingAddress: { ...validInput.shippingAddress, line1: "" },
-    });
-    expect(result.success).toBe(false);
-  });
-
-  it.each(["line1", "city", "region", "postalCode", "country"] as const)(
-    "rejects an empty shipping address %s",
-    (field) => {
+  it("requires a single shipping address line", () => {
+    for (const bad of ["", "   "]) {
       const result = quoteRequestSchema.safeParse({
         ...validInput,
-        shippingAddress: { ...validInput.shippingAddress, [field]: "" },
+        shippingAddress: bad,
       });
       expect(result.success).toBe(false);
     }
-  );
-
-  it("treats shipping address line2 as optional", () => {
-    const withLine2 = quoteRequestSchema.safeParse({
+    const result = quoteRequestSchema.safeParse({
       ...validInput,
-      shippingAddress: { ...validInput.shippingAddress, line2: "Suite 4" },
+      shippingAddress: "  1 Main St, Amman  ",
     });
-    expect(withLine2.success).toBe(true);
-    const { line2: _omit, ...noLine2 } = validInput.shippingAddress;
-    expect(
-      quoteRequestSchema.safeParse({ ...validInput, shippingAddress: noLine2 }).success
-    ).toBe(true);
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.shippingAddress).toBe("1 Main St, Amman");
   });
 
   it("rejects submission when the acknowledgment is false", () => {

@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useForm, useWatch, type FieldPath } from "react-hook-form";
-import { PhoneVerification } from "@/components/phone-verification";
-import { parsePhone } from "@/lib/phone";
+import { useEffect, useRef, useState } from "react";
+import { useForm, type FieldPath } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
@@ -14,19 +12,41 @@ import {
   type QuoteContactFormValues,
 } from "@/lib/quote-schema";
 import { submitQuoteRequest } from "@/app/[locale]/quote/actions";
+import { signOut } from "@/app/[locale]/quote/otp-actions";
+import {
+  clearDraft,
+  clearProfile,
+  readProfile,
+  takeDraft,
+  writeDraft,
+  writeProfile,
+} from "@/lib/quote-storage";
 import { Field, inputClass } from "@/components/form-field";
+import { LtrValue } from "@/components/ltr-value";
 
-export function QuoteForm() {
+const emptyValues = {
+  customerName: "",
+  customerEmail: "",
+  shippingAddress: "",
+  notes: "",
+  website: "",
+};
+
+const noAck = undefined as unknown as true;
+
+const buttonClass =
+  "inline-flex w-fit items-center justify-center rounded-full border border-border-strong px-4 py-2 font-serif text-xs font-semibold uppercase tracking-wide text-navy transition-opacity hover:opacity-80 disabled:opacity-50";
+
+export function QuoteForm({ sessionPhone }: { sessionPhone: string | null }) {
   const t = useTranslations("quoteForm");
   const tErrors = useTranslations("errors");
   const locale = useLocale() as Locale;
   const router = useRouter();
   const { items, clear } = useCart();
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [verifiedPhone, setVerifiedPhone] = useState<{
-    token: string;
-    phone: string;
-  } | null>(null);
+  const [detailsCleared, setDetailsCleared] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+  const restored = useRef(false);
 
   // Both the client-side Zod schema and the server action's field errors
   // use short codes ("required", "invalidEmail", "ackRequired", ...) as
@@ -36,10 +56,8 @@ export function QuoteForm() {
   const knownErrorCodes = new Set([
     "required",
     "invalidEmail",
-    "invalidPhone",
     "emptyCart",
     "ackRequired",
-    "phoneNotVerified",
   ]);
   function translateFieldError(message: string | undefined): string | undefined {
     if (!message) return undefined;
@@ -50,34 +68,67 @@ export function QuoteForm() {
     register,
     handleSubmit,
     setError,
-    clearErrors,
-    control,
+    reset,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<QuoteContactFormValues>({
     resolver: zodResolver(quoteContactFormSchema),
-    defaultValues: {
-      customerName: "",
-      customerEmail: "",
-      customerPhone: "",
-      shippingAddress: {
-        line1: "",
-        line2: "",
-        city: "",
-        region: "",
-        postalCode: "",
-      },
-      notes: "",
-      website: "",
-      ageAndResearchUseAck: undefined as unknown as true,
-    },
+    defaultValues: { ...emptyValues, ageAndResearchUseAck: noAck },
   });
 
-  const currentPhone = (useWatch({ control, name: "customerPhone" }) ?? "").trim();
-  // A token only counts for the exact number it was issued for.
-  const phoneToken =
-    verifiedPhone && verifiedPhone.phone === currentPhone
-      ? verifiedPhone.token
-      : null;
+  // Restore what the visitor had typed before being sent to sign in (the
+  // draft wins), then fill any still-empty field from the remembered
+  // details — but only for a signed-in visitor whose session phone owns that
+  // profile. The ref keeps React StrictMode's double effect from consuming
+  // the draft twice.
+  useEffect(() => {
+    if (restored.current) return;
+    restored.current = true;
+    const draft = takeDraft();
+    const profile = sessionPhone ? readProfile() : null;
+    const saved = profile && profile.phone === sessionPhone ? profile : null;
+    if (!draft && !saved) return;
+    const pick = (
+      typed: string | null | undefined,
+      remembered: string | null | undefined
+    ) => (typed && typed.trim() ? typed : (remembered ?? ""));
+    reset({
+      ...emptyValues,
+      customerName: pick(draft?.customerName, saved?.customerName),
+      customerEmail: pick(draft?.customerEmail, saved?.customerEmail),
+      shippingAddress: pick(draft?.shippingAddress, saved?.shippingAddress),
+      notes: draft?.notes ?? "",
+      ageAndResearchUseAck: noAck,
+    });
+  }, [sessionPhone, reset]);
+
+  function goToSignIn(values: QuoteContactFormValues) {
+    // Never the acknowledgment: it must be given afresh on every submission.
+    writeDraft({
+      customerName: values.customerName,
+      customerEmail: values.customerEmail,
+      shippingAddress: values.shippingAddress,
+      notes: values.notes ?? null,
+    });
+    router.push("/signin");
+  }
+
+  async function handleSignOut() {
+    setSigningOut(true);
+    await signOut();
+    clearProfile();
+    clearDraft();
+    reset({ ...emptyValues, ageAndResearchUseAck: noAck });
+    setDetailsCleared(false);
+    router.refresh();
+    setSigningOut(false);
+  }
+
+  function handleClearDetails() {
+    clearProfile();
+    reset({ ...emptyValues, ageAndResearchUseAck: noAck });
+    setDetailsCleared(true);
+  }
 
   // The quote-cart summary above this form already shows the "empty" state
   // with a link back to the catalog (see components/quote-summary.tsx), so
@@ -94,22 +145,34 @@ export function QuoteForm() {
       return;
     }
 
-    if (!phoneToken) {
-      setError("customerPhone", { message: "phoneNotVerified" });
+    if (!sessionPhone) {
+      goToSignIn(values);
       return;
     }
 
     const result = await submitQuoteRequest({
       ...values,
-      customerPhone: parsePhone(values.customerPhone) ?? values.customerPhone,
-      phoneVerificationToken: phoneToken,
       lineItems: items,
       locale,
     });
 
     if (result.ok) {
+      writeProfile({
+        phone: sessionPhone,
+        customerName: values.customerName,
+        customerEmail: values.customerEmail,
+        shippingAddress: values.shippingAddress,
+      });
+      clearDraft();
       clear();
       router.push("/quote/confirmation");
+      return;
+    }
+
+    // The session expired or was ended elsewhere: keep what was typed and
+    // send the visitor back through sign-in.
+    if (result.error.code === "NOT_SIGNED_IN") {
+      goToSignIn(getValues());
       return;
     }
 
@@ -117,24 +180,14 @@ export function QuoteForm() {
       const knownFieldPaths = new Set([
         "customerName",
         "customerEmail",
-        "customerPhone",
-        "shippingAddress.line1",
-        "shippingAddress.line2",
-        "shippingAddress.city",
-        "shippingAddress.region",
-        "shippingAddress.postalCode",
+        "shippingAddress",
         "notes",
         "ageAndResearchUseAck",
       ]);
       for (const [field, message] of Object.entries(result.error.fieldErrors)) {
         if (knownFieldPaths.has(field)) {
           setError(field as FieldPath<QuoteContactFormValues>, { message });
-        } else if (field === "phoneVerificationToken") {
-          setError("customerPhone", { message });
         }
-      }
-      if (result.error.fieldErrors.customerPhone) {
-        setVerifiedPhone(null);
       }
     }
     setSubmitError(result.error.message);
@@ -152,6 +205,39 @@ export function QuoteForm() {
         </h2>
         <p className="mt-1 text-sm text-muted">{t("intro")}</p>
       </div>
+
+      {sessionPhone ? (
+        <div className="flex flex-col gap-3 rounded-md border border-dashed border-border-strong px-4 py-3">
+          <p role="status" className="text-sm font-semibold text-accent">
+            <span aria-hidden="true">✓ </span>
+            {t("signedInAs")} <LtrValue>{sessionPhone}</LtrValue>
+          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={handleSignOut}
+              disabled={signingOut}
+              className={buttonClass}
+            >
+              {t("signOut")}
+            </button>
+            <button
+              type="button"
+              onClick={handleClearDetails}
+              className={buttonClass}
+            >
+              {t("clearDetails")}
+            </button>
+          </div>
+          {detailsCleared && (
+            <p role="status" className="text-sm text-muted">
+              {t("detailsCleared")}
+            </p>
+          )}
+        </div>
+      ) : (
+        <p className="text-sm text-muted">{t("phoneVerifiedOnSubmit")}</p>
+      )}
 
       <Field
         label={t("nameLabel")}
@@ -180,114 +266,19 @@ export function QuoteForm() {
       </Field>
 
       <Field
-        label={t("phoneLabel")}
-        htmlFor="customerPhone"
-        help={t("phoneHelp")}
-        error={translateFieldError(errors.customerPhone?.message)}
+        label={t("addressLabel")}
+        htmlFor="shippingAddress"
+        help={t("addressHelp")}
+        error={translateFieldError(errors.shippingAddress?.message)}
       >
         <input
-          id="customerPhone"
-          type="tel"
-          dir="ltr"
-          autoComplete="tel"
-          {...register("customerPhone")}
+          id="shippingAddress"
+          type="text"
+          autoComplete="street-address"
+          {...register("shippingAddress")}
           className={inputClass}
         />
       </Field>
-      <PhoneVerification
-        phone={currentPhone}
-        locale={locale}
-        onVerified={(token, _expiresAt, phone) => {
-          setVerifiedPhone({ token, phone });
-          clearErrors("customerPhone");
-        }}
-        onReset={() => setVerifiedPhone(null)}
-      />
-
-      <fieldset className="flex flex-col gap-4 border-t border-dashed border-border pt-5">
-        <legend className="-mt-[1.9rem] bg-surface px-0 font-serif text-sm font-semibold uppercase tracking-wide text-navy">
-          {t("addressSectionTitle")}
-        </legend>
-
-        <Field
-          label={t("addressLine1Label")}
-          htmlFor="addressLine1"
-          error={translateFieldError(errors.shippingAddress?.line1?.message)}
-        >
-          <input
-            id="addressLine1"
-            type="text"
-            {...register("shippingAddress.line1")}
-            className={inputClass}
-          />
-        </Field>
-
-        <Field
-          label={`${t("addressLine2Label")} (${t("addressLine2Optional")})`}
-          htmlFor="addressLine2"
-          error={translateFieldError(errors.shippingAddress?.line2?.message)}
-        >
-          <input
-            id="addressLine2"
-            type="text"
-            {...register("shippingAddress.line2")}
-            className={inputClass}
-          />
-        </Field>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Field
-            label={t("cityLabel")}
-            htmlFor="addressCity"
-            error={translateFieldError(errors.shippingAddress?.city?.message)}
-          >
-            <input
-              id="addressCity"
-              type="text"
-              {...register("shippingAddress.city")}
-              className={inputClass}
-            />
-          </Field>
-
-          <Field
-            label={t("regionLabel")}
-            htmlFor="addressRegion"
-            error={translateFieldError(errors.shippingAddress?.region?.message)}
-          >
-            <input
-              id="addressRegion"
-              type="text"
-              {...register("shippingAddress.region")}
-              className={inputClass}
-            />
-          </Field>
-
-          <Field
-            label={t("postalCodeLabel")}
-            htmlFor="addressPostalCode"
-            error={translateFieldError(errors.shippingAddress?.postalCode?.message)}
-          >
-            <input
-              id="addressPostalCode"
-              type="text"
-              {...register("shippingAddress.postalCode")}
-              className={inputClass}
-            />
-          </Field>
-          <Field
-            label={t("countryLabel")}
-            htmlFor="addressCountry"
-            error={translateFieldError(errors.shippingAddress?.country?.message)}
-          >
-            <input
-              id="addressCountry"
-              type="text"
-              {...register("shippingAddress.country")}
-              className={inputClass}
-            />
-          </Field>
-        </div>
-      </fieldset>
 
       <Field
         label={`${t("notesLabel")} (${t("notesOptional")})`}

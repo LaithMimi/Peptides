@@ -11,6 +11,11 @@ function envInt(name: string, fallback: number): number {
   return Number.isInteger(value) && value > 0 ? value : fallback;
 }
 
+export const submitLimit = () => ({
+  max: envInt("SUBMIT_LIMIT_PER_IP", RATE_LIMIT_MAX),
+  windowMs: RATE_LIMIT_WINDOW_MS,
+});
+
 export const otpLimits = {
   sendPerIp: () => ({
     max: envInt("OTP_SEND_LIMIT_PER_IP", 3),

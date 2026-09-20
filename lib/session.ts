@@ -1,6 +1,8 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { cookies } from "next/headers";
 
-const TOKEN_TTL_SECONDS = 30 * 60;
+export const SESSION_COOKIE = "pepclub_session";
+export const SESSION_TTL_SECONDS = 30 * 24 * 60 * 60;
 const DEV_SECRET = "dev-only-phone-token-secret";
 
 function getSecret(): string {
@@ -16,49 +18,58 @@ function sign(payload: string, secret: string): string {
   return createHmac("sha256", secret).update(payload).digest("base64url");
 }
 
-export function signPhoneToken(
+/** Signs a 30-day session proving this browser verified `phone`. */
+export function createSession(
   phone: string,
   now: number = Date.now()
-): { token: string; expiresAt: string } {
-  const exp = Math.floor(now / 1000) + TOKEN_TTL_SECONDS;
+): { value: string; expiresAt: string } {
+  const exp = Math.floor(now / 1000) + SESSION_TTL_SECONDS;
   const payload = Buffer.from(JSON.stringify({ p: phone, exp })).toString(
     "base64url"
   );
   return {
-    token: `${payload}.${sign(payload, getSecret())}`,
+    value: `${payload}.${sign(payload, getSecret())}`,
     expiresAt: new Date(exp * 1000).toISOString(),
   };
 }
 
-export function verifyPhoneToken(
-  token: string,
-  phone: string,
+/** Returns the verified phone, or null for anything absent, forged or expired. */
+export function readSession(
+  value: string | undefined | null,
   now: number = Date.now()
-): boolean {
-  if (typeof token !== "string") return false;
-  const parts = token.split(".");
-  if (parts.length !== 2) return false;
+): { phone: string } | null {
+  if (typeof value !== "string") return null;
+  const parts = value.split(".");
+  if (parts.length !== 2) return null;
   const [payload, signature] = parts;
 
   let expected: string;
   try {
     expected = sign(payload, getSecret());
   } catch {
-    return false;
+    return null;
   }
   const a = Buffer.from(signature);
   const b = Buffer.from(expected);
-  if (a.length !== b.length || !timingSafeEqual(a, b)) return false;
+  if (a.length !== b.length || !timingSafeEqual(a, b)) return null;
 
   try {
     const data = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
-    return (
+    if (
       typeof data.p === "string" &&
       typeof data.exp === "number" &&
-      data.p === phone &&
       data.exp > Math.floor(now / 1000)
-    );
+    ) {
+      return { phone: data.p };
+    }
+    return null;
   } catch {
-    return false;
+    return null;
   }
+}
+
+/** The verified phone from the request's session cookie, or null. */
+export async function getSessionPhone(): Promise<string | null> {
+  const value = (await cookies()).get(SESSION_COOKIE)?.value;
+  return readSession(value)?.phone ?? null;
 }

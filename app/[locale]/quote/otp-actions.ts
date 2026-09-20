@@ -1,11 +1,15 @@
 "use server";
 
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { parsePhone } from "@/lib/phone";
 import { checkRateLimit, otpLimits } from "@/lib/rate-limit";
 import { checkVerification, startVerification } from "@/lib/otp";
-import { signPhoneToken } from "@/lib/phone-token";
+import {
+  SESSION_COOKIE,
+  SESSION_TTL_SECONDS,
+  createSession,
+} from "@/lib/session";
 import type {
   SendPhoneCodeResult,
   VerifyPhoneCodeResult,
@@ -105,13 +109,25 @@ export async function verifyPhoneCode(input: {
   }
 
   try {
-    const { token, expiresAt } = signPhoneToken(phone);
-    return { ok: true, token, expiresAt };
+    const { value } = createSession(phone);
+    (await cookies()).set(SESSION_COOKIE, value, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: SESSION_TTL_SECONDS,
+    });
+    return { ok: true, phone };
   } catch (err) {
-    console.error("Failed to sign phone token", err);
+    console.error("Failed to create session", err);
     return {
       ok: false,
       error: { code: "VERIFY_FAILED", message: t("otpVerifyFailed") },
     };
   }
+}
+
+export async function signOut(): Promise<{ ok: true }> {
+  (await cookies()).delete(SESSION_COOKIE);
+  return { ok: true };
 }

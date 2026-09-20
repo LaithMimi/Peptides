@@ -5,18 +5,16 @@ const PHONE = "+14155552671";
 // server accepts this fixed code (see lib/otp.ts).
 const DEV_CODE = "000000";
 
-async function verifyPhone(page: Page, labels: {
+async function signIn(page: Page, labels: {
   phone: string;
   sendCode: string;
   codeLabel: string;
   verify: string;
-  verified: string;
 }) {
   await page.getByLabel(labels.phone).fill(PHONE);
   await page.getByRole("button", { name: labels.sendCode }).click();
   await page.getByLabel(labels.codeLabel).fill(DEV_CODE);
   await page.getByRole("button", { name: labels.verify, exact: true }).click();
-  await expect(page.getByText(labels.verified)).toBeVisible();
 }
 
 const en = {
@@ -24,15 +22,10 @@ const en = {
   sendCode: "Send code",
   codeLabel: "6-digit code",
   verify: "Verify",
-  verified: "Phone number verified",
 };
 
 async function fillAddress(page: Page) {
-  await page.getByLabel("Address line 1").fill("123 Lab Way");
-  await page.getByLabel("City").fill("Cambridge");
-  await page.getByLabel("State / region").fill("MA");
-  await page.getByLabel("Postal code").fill("02139");
-  await page.getByLabel("Country").fill("United States");
+  await page.getByLabel("Shipping address").fill("123 Lab Way, Cambridge, United States");
 }
 
 async function addTb500(page: Page) {
@@ -43,7 +36,7 @@ async function addTb500(page: Page) {
 }
 
 test.describe("quote request flow (English)", () => {
-  test("browse -> select vial -> verify phone -> acknowledgment gate -> submit -> confirmation", async ({
+  test("browse -> select vial -> sign in -> acknowledgment gate -> submit -> confirmation", async ({
     page,
   }) => {
     await page.goto("/en");
@@ -64,7 +57,6 @@ test.describe("quote request flow (English)", () => {
 
     await page.getByLabel("Full name").fill("Jane Researcher");
     await page.getByLabel("Email address").fill("jane@example.com");
-    await verifyPhone(page, en);
     await fillAddress(page);
 
     // Acknowledgment gate: submitting without checking the box should
@@ -72,6 +64,15 @@ test.describe("quote request flow (English)", () => {
     await page.getByRole("button", { name: "Submit quote request" }).click();
     await expect(page).toHaveURL(/\/en\/quote$/);
 
+    // Signed out: a valid submit is sent to the sign-in step.
+    await page.getByLabel(/I confirm I am 18 years/).check();
+    await page.getByRole("button", { name: "Submit quote request" }).click();
+    await expect(page).toHaveURL(/\/en\/signin$/);
+    await signIn(page, en);
+    await expect(page).toHaveURL(/\/en\/quote$/);
+
+    // Back on the quote page the acknowledgment must be given afresh.
+    await expect(page.getByLabel(/I confirm I am 18 years/)).not.toBeChecked();
     await page.getByLabel(/I confirm I am 18 years/).check();
     await page.getByRole("button", { name: "Submit quote request" }).click();
 
@@ -80,35 +81,21 @@ test.describe("quote request flow (English)", () => {
   });
 });
 
-test.describe("phone verification", () => {
-  test("submit is blocked until the phone is verified", async ({ page }) => {
-    await addTb500(page);
-    await page.getByLabel("Full name").fill("Jane Researcher");
-    await page.getByLabel("Email address").fill("jane@example.com");
-    await page.getByLabel("Phone number").fill(PHONE);
-    await fillAddress(page);
-    await page.getByLabel(/I confirm I am 18 years/).check();
-    await page.getByRole("button", { name: "Submit quote request" }).click();
-
-    await expect(page).toHaveURL(/\/en\/quote$/);
-    await expect(
-      page.getByText("Please verify your phone number", { exact: false })
-    ).toBeVisible();
-  });
-
-  test("a wrong code is rejected and the number stays unverified", async ({ page }) => {
-    await addTb500(page);
+test.describe("phone verification (sign-in step)", () => {
+  test("a wrong code is rejected and the visitor stays signed out", async ({ page }) => {
+    await page.goto("/en/signin");
     await page.getByLabel("Phone number").fill(PHONE);
     await page.getByRole("button", { name: "Send code" }).click();
     await page.getByLabel("6-digit code").fill("123456");
     await page.getByRole("button", { name: "Verify", exact: true }).click();
 
     await expect(page.getByText("That code isn't correct.")).toBeVisible();
+    await expect(page).toHaveURL(/\/en\/signin$/);
     await expect(page.getByText("Phone number verified")).toHaveCount(0);
   });
 
   test("an invalid number gets no code", async ({ page }) => {
-    await addTb500(page);
+    await page.goto("/en/signin");
     await page.getByLabel("Phone number").fill("12345");
     await page.getByRole("button", { name: "Send code" }).click();
 
@@ -116,12 +103,14 @@ test.describe("phone verification", () => {
     await expect(page.getByLabel("6-digit code")).toHaveCount(0);
   });
 
-  test("editing the number after verifying clears the verification", async ({ page }) => {
-    await addTb500(page);
-    await verifyPhone(page, en);
+  test("editing the number after a code was sent goes back to the first step", async ({ page }) => {
+    await page.goto("/en/signin");
+    await page.getByLabel("Phone number").fill(PHONE);
+    await page.getByRole("button", { name: "Send code" }).click();
+    await expect(page.getByLabel("6-digit code")).toBeVisible();
 
     await page.getByLabel("Phone number").fill("+14155552672");
-    await expect(page.getByText("Phone number verified")).toHaveCount(0);
+    await expect(page.getByLabel("6-digit code")).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Send code" })).toBeVisible();
   });
 });
@@ -149,16 +138,16 @@ test.describe("honeypot", () => {
 
     await page.getByLabel("Full name").fill("Bot");
     await page.getByLabel("Email address").fill("bot@example.com");
-    await verifyPhone(page, en);
-    await page.getByLabel("Address line 1").fill("1 Spam St");
-    await page.getByLabel("City").fill("Botville");
-    await page.getByLabel("State / region").fill("XX");
-    await page.getByLabel("Postal code").fill("00000");
-    await page.getByLabel("Country").fill("Nowhere");
+    await page.getByLabel("Shipping address").fill("1 Spam St, Botville");
     await page.locator("#website").evaluate((el: HTMLInputElement) => {
       el.value = "http://spam.example";
       el.dispatchEvent(new Event("input", { bubbles: true }));
     });
+    await page.getByLabel(/I confirm I am 18 years/).check();
+    await page.getByRole("button", { name: "Submit quote request" }).click();
+    await expect(page).toHaveURL(/\/en\/signin$/);
+    await signIn(page, en);
+    await expect(page).toHaveURL(/\/en\/quote$/);
     await page.getByLabel(/I confirm I am 18 years/).check();
     await page.getByRole("button", { name: "Submit quote request" }).click();
 
@@ -175,13 +164,9 @@ test.describe("quote request flow (Arabic, RTL)", () => {
     ).toBeVisible();
   });
 
-  test("phone verification works in Arabic with a left-to-right code field", async ({
-    page,
-  }) => {
-    await page.goto("/ar/products/tb-500");
-    await page.getByRole("radio", { name: "10 mg" }).check();
-    await page.getByRole("button", { name: "إضافة إلى طلب عرض السعر" }).click();
-    await page.goto("/ar/quote");
+  test("sign-in works in Arabic with a left-to-right code field", async ({ page }) => {
+    await page.goto("/ar/signin");
+    await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
 
     await page.getByLabel("رقم الهاتف").fill(PHONE);
     await page.getByRole("button", { name: "إرسال الرمز" }).click();
@@ -189,6 +174,7 @@ test.describe("quote request flow (Arabic, RTL)", () => {
     await expect(code).toHaveAttribute("dir", "ltr");
     await code.fill(DEV_CODE);
     await page.getByRole("button", { name: "تحقق", exact: true }).click();
-    await expect(page.getByText("تم التحقق من رقم الهاتف")).toBeVisible();
+    // Empty cart, so signing in lands on the catalog (not the quote page).
+    await expect(page).toHaveURL(/\/ar$/);
   });
 });

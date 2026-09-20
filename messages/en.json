@@ -58,14 +58,8 @@
     "phoneVerified": "Phone number verified",
     "changeNumber": "Change number",
     "codeSentTo": "We sent a code to",
-    "addressSectionTitle": "Shipping address",
-    "addressLine1Label": "Address line 1",
-    "addressLine2Label": "Address line 2",
-    "addressLine2Optional": "optional",
-    "cityLabel": "City",
-    "regionLabel": "State / region",
-    "postalCodeLabel": "Postal code",
-    "countryLabel": "Country",
+    "addressLabel": "Shipping address",
+    "addressHelp": "Street, city and country.",
     "notesLabel": "Notes",
     "notesOptional": "optional",
     "notesPlaceholder": "Anything else we should know about your request?",
@@ -73,7 +67,12 @@
     "submit": "Submit quote request",
     "submitting": "Submitting…",
     "emptyCartTitle": "No items in your quote request",
-    "emptyCartBody": "Add at least one product before submitting a quote request."
+    "emptyCartBody": "Add at least one product before submitting a quote request.",
+    "phoneVerifiedOnSubmit": "We'll ask you to verify your phone number when you submit.",
+    "signedInAs": "Signed in as",
+    "signOut": "Sign out",
+    "clearDetails": "Clear my details",
+    "detailsCleared": "Your saved details were cleared from this browser."
   },
   "errors": {
     "required": "This field is required.",
@@ -92,7 +91,16 @@
     "emailFailed": "We couldn't send your quote request just now. Please try again — your information has been kept.",
     "rateLimited": "Too many requests from your connection. Please wait a few minutes and try again — your information has been kept.",
     "genericSubmit": "Something went wrong submitting your request. Please try again.",
-    "feedbackFailed": "We couldn't send your feedback just now. Please try again — your message has been kept."
+    "feedbackFailed": "We couldn't send your feedback just now. Please try again — your message has been kept.",
+    "notSignedIn": "Please verify your phone number to continue — your information has been kept."
+  },
+  "signIn": {
+    "title": "Verify your phone number",
+    "intro": "We use your number only to confirm your quote request — this doesn't create an account. We text you a one-time code, and this browser then stays verified for 30 days.",
+    "cookieNote": "A small cookie in this browser remembers that your number is verified.",
+    "phoneLabel": "Phone number",
+    "phoneHelp": "Include the country code, e.g. +1 555 010 0100.",
+    "backToQuote": "Back to quote request"
   },
   "feedback": {
     "title": "Tell us what you think",

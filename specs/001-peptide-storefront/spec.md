@@ -313,7 +313,9 @@ step anywhere in the flow.
 ## Assumptions
 
 - Ordering is guest-only; no customer accounts, login, or request-history
-  view are in scope for v1.
+  view are in scope for v1. (Amended by `specs/002-phone-signin-prefill`:
+  a phone-verified 30-day browser sign-in and per-browser remembered details
+  were added; there are still no passwords, profiles, or stored users.)
 - No real-time inventory/stock tracking in v1 — all listed products and
   vials are treated as available.
 - No catalog search or filtering in v1, given a small, multi-product

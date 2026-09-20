@@ -3,9 +3,8 @@
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { quoteRequestSchema } from "@/lib/quote-schema";
-import { checkRateLimit } from "@/lib/rate-limit";
-import { parsePhone } from "@/lib/phone";
-import { verifyPhoneToken } from "@/lib/phone-token";
+import { checkRateLimit, submitLimit } from "@/lib/rate-limit";
+import { getSessionPhone } from "@/lib/session";
 import { getProductById } from "@/lib/products";
 import { sendQuoteRequestEmail } from "@/lib/email";
 import type {
@@ -21,7 +20,7 @@ export async function submitQuoteRequest(
 
   const forwardedFor = (await headers()).get("x-forwarded-for");
   const ip = forwardedFor?.split(",")[0]?.trim() || "unknown";
-  if (!checkRateLimit(`submit:${ip}`)) {
+  if (!checkRateLimit(`submit:${ip}`, submitLimit())) {
     return {
       ok: false,
       error: { code: "RATE_LIMITED", message: t("rateLimited") },
@@ -32,6 +31,16 @@ export async function submitQuoteRequest(
   // bots get no signal, but send nothing.
   if (input.website && input.website.trim().length > 0) {
     return { ok: true };
+  }
+
+  // The verified phone comes only from the signed session cookie, never
+  // from the client. Missing/expired => the client sends the visitor to sign in.
+  const sessionPhone = await getSessionPhone();
+  if (!sessionPhone) {
+    return {
+      ok: false,
+      error: { code: "NOT_SIGNED_IN", message: t("notSignedIn") },
+    };
   }
 
   const parsed = quoteRequestSchema.safeParse(input);
@@ -52,22 +61,7 @@ export async function submitQuoteRequest(
     };
   }
 
-  const normalizedPhone = parsePhone(parsed.data.customerPhone);
-  if (
-    !normalizedPhone ||
-    !verifyPhoneToken(parsed.data.phoneVerificationToken, normalizedPhone)
-  ) {
-    return {
-      ok: false,
-      error: {
-        code: "VALIDATION_ERROR",
-        fieldErrors: { customerPhone: t("phoneNotVerified") },
-        message: t("phoneNotVerified"),
-      },
-    };
-  }
-
-  const data = { ...parsed.data, customerPhone: normalizedPhone };
+  const data = { ...parsed.data, customerPhone: sessionPhone };
 
   const resolvedLineItems: ResolvedLineItem[] = [];
   for (const item of data.lineItems) {
@@ -119,8 +113,6 @@ function translateErrorCode(
     "invalidEmail",
     "emptyCart",
     "ackRequired",
-    "invalidPhone",
-    "phoneNotVerified",
   ];
   if (known.includes(code)) {
     return t(code);

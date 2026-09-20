@@ -33,27 +33,21 @@ export interface ResolvedLineItem extends LineItem {
   vialLabel: string;
 }
 
-export interface Address {
-  line1: string;
-  line2?: string | null;
-  city: string;
-  region: string;
-  postalCode: string;
-  country: string;
-}
-
 export interface QuoteRequestInput {
   lineItems: LineItem[];
   customerName: string;
   customerEmail: string;
-  customerPhone: string;
-  shippingAddress: Address;
+  shippingAddress: string;
   notes?: string | null;
-  phoneVerificationToken: string;
   ageAndResearchUseAck: boolean;
   website?: string;
   locale: Locale;
 }
+
+/** A validated request plus the phone taken from the signed session cookie. */
+export type QuoteRequestEmailData = QuoteRequestInput & {
+  customerPhone: string;
+};
 
 export type SendPhoneCodeResult =
   | { ok: true; phone: string; resendAfterSeconds: number }
@@ -66,7 +60,7 @@ export type SendPhoneCodeResult =
     };
 
 export type VerifyPhoneCodeResult =
-  | { ok: true; token: string; expiresAt: string }
+  | { ok: true; phone: string }
   | {
       ok: false;
       error: {
@@ -78,7 +72,8 @@ export type VerifyPhoneCodeResult =
 export type QuoteRequestErrorCode =
   | "VALIDATION_ERROR"
   | "EMAIL_DELIVERY_FAILED"
-  | "RATE_LIMITED";
+  | "RATE_LIMITED"
+  | "NOT_SIGNED_IN";
 
 export interface QuoteRequestError {
   code: QuoteRequestErrorCode;

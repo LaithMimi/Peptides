@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { getProductById } from "./products";
-import { parsePhone } from "./phone";
 
 export const MAX_LINE_QUANTITY = 10;
 
@@ -18,15 +17,6 @@ export const lineItemSchema = z
     { message: "itemUnavailable" }
   );
 
-export const addressSchema = z.object({
-  line1: z.string().trim().min(1, { message: "required" }),
-  line2: z.string().trim().optional().nullable(),
-  city: z.string().trim().min(1, { message: "required" }),
-  region: z.string().trim().min(1, { message: "required" }),
-  postalCode: z.string().trim().min(1, { message: "required" }),
-  country: z.string().trim().min(1, { message: "required" }),
-});
-
 export const quoteRequestSchema = z.object({
   lineItems: z
     .array(lineItemSchema)
@@ -39,15 +29,7 @@ export const quoteRequestSchema = z.object({
     ),
   customerName: z.string().trim().min(1, { message: "required" }),
   customerEmail: z.string().trim().email({ message: "invalidEmail" }),
-  customerPhone: z
-    .string()
-    .trim()
-    .min(1, { message: "required" })
-    .refine((value) => parsePhone(value) !== null, { message: "invalidPhone" }),
-  phoneVerificationToken: z
-    .string()
-    .min(1, { message: "phoneNotVerified" }),
-  shippingAddress: addressSchema,
+  shippingAddress: z.string().trim().min(1, { message: "required" }),
   notes: z.string().trim().optional().nullable(),
   ageAndResearchUseAck: z.literal(true, {
     error: "ackRequired",
@@ -67,7 +49,6 @@ export type QuoteRequestFormValues = z.infer<typeof quoteRequestSchema>;
 export const quoteContactFormSchema = quoteRequestSchema.omit({
   lineItems: true,
   locale: true,
-  phoneVerificationToken: true,
 });
 
 export type QuoteContactFormValues = z.infer<typeof quoteContactFormSchema>;

@@ -1,8 +1,8 @@
 import { Resend } from "resend";
-import type { QuoteRequestInput, ResolvedLineItem } from "@/types/catalog";
+import type { QuoteRequestEmailData, ResolvedLineItem } from "@/types/catalog";
 
 interface SendQuoteRequestEmailArgs {
-  request: QuoteRequestInput;
+  request: QuoteRequestEmailData;
   resolvedLineItems: ResolvedLineItem[];
   submittedAt: string;
 }
@@ -24,14 +24,6 @@ export async function sendQuoteRequestEmail({
   const orFallback = (value: string | null | undefined, fallback: string) =>
     value && value.trim().length > 0 ? value : fallback;
 
-  const addr = request.shippingAddress;
-  const addressLines = [
-    addr.line1,
-    addr.line2,
-    `${addr.city}, ${addr.region} ${addr.postalCode}`,
-    addr.country,
-  ].filter((line): line is string => !!line && line.trim().length > 0);
-
   const bodyText = [
     `New quote request (submitted ${submittedAt}, locale: ${request.locale})`,
     "",
@@ -41,8 +33,7 @@ export async function sendQuoteRequestEmail({
     `Name: ${request.customerName}`,
     `Email: ${request.customerEmail}`,
     `Phone: ${request.customerPhone} (verified by one-time code)`,
-    "Shipping address:",
-    ...addressLines.map((line) => `  ${line}`),
+    `Shipping address: ${request.shippingAddress}`,
     `Notes: ${orFallback(request.notes, "(none)")}`,
     `18+/research-use acknowledgment: ${request.ageAndResearchUseAck ? "confirmed" : "NOT confirmed"}`,
     "",
