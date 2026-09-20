@@ -32,7 +32,7 @@ export default async function ProductPage({
     <div className="flex flex-col gap-6">
       <Link
         href="/"
-        className="w-fit font-mono text-xs font-semibold uppercase tracking-widest text-accent hover:underline"
+        className="inline-flex min-h-11 w-fit items-center font-mono text-xs font-semibold uppercase tracking-widest text-navy hover:text-accent hover:underline"
       >
         <span aria-hidden="true" className="me-1 inline-block rtl:rotate-180">
           ←
@@ -40,9 +40,9 @@ export default async function ProductPage({
         {t("backToCatalog")}
       </Link>
 
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        <div className="flex aspect-square w-full flex-col items-center justify-center gap-4 rounded-2xl border-2 border-navy bg-surface-raised p-8">
-          <VialGlyph className="size-28 text-accent" />
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+        <div className="flex aspect-[16/9] w-full flex-col items-center justify-center gap-3 rounded-2xl border-2 border-navy bg-surface-raised p-6 md:sticky md:top-6 md:aspect-[4/3] md:max-h-[22rem] md:self-start">
+          <VialGlyph className="size-20 text-accent md:size-24" />
           <p className="font-serif text-2xl font-semibold uppercase tracking-wide text-navy">
             {product.name}
           </p>

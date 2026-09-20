@@ -28,11 +28,11 @@ export function ProductCard({ product }: { product: Product }) {
         <span className="font-mono text-xs uppercase tracking-widest text-muted">
           <LtrValue>{product.vials[0]?.label}</LtrValue>
         </span>
-        <h3 className="font-serif text-base font-semibold uppercase tracking-wide text-navy">
+        <h2 className="font-serif text-base font-semibold uppercase tracking-wide text-navy">
           {product.name}
-        </h3>
+        </h2>
         <p className="line-clamp-2 text-xs text-muted">{translation.tagline}</p>
-        <span className="mt-0.5 font-serif text-xs font-medium italic text-accent">
+        <span className="mt-0.5 font-serif text-xs font-medium italic text-navy group-hover:text-accent">
           {t("viewDetails")}
           <span aria-hidden="true" className="ms-1 inline-block rtl:rotate-180">
             →
