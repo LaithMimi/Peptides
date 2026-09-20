@@ -1,10 +1,10 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getActiveProducts, getProductById } from "@/lib/products";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 import { VialSelector } from "@/components/vial-selector";
-import { VialGlyph } from "@/components/vial-glyph";
 import { LtrValue } from "@/components/ltr-value";
 import type { Locale } from "@/i18n/routing";
 
@@ -35,7 +35,7 @@ export default async function ProductPage({
     <div className="flex flex-col gap-6">
       <Link
         href="/"
-        className="w-fit font-mono text-xs font-semibold uppercase tracking-widest text-accent hover:underline"
+        className="inline-flex min-h-11 w-fit items-center font-mono text-xs font-semibold uppercase tracking-widest text-navy hover:text-accent hover:underline"
       >
         <span aria-hidden="true" className="me-1 inline-block rtl:rotate-180">
           ←
@@ -43,18 +43,17 @@ export default async function ProductPage({
         {t("backToCatalog")}
       </Link>
 
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        <div className="flex aspect-square w-full flex-col items-center justify-center gap-4 rounded-2xl border-2 border-navy bg-surface-raised p-8">
-          <VialGlyph className="size-28 text-accent" />
-          <p className="font-serif text-2xl font-semibold uppercase tracking-wide text-navy">
-            {product.name}
-          </p>
-          <div className="mt-2 rounded-full border border-border-strong bg-surface px-4 py-1 font-mono text-xs uppercase tracking-widest text-muted">
-            <LtrValue>
-              {product.vials.map((v) => v.label).join(" / ")}
-              {purity ? ` · ${purity}` : ""}
-            </LtrValue>
-          </div>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+        <div className="aspect-square w-full max-w-64 self-start overflow-hidden rounded-2xl border-2 border-navy bg-surface-raised max-md:mx-auto md:sticky md:top-6 md:max-w-sm">
+          <Image
+            src={product.image}
+            alt={product.name}
+            width={768}
+            height={768}
+            sizes="(min-width: 768px) 24rem, 16rem"
+            priority
+            className="h-full w-full object-cover"
+          />
         </div>
 
         <div className="flex flex-col gap-5">

@@ -27,13 +27,13 @@ export function SiteHeader() {
         <nav className="flex items-center gap-2 sm:gap-4">
           <Link
             href="/"
-            className="rounded px-2 py-1 font-serif text-sm font-semibold uppercase tracking-wide text-navy hover:text-accent"
+            className="inline-flex min-h-11 items-center rounded px-2 font-serif text-sm font-semibold uppercase tracking-wide text-navy hover:text-accent"
           >
             {tNav("catalog")}
           </Link>
           <Link
             href="/quote"
-            className="relative rounded px-2 py-1 font-serif text-sm font-semibold uppercase tracking-wide text-navy hover:text-accent"
+            className="relative inline-flex min-h-11 items-center rounded px-2 font-serif text-sm font-semibold uppercase tracking-wide text-navy hover:text-accent"
           >
             {tNav("quote")}
             {count > 0 && (

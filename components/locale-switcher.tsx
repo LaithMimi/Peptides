@@ -36,7 +36,7 @@ export function LocaleSwitcher() {
               });
             }}
             aria-pressed={active}
-            className={`rounded-full px-3 py-1 font-mono text-xs font-semibold tracking-wide transition-colors ${
+            className={`inline-flex min-h-9 min-w-11 items-center justify-center rounded-full px-3 font-mono text-xs font-semibold tracking-wide transition-colors ${
               active
                 ? "bg-navy text-navy-foreground"
                 : "text-muted hover:text-navy"
