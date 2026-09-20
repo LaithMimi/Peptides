@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { dataRequestSchema } from "@/lib/data-request-schema";
 import { sendDataRequestEmail } from "@/lib/email";
 import { checkRateLimit, submitLimit } from "@/lib/rate-limit";
+import { logSecurityEvent } from "@/lib/security-log";
 
 export type DataRequestResult =
   | { ok: true }
@@ -23,6 +24,7 @@ export async function submitDataRequest(input: unknown): Promise<DataRequestResu
   const forwardedFor = (await headers()).get("x-forwarded-for");
   const ip = forwardedFor?.split(",")[0]?.trim() || "unknown";
   if (!checkRateLimit(`data-request:${ip}`, submitLimit())) {
+    logSecurityEvent("data_request_rate_limited", { ip });
     return { ok: false, message: t("rateLimited") };
   }
 

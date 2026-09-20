@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { parsePhone } from "@/lib/phone";
 import { checkRateLimit, otpLimits } from "@/lib/rate-limit";
 import { checkVerification, startVerification } from "@/lib/otp";
+import { logSecurityEvent, maskPhone } from "@/lib/security-log";
 import {
   SESSION_COOKIE,
   SESSION_TTL_SECONDS,
@@ -31,6 +32,7 @@ export async function sendPhoneCode(input: {
   const ip = await getClientIp();
 
   if (!checkRateLimit(`otp-send-ip:${ip}`, otpLimits.sendPerIp())) {
+    logSecurityEvent("otp_send_rate_limited", { ip, scope: "ip" });
     return {
       ok: false,
       error: { code: "RATE_LIMITED", message: t("otpRateLimited") },
@@ -46,6 +48,11 @@ export async function sendPhoneCode(input: {
   }
 
   if (!checkRateLimit(`otp-send-phone:${phone}`, otpLimits.sendPerPhone())) {
+    logSecurityEvent("otp_send_rate_limited", {
+      ip,
+      scope: "phone",
+      phone: maskPhone(phone),
+    });
     return {
       ok: false,
       error: { code: "RATE_LIMITED", message: t("otpRateLimited") },
@@ -54,12 +61,14 @@ export async function sendPhoneCode(input: {
 
   const result = await startVerification(phone, locale);
   if (result !== "ok") {
+    logSecurityEvent("otp_send_failed", { ip, phone: maskPhone(phone) });
     return {
       ok: false,
       error: { code: "SEND_FAILED", message: t("otpSendFailed") },
     };
   }
 
+  logSecurityEvent("otp_send_ok", { ip, phone: maskPhone(phone) });
   return { ok: true, phone, resendAfterSeconds: RESEND_AFTER_SECONDS };
 }
 
@@ -73,6 +82,7 @@ export async function verifyPhoneCode(input: {
   const ip = await getClientIp();
 
   if (!checkRateLimit(`otp-check-ip:${ip}`, otpLimits.checkPerIp())) {
+    logSecurityEvent("otp_verify_rate_limited", { ip });
     return {
       ok: false,
       error: { code: "RATE_LIMITED", message: t("otpRateLimited") },
@@ -82,6 +92,7 @@ export async function verifyPhoneCode(input: {
   const phone = parsePhone(String(input.phone ?? ""));
   const code = String(input.code ?? "").trim();
   if (!phone || !/^\d{6}$/.test(code)) {
+    logSecurityEvent("otp_verify_failed", { ip, reason: "malformed" });
     return {
       ok: false,
       error: { code: "INVALID_CODE", message: t("otpInvalidCode") },
@@ -89,6 +100,13 @@ export async function verifyPhoneCode(input: {
   }
 
   const result = await checkVerification(phone, code);
+  if (result !== "ok") {
+    logSecurityEvent("otp_verify_failed", {
+      ip,
+      phone: maskPhone(phone),
+      reason: result,
+    });
+  }
   if (result === "invalid") {
     return {
       ok: false,
@@ -117,9 +135,11 @@ export async function verifyPhoneCode(input: {
       path: "/",
       maxAge: SESSION_TTL_SECONDS,
     });
+    logSecurityEvent("otp_verify_ok", { ip, phone: maskPhone(phone) });
     return { ok: true, phone };
   } catch (err) {
     console.error("Failed to create session", err);
+    logSecurityEvent("session_create_failed", { ip, phone: maskPhone(phone) });
     return {
       ok: false,
       error: { code: "VERIFY_FAILED", message: t("otpVerifyFailed") },
@@ -128,6 +148,7 @@ export async function verifyPhoneCode(input: {
 }
 
 export async function signOut(): Promise<{ ok: true }> {
+  logSecurityEvent("sign_out", { ip: await getClientIp() });
   (await cookies()).delete(SESSION_COOKIE);
   return { ok: true };
 }

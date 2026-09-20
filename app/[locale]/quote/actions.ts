@@ -7,6 +7,7 @@ import { checkRateLimit, submitLimit } from "@/lib/rate-limit";
 import { getSessionPhone } from "@/lib/session";
 import { getProductById } from "@/lib/products";
 import { sendQuoteRequestEmail } from "@/lib/email";
+import { logSecurityEvent, maskPhone } from "@/lib/security-log";
 import type {
   QuoteRequestInput,
   QuoteRequestResult,
@@ -21,6 +22,7 @@ export async function submitQuoteRequest(
   const forwardedFor = (await headers()).get("x-forwarded-for");
   const ip = forwardedFor?.split(",")[0]?.trim() || "unknown";
   if (!checkRateLimit(`submit:${ip}`, submitLimit())) {
+    logSecurityEvent("quote_rate_limited", { ip });
     return {
       ok: false,
       error: { code: "RATE_LIMITED", message: t("rateLimited") },
@@ -30,6 +32,7 @@ export async function submitQuoteRequest(
   // Honeypot: real users never see this field. Answer as if it succeeded so
   // bots get no signal, but send nothing.
   if (input.website && input.website.trim().length > 0) {
+    logSecurityEvent("quote_honeypot_hit", { ip });
     return { ok: true };
   }
 
@@ -37,6 +40,7 @@ export async function submitQuoteRequest(
   // from the client. Missing/expired => the client sends the visitor to sign in.
   const sessionPhone = await getSessionPhone();
   if (!sessionPhone) {
+    logSecurityEvent("quote_not_signed_in", { ip });
     return {
       ok: false,
       error: { code: "NOT_SIGNED_IN", message: t("notSignedIn") },
@@ -101,6 +105,7 @@ export async function submitQuoteRequest(
     };
   }
 
+  logSecurityEvent("quote_submitted", { ip, phone: maskPhone(sessionPhone) });
   return { ok: true };
 }
 
