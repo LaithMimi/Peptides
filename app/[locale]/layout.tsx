@@ -6,6 +6,8 @@ import { Fraunces, DM_Sans, IBM_Plex_Mono, Noto_Kufi_Arabic } from "next/font/go
 import { routing } from "@/i18n/routing";
 import { CartProvider } from "@/lib/cart-store";
 import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
+import { CookieConsent } from "@/components/cookie-consent";
 import "../globals.css";
 
 const fraunces = Fraunces({
@@ -60,8 +62,7 @@ export default async function LocaleLayout({
   }
   setRequestLocale(locale);
   const dir = locale === "ar" ? "rtl" : "ltr";
-  const t = await getTranslations({ locale, namespace: "footer" });
-  const site = await getTranslations({ locale, namespace: "site" });
+  const tLegal = await getTranslations({ locale, namespace: "legal" });
 
   return (
     <html
@@ -92,18 +93,22 @@ finish review, the verdict, and DESIGN.md.
         */}
         <NextIntlClientProvider>
           <CartProvider>
+            <a
+              href="#main"
+              className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[60] focus:rounded focus:bg-navy focus:px-4 focus:py-2 focus:text-navy-foreground"
+            >
+              {tLegal("skipToContent")}
+            </a>
             <SiteHeader />
-            <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
+            <main
+              id="main"
+              tabIndex={-1}
+              className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 outline-none sm:px-6 lg:px-8"
+            >
               {children}
             </main>
-            <footer className="border-t border-border-strong bg-navy text-navy-foreground">
-              <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-6 text-sm opacity-80 sm:px-6 lg:px-8">
-                <p>{t("disclaimer")}</p>
-                <p>
-                  &copy; {new Date().getFullYear()} {site("name")} — {t("rights")}
-                </p>
-              </div>
-            </footer>
+            <SiteFooter />
+            <CookieConsent />
           </CartProvider>
         </NextIntlClientProvider>
       </body>

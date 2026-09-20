@@ -92,7 +92,63 @@
     "rateLimited": "Too many requests from your connection. Please wait a few minutes and try again — your information has been kept.",
     "genericSubmit": "Something went wrong submitting your request. Please try again.",
     "feedbackFailed": "We couldn't send your feedback just now. Please try again — your message has been kept.",
-    "notSignedIn": "Please verify your phone number to continue — your information has been kept."
+    "notSignedIn": "Please verify your phone number to continue — your information has been kept.",
+    "dataRequestFailed": "We couldn't send your request just now. Please try again or email us directly."
+  },
+  "legal": {
+    "skipToContent": "Skip to main content",
+    "lastUpdated": "Last updated",
+    "banner": {
+      "title": "Cookies and browser storage",
+      "body": "We use only the storage the site needs to work: a sign-in cookie, your quote cart and your language. We use no advertising or tracking. You can also let us remember your name, email and address on this device for next time.",
+      "learnMore": "Cookie policy",
+      "essentialOnly": "Essential only",
+      "acceptAll": "Accept optional storage"
+    },
+    "footer": {
+      "navLabel": "Legal",
+      "privacy": "Privacy policy",
+      "terms": "Terms of service",
+      "refunds": "Refund policy",
+      "cookies": "Cookie policy",
+      "dataRequest": "Data request (delete or access my data)",
+      "cookieSettings": "Cookie settings"
+    },
+    "note": {
+      "quote": "We use these details only to verify your phone and answer your quote request.",
+      "feedback": "We use these details only to read and reply to your message.",
+      "otp": "We use your number only to send the verification code.",
+      "prefix": "By continuing you accept our",
+      "terms": "terms of service",
+      "and": "and have read our",
+      "privacy": "privacy policy"
+    },
+    "erase": {
+      "title": "Delete my data in this browser",
+      "body": "Signs you out and removes your quote cart, remembered details, unsent draft and cookie choice from this browser.",
+      "button": "Delete data in this browser",
+      "done": "Done — everything this site stored in this browser was removed."
+    }
+  },
+  "dataRequest": {
+    "title": "Data request",
+    "intro": "Ask us to delete, send you a copy of, or correct the personal data we hold about you. We reply within 30 days after confirming it is you.",
+    "typeLabel": "What would you like?",
+    "types": {
+      "delete": "Delete my data",
+      "access": "Send me a copy of my data",
+      "correct": "Correct my data"
+    },
+    "emailLabel": "Email address",
+    "emailHelp": "Use the address you gave us, so we can confirm it is you by replying to it.",
+    "phoneLabel": "Phone number",
+    "phoneHelp": "The number you used for quote requests, if any.",
+    "detailsLabel": "Details",
+    "optional": "optional",
+    "submit": "Send request",
+    "submitting": "Sending…",
+    "successTitle": "Request received",
+    "successBody": "Thank you. We will reply to your email address to confirm it is you, then act on your request within 30 days."
   },
   "signIn": {
     "title": "Verify your phone number",

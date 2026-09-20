@@ -23,6 +23,8 @@ import {
 } from "@/lib/quote-storage";
 import { Field, inputClass } from "@/components/form-field";
 import { LtrValue } from "@/components/ltr-value";
+import { LegalNote } from "@/components/legal-note";
+import { hasOptionalConsent } from "@/lib/consent";
 
 const emptyValues = {
   customerName: "",
@@ -85,7 +87,7 @@ export function QuoteForm({ sessionPhone }: { sessionPhone: string | null }) {
     if (restored.current) return;
     restored.current = true;
     const draft = takeDraft();
-    const profile = sessionPhone ? readProfile() : null;
+    const profile = sessionPhone && hasOptionalConsent() ? readProfile() : null;
     const saved = profile && profile.phone === sessionPhone ? profile : null;
     if (!draft && !saved) return;
     const pick = (
@@ -157,12 +159,16 @@ export function QuoteForm({ sessionPhone }: { sessionPhone: string | null }) {
     });
 
     if (result.ok) {
-      writeProfile({
-        phone: sessionPhone,
-        customerName: values.customerName,
-        customerEmail: values.customerEmail,
-        shippingAddress: values.shippingAddress,
-      });
+      // Remembering details is optional storage: only with the visitor's
+      // consent from the cookie notice.
+      if (hasOptionalConsent()) {
+        writeProfile({
+          phone: sessionPhone,
+          customerName: values.customerName,
+          customerEmail: values.customerEmail,
+          shippingAddress: values.shippingAddress,
+        });
+      }
       clearDraft();
       clear();
       router.push("/quote/confirmation");
@@ -327,6 +333,8 @@ export function QuoteForm({ sessionPhone }: { sessionPhone: string | null }) {
           {submitError}
         </p>
       )}
+
+      <LegalNote purpose="quote" />
 
       <button
         type="submit"
