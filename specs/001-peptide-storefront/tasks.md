@@ -191,10 +191,10 @@ description: "Task list for Peptide Storefront (Catalog + Quote-Request Capture,
 **Purpose**: Close gaps found by `/speckit-analyze`: work built without a task, and success criteria with no verification.
 
 - [X] T070 [US4] Full shipping address (FR-007): `addressSchema` (line1, optional line2, city, region, postalCode, country) in `lib/quote-schema.ts`, address fields in `components/quote-form.tsx`, address lines in `lib/email.ts`, labels in `messages/en.json` and `messages/ar.json`. Built without a task; recorded retroactively. Supersedes the country-only wording in T014, T030 and T031.
-- [ ] T071 [P] Add `tests/unit/messages-parity.test.ts` asserting `messages/en.json` and `messages/ar.json` have identical key sets (SC-007, CLAUDE.md rule)
-- [ ] T072 [P] Confirm unit coverage of address validation in `tests/unit/quote-schema.test.ts` (every required address field rejected when empty; line2 optional) (FR-008)
+- [X] T071 [P] Add `tests/unit/messages-parity.test.ts` asserting `messages/en.json` and `messages/ar.json` have identical key sets (SC-007, CLAUDE.md rule)
+- [X] T072 [P] Confirm unit coverage of address validation in `tests/unit/quote-schema.test.ts` (every required address field rejected when empty; line2 optional) (FR-008)
 - [ ] T073 Manual verification of SC-001 (product page within 2 clicks), SC-002 (select-to-submit under 3 minutes) and SC-004 (email within 1 minute), plus a Lighthouse mobile run against plan.md's 2s goal; record results in `quickstart.md`
-- [ ] T074 Review `components/feedback-form.tsx`, `components/feedback-section.tsx` and `lib/feedback-schema.ts`, which are in no spec or plan: confirm they add no new infrastructure or extra email recipient (Principle IV, FR-009), then add a spec requirement and plan entry, or remove them
+- [X] T074 Review `components/feedback-form.tsx`, `components/feedback-section.tsx` and `lib/feedback-schema.ts`, which are in no spec or plan: confirm they add no new infrastructure or extra email recipient (Principle IV, FR-009), then add a spec requirement and plan entry, or remove them — **done**: reviewed; `submitFeedback` (`app/[locale]/feedback/actions.ts`) only emails the business via `sendFeedbackEmail`, no new infrastructure or recipient. Recorded as FR-015 in spec.md. It has no honeypot or rate limit, so it is an open spam vector
 
 ---
 

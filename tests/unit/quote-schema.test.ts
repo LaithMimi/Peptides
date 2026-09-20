@@ -131,6 +131,29 @@ describe("quoteRequestSchema", () => {
     expect(result.success).toBe(false);
   });
 
+  it.each(["line1", "city", "region", "postalCode", "country"] as const)(
+    "rejects an empty shipping address %s",
+    (field) => {
+      const result = quoteRequestSchema.safeParse({
+        ...validInput,
+        shippingAddress: { ...validInput.shippingAddress, [field]: "" },
+      });
+      expect(result.success).toBe(false);
+    }
+  );
+
+  it("treats shipping address line2 as optional", () => {
+    const withLine2 = quoteRequestSchema.safeParse({
+      ...validInput,
+      shippingAddress: { ...validInput.shippingAddress, line2: "Suite 4" },
+    });
+    expect(withLine2.success).toBe(true);
+    const { line2: _omit, ...noLine2 } = validInput.shippingAddress;
+    expect(
+      quoteRequestSchema.safeParse({ ...validInput, shippingAddress: noLine2 }).success
+    ).toBe(true);
+  });
+
   it("rejects submission when the acknowledgment is false", () => {
     const result = quoteRequestSchema.safeParse({
       ...validInput,

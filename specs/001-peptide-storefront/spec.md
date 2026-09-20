@@ -262,6 +262,10 @@ step anywhere in the flow.
   quote-request flow, confirmation, and all disclaimers) MUST be available
   in both English and Arabic, with a visible language switcher, and Arabic
   MUST render in correct right-to-left layout.
+- **FR-015**: System MAY offer a general feedback form (optional name,
+  required email and message, both languages) whose submission is emailed
+  to the business only. It collects no pricing or payment data and stores
+  nothing. (Documented retroactively; it has no spam guard yet.)
 
 ### Key Entities
 
