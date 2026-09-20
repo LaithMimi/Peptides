@@ -5,13 +5,15 @@ const validInput = {
   lineItems: [{ productId: "tb-500", vialId: "10mg", quantity: 2 }],
   customerName: "Jane Researcher",
   customerEmail: "jane@example.com",
-  customerPhone: "+972 59 123 4567",
+  customerPhone: "+14155552671",
+  phoneVerificationToken: "signed-token-placeholder",
   shippingAddress: {
     line1: "123 Lab Way",
     line2: null,
     city: "Cambridge",
     region: "MA",
     postalCode: "02139",
+    country: "United States",
   },
   notes: null,
   ageAndResearchUseAck: true as const,
@@ -103,32 +105,23 @@ describe("quoteRequestSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it.each([
-    "abc",
-    "12345",
-    "+1 555 0100",
-    "+962 79 123 4567",
-    "0591234567",
-    "972591234567",
-    "+972 59 12",
-    "+970 59 123 4567 89",
-  ])(
-    "rejects malformed phone number %s",
-    (customerPhone) => {
-      const result = quoteRequestSchema.safeParse({ ...validInput, customerPhone });
+  it("rejects a phone number that is not a valid international number", () => {
+    for (const bad of ["4155552671", "+1", "abc"]) {
+      const result = quoteRequestSchema.safeParse({
+        ...validInput,
+        customerPhone: bad,
+      });
       expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].message).toBe("invalidPhone");
-      }
     }
-  );
+  });
 
-  it.each(["+972 59 123 4567", "+970-59-123-4567", "+972 (2) 123 4567", "+970591234567"])(
-    "accepts phone number %s",
-    (customerPhone) => {
-      expect(quoteRequestSchema.safeParse({ ...validInput, customerPhone }).success).toBe(true);
-    }
-  );
+  it("rejects a missing phone verification token", () => {
+    const result = quoteRequestSchema.safeParse({
+      ...validInput,
+      phoneVerificationToken: "",
+    });
+    expect(result.success).toBe(false);
+  });
 
   it("rejects an incomplete shipping address", () => {
     const result = quoteRequestSchema.safeParse({

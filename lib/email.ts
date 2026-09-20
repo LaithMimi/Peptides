@@ -29,6 +29,7 @@ export async function sendQuoteRequestEmail({
     addr.line1,
     addr.line2,
     `${addr.city}, ${addr.region} ${addr.postalCode}`,
+    addr.country,
   ].filter((line): line is string => !!line && line.trim().length > 0);
 
   const bodyText = [
@@ -39,7 +40,7 @@ export async function sendQuoteRequestEmail({
     "",
     `Name: ${request.customerName}`,
     `Email: ${request.customerEmail}`,
-    `Phone: ${request.customerPhone}`,
+    `Phone: ${request.customerPhone} (verified by one-time code)`,
     "Shipping address:",
     ...addressLines.map((line) => `  ${line}`),
     `Notes: ${orFallback(request.notes, "(none)")}`,

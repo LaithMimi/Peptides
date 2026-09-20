@@ -8,12 +8,11 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "test:e2e": "playwright test",
-    "example:seedance": "tsx scripts/index.ts"
+    "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@higgsfield/client": "^0.2.6",
     "@hookform/resolvers": "^5.9.1",
+    "libphonenumber-js": "^1.13.13",
     "next": "16.3.5",
     "next-intl": "^4.14.5",
     "react": "19.2.8",
@@ -31,7 +30,6 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6.1.1",
-    "dotenv": "^18.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "jsdom": "^30.1.0",

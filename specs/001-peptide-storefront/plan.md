@@ -43,7 +43,7 @@ deployed on Vercel
 routing (`app/[locale]/...`) — no separate backend
 
 **Performance Goals**: Catalog and product pages interactive within 2s on a
-typical mobile connection; no specific throughput target (low-traffic
+throttled mobile connection (Lighthouse mobile default, 4x CPU slowdown); no specific throughput target (low-traffic
 storefront)
 
 **Constraints**: No payment SDK, card-data field, or price/subtotal display
@@ -110,6 +110,8 @@ specs/001-peptide-storefront/
 ### Source Code (repository root)
 
 ```text
+proxy.ts                         # next-intl middleware for locale detection/routing (Next.js 16 "proxy" convention), at repo root
+
 i18n/
 ├── routing.ts                   # next-intl locale list (en, ar) + routing config
 └── request.ts                   # next-intl request config (loads messages per locale)
@@ -132,7 +134,6 @@ app/
 │       ├── otp-actions.ts             # Server Actions: sendPhoneCode, verifyPhoneCode (FR-007a)
 │       └── confirmation/
 │           └── page.tsx                # Post-submit confirmation (or failure) state
-└── proxy.ts                      # next-intl middleware for locale detection/routing (Next.js 16 "proxy" convention)
 
 components/
 ├── product-card.tsx
@@ -151,7 +152,7 @@ lib/
 ├── phone.ts                     # libphonenumber-js wrapper: parse, validate, normalize to E.164
 ├── otp.ts                       # Twilio Verify REST wrapper (start/check) + non-production console fallback
 ├── phone-token.ts               # HMAC-signed stateless "phone verified" token: sign/verify (node:crypto)
-└── cart-store.ts                # Client-side quote-cart state (React context + localStorage)
+└── cart-store.tsx               # Client-side quote-cart state (React context + localStorage)
 
 types/
 └── catalog.ts                   # Product/Vial/QuoteRequest/LineItem types

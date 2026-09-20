@@ -165,7 +165,7 @@ step anywhere in the flow.
   selected items? System MUST block submission and indicate at least one
   item is required.
 - How does the system handle a product or vial that has been removed or is
-  unavailable while a customer is mid-request? System MUST surface which
+  unavailable while a customer is mid-request? (The catalog is static, so this arises only from a stale saved selection in browser storage.) System MUST surface which
   item is affected and let the customer adjust before resubmitting.
 - What happens if a customer navigates away and returns before submitting?
   In-progress selections MUST persist in the visitor's browser across
@@ -199,7 +199,7 @@ step anywhere in the flow.
   summary.
 - **FR-002**: System MUST display a "research/laboratory use only — not for
   human consumption" disclaimer on the catalog page, every product detail
-  page, and the quote-request page.
+  page, the quote-request page, and the confirmation page.
 - **FR-003**: Users MUST be able to open a product detail page showing the
   full research-area description, available vial size(s), and any
   available purity information.

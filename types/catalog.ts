@@ -39,6 +39,7 @@ export interface Address {
   city: string;
   region: string;
   postalCode: string;
+  country: string;
 }
 
 export interface QuoteRequestInput {
@@ -48,10 +49,31 @@ export interface QuoteRequestInput {
   customerPhone: string;
   shippingAddress: Address;
   notes?: string | null;
+  phoneVerificationToken: string;
   ageAndResearchUseAck: boolean;
   website?: string;
   locale: Locale;
 }
+
+export type SendPhoneCodeResult =
+  | { ok: true; phone: string; resendAfterSeconds: number }
+  | {
+      ok: false;
+      error: {
+        code: "INVALID_PHONE" | "RATE_LIMITED" | "SEND_FAILED";
+        message: string;
+      };
+    };
+
+export type VerifyPhoneCodeResult =
+  | { ok: true; token: string; expiresAt: string }
+  | {
+      ok: false;
+      error: {
+        code: "INVALID_CODE" | "CODE_EXPIRED" | "RATE_LIMITED" | "VERIFY_FAILED";
+        message: string;
+      };
+    };
 
 export type QuoteRequestErrorCode =
   | "VALIDATION_ERROR"
