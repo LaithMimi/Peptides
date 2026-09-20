@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { Vial } from "@/types/catalog";
 import { useCart } from "@/lib/cart-store";
@@ -22,6 +22,14 @@ export function VialSelector({
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState<string | null>(null);
   const [added, setAdded] = useState(false);
+  // Bumped on every add so repeated adds restart the auto-dismiss timer.
+  const [addCount, setAddCount] = useState(0);
+
+  useEffect(() => {
+    if (!added) return;
+    const timer = setTimeout(() => setAdded(false), 2500);
+    return () => clearTimeout(timer);
+  }, [added, addCount]);
 
   function handleAdd() {
     if (!selectedVialId) {
@@ -32,6 +40,7 @@ export function VialSelector({
     setError(null);
     addItem({ productId, vialId: selectedVialId, quantity });
     setAdded(true);
+    setAddCount((n) => n + 1);
   }
 
   return (
@@ -102,19 +111,44 @@ export function VialSelector({
           {error}
         </p>
       )}
-      {added && !error && (
-        <p role="status" className="text-sm font-medium text-accent">
-          {t("addedToQuote")}
-        </p>
-      )}
 
       <button
         type="button"
         onClick={handleAdd}
-        className="inline-flex w-fit items-center justify-center rounded-full bg-accent px-5 py-2.5 font-serif text-sm font-semibold uppercase tracking-wide text-accent-foreground transition-opacity hover:opacity-90"
+        className={`inline-flex w-fit items-center justify-center gap-2 rounded-full px-5 py-2.5 font-serif text-sm font-semibold uppercase tracking-wide transition-colors ${
+          added
+            ? "bg-navy text-navy-foreground"
+            : "bg-accent text-accent-foreground hover:opacity-90"
+        }`}
       >
-        {t("addToQuote")}
+        {added && (
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 20 20"
+            className="size-4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M4 10.5l4 4 8-9" />
+          </svg>
+        )}
+        {added ? t("added") : t("addToQuote")}
       </button>
+
+      <div
+        role="status"
+        aria-live="polite"
+        className="pointer-events-none fixed inset-x-4 bottom-6 z-50 flex justify-center"
+      >
+        {added && !error && (
+          <p className="toast-in rounded-full border border-border-strong bg-navy px-5 py-3 text-sm font-medium text-navy-foreground shadow-lg">
+            {t("addedToQuote")}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
