@@ -1,0 +1,66 @@
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import { getBusiness } from "@/lib/business";
+import { CookieSettingsButton } from "@/components/cookie-settings-button";
+
+const linkClass =
+  "underline underline-offset-2 hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current";
+
+export async function SiteFooter() {
+  const t = await getTranslations("footer");
+  const tl = await getTranslations("legal.footer");
+  const site = await getTranslations("site");
+  const b = getBusiness();
+
+  return (
+    <footer className="border-t border-border-strong bg-navy text-navy-foreground">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-6 text-sm sm:px-6 lg:px-8">
+        <p className="opacity-90">{t("disclaimer")}</p>
+
+        <nav aria-label={tl("navLabel")}>
+          <ul className="flex flex-wrap gap-x-5 gap-y-2 opacity-90">
+            <li>
+              <Link href="/legal/privacy" className={linkClass}>
+                {tl("privacy")}
+              </Link>
+            </li>
+            <li>
+              <Link href="/legal/terms" className={linkClass}>
+                {tl("terms")}
+              </Link>
+            </li>
+            <li>
+              <Link href="/legal/refunds" className={linkClass}>
+                {tl("refunds")}
+              </Link>
+            </li>
+            <li>
+              <Link href="/legal/cookies" className={linkClass}>
+                {tl("cookies")}
+              </Link>
+            </li>
+            <li>
+              <Link href="/data-request" className={linkClass}>
+                {tl("dataRequest")}
+              </Link>
+            </li>
+            <li>
+              <CookieSettingsButton className={linkClass} />
+            </li>
+          </ul>
+        </nav>
+
+        <address className="not-italic opacity-90">
+          <span className="font-semibold">{b.legalName}</span>
+          <span> · {b.address}</span>
+          <span> · {b.email}</span>
+          <span> · <span dir="ltr">{b.phone}</span></span>
+        </address>
+
+        <p className="opacity-90">
+          &copy; {new Date().getFullYear()} {site("name")} — {t("rights")}
+        </p>
+      </div>
+    </footer>
+  );
+}

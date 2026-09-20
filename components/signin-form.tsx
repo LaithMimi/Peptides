@@ -5,6 +5,7 @@ import { Link, useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { useCart } from "@/lib/cart-store";
 import { PhoneVerification } from "@/components/phone-verification";
+import { LegalNote } from "@/components/legal-note";
 
 export function SigninForm() {
   const t = useTranslations("signIn");
@@ -31,6 +32,7 @@ export function SigninForm() {
       <PhoneVerification locale={locale} onSignedIn={handleSignedIn} />
 
       <p className="text-xs text-muted">{t("cookieNote")}</p>
+      <LegalNote purpose="otp" />
 
       <Link
         href={items.length > 0 ? "/quote" : "/"}

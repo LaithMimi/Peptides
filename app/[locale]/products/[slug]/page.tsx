@@ -27,6 +27,9 @@ export default async function ProductPage({
   }
 
   const translation = product.translations[locale as Locale];
+  // A purity figure is a factual claim: only show it once a certificate of
+  // analysis is linked to back it up.
+  const purity = product.coaUrl ? product.purity : null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -49,7 +52,7 @@ export default async function ProductPage({
           <div className="mt-2 rounded-full border border-border-strong bg-surface px-4 py-1 font-mono text-xs uppercase tracking-widest text-muted">
             <LtrValue>
               {product.vials.map((v) => v.label).join(" / ")}
-              {product.purity ? ` · ${product.purity}` : ""}
+              {purity ? ` · ${purity}` : ""}
             </LtrValue>
           </div>
         </div>
@@ -73,13 +76,13 @@ export default async function ProductPage({
                 <LtrValue>{product.vials.map((v) => v.label).join(", ")}</LtrValue>
               </dd>
             </div>
-            {product.purity && (
+            {purity && (
               <div>
                 <dt className="font-mono text-xs font-semibold uppercase tracking-widest text-muted">
                   {t("purityLabel")}
                 </dt>
                 <dd className="mt-1 font-mono text-foreground">
-                  <LtrValue>{product.purity}</LtrValue>
+                  <LtrValue>{purity}</LtrValue>
                 </dd>
               </div>
             )}

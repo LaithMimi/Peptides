@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import { QuoteForm } from "@/components/quote-form";
 import { writeDraft, writeProfile } from "@/lib/quote-storage";
+import { writeConsent } from "@/lib/consent";
 
 vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
@@ -9,6 +10,7 @@ vi.mock("next-intl", () => ({
 }));
 vi.mock("@/i18n/navigation", () => ({
   useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }),
+  Link: ({ children }: { children: React.ReactNode }) => <a>{children}</a>,
 }));
 vi.mock("@/lib/cart-store", () => ({
   useCart: () => ({
@@ -41,9 +43,18 @@ afterEach(cleanup);
 beforeEach(() => {
   window.localStorage.clear();
   window.sessionStorage.clear();
+  // Remembered details are optional storage: allowed unless a test says not.
+  writeConsent("all");
 });
 
 describe("QuoteForm prefill", () => {
+  it("does not prefill when the visitor allowed essential storage only", () => {
+    writeProfile(profile);
+    writeConsent("essential");
+    render(<QuoteForm sessionPhone={PHONE} />);
+    expect(field("customerName").value).toBe("");
+  });
+
   it("prefills from the remembered profile when the session phone matches", () => {
     writeProfile(profile);
     render(<QuoteForm sessionPhone={PHONE} />);

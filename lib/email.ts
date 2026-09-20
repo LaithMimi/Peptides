@@ -119,3 +119,64 @@ export async function sendFeedbackEmail({
     return { ok: false };
   }
 }
+
+interface SendDataRequestEmailArgs {
+  type: "delete" | "access" | "correct";
+  email: string;
+  phone?: string | null;
+  details?: string | null;
+  locale: string;
+  submittedAt: string;
+}
+
+/**
+ * Privacy request (deletion / access / correction) for the business to act on.
+ * The reply-to is the requester, so the owner can verify identity by replying
+ * to the address the request came from.
+ */
+export async function sendDataRequestEmail({
+  type,
+  email,
+  phone,
+  details,
+  locale,
+  submittedAt,
+}: SendDataRequestEmailArgs): Promise<{ ok: true } | { ok: false }> {
+  const apiKey = process.env.RESEND_API_KEY;
+  const notificationEmail = process.env.ORDER_NOTIFICATION_EMAIL;
+
+  const bodyText = [
+    `New privacy/data request (submitted ${submittedAt}, locale: ${locale})`,
+    "",
+    `Request: ${type.toUpperCase()}`,
+    `Email: ${email}`,
+    `Phone used on quote requests: ${phone && phone.trim() ? phone : "(not given)"}`,
+    `Details: ${details && details.trim() ? details : "(none)"}`,
+    "",
+    "Verify the requester by replying to this email address before acting, then respond within 30 days.",
+  ].join("\n");
+
+  if (!apiKey || !notificationEmail) {
+    console.log("[data request email — dev fallback, no RESEND_API_KEY]\n" + bodyText);
+    return { ok: true };
+  }
+
+  try {
+    const resend = new Resend(apiKey);
+    const { error } = await resend.emails.send({
+      from: "Data Requests <onboarding@resend.dev>",
+      to: notificationEmail,
+      replyTo: email,
+      subject: `Data request (${type}) from ${email}`,
+      text: bodyText,
+    });
+    if (error) {
+      console.error("Resend error sending data-request email", error);
+      return { ok: false };
+    }
+    return { ok: true };
+  } catch (err) {
+    console.error("Failed to send data-request email", err);
+    return { ok: false };
+  }
+}

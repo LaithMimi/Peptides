@@ -10,6 +10,7 @@ import {
 } from "@/lib/feedback-schema";
 import { submitFeedback } from "@/app/[locale]/feedback/actions";
 import { Field, inputClass } from "@/components/form-field";
+import { LegalNote } from "@/components/legal-note";
 
 export function FeedbackForm() {
   const t = useTranslations("feedback");
@@ -106,6 +107,8 @@ export function FeedbackForm() {
           className={inputClass}
         />
       </Field>
+
+      <LegalNote purpose="feedback" />
 
       {submitError && (
         <p role="alert" className="rounded-md bg-danger-bg px-4 py-3 text-sm text-danger">
