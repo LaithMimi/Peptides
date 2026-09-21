@@ -174,11 +174,6 @@
     "successTitle": "Thank you",
     "successBody": "Your feedback has been sent."
   },
-  "trust": {
-    "curated": "Curated catalog",
-    "quoteBased": "Quote-based, no payment on site",
-    "bilingual": "English and Arabic"
-  },
   "confirmation": {
     "title": "Quote request received",
     "body": "Thank you — we've received your request. Our team will follow up by email with pricing and next steps shortly.",
