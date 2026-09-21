@@ -113,7 +113,7 @@ export async function verifyPhoneCode(input: {
     (await cookies()).set(SESSION_COOKIE, value, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "strict",
       path: "/",
       maxAge: SESSION_TTL_SECONDS,
     });
