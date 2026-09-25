@@ -7,26 +7,49 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from "react";
-import type { LineItem } from "@/types/catalog";
-import { MAX_LINE_QUANTITY } from "@/lib/quote-schema";
 
-const STORAGE_KEY = "peptides:quote-cart";
+// The cart holds only product ids and quantities. Prices, names and totals are
+// always fetched from the server, so nothing price-related is stored or trusted
+// in the browser.
 
-const EMPTY_CART: LineItem[] = [];
+export interface CartItem {
+  productId: string;
+  quantity: number;
+}
 
-let cartItems: LineItem[] = EMPTY_CART;
+const STORAGE_KEY = "peptides:cart";
+/** Absolute cap in the browser; the store's per-line maximum is applied by the server. */
+export const MAX_CART_QUANTITY = 100;
+
+const EMPTY_CART: CartItem[] = [];
+
+let cartItems: CartItem[] = EMPTY_CART;
 let loaded = false;
 const listeners = new Set<() => void>();
 
-function loadFromStorage(): LineItem[] {
-  if (typeof window === "undefined") return [];
+const clamp = (q: number) =>
+  Math.max(1, Math.min(MAX_CART_QUANTITY, Math.floor(Number.isFinite(q) ? q : 1)));
+
+function loadFromStorage(): CartItem[] {
+  if (typeof window === "undefined") return EMPTY_CART;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    if (!raw) return EMPTY_CART;
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return EMPTY_CART;
+    const seen = new Set<string>();
+    const items: CartItem[] = [];
+    for (const entry of parsed) {
+      const productId = (entry as CartItem | null)?.productId;
+      const quantity = (entry as CartItem | null)?.quantity;
+      if (typeof productId !== "string" || typeof quantity !== "number") continue;
+      if (seen.has(productId)) continue;
+      seen.add(productId);
+      items.push({ productId, quantity: clamp(quantity) });
+    }
+    return items;
   } catch {
-    return [];
+    return EMPTY_CART;
   }
 }
 
@@ -35,8 +58,8 @@ function persist() {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cartItems));
   } catch {
-    // localStorage may be unavailable (private browsing, quota) — the
-    // in-memory store still works for the current page lifetime.
+    // localStorage may be unavailable (private browsing, quota): the in-memory
+    // store still works for the current page lifetime.
   }
 }
 
@@ -49,7 +72,7 @@ function subscribe(listener: () => void) {
   return () => listeners.delete(listener);
 }
 
-function getSnapshot(): LineItem[] {
+function getSnapshot(): CartItem[] {
   if (!loaded && typeof window !== "undefined") {
     cartItems = loadFromStorage();
     loaded = true;
@@ -57,53 +80,37 @@ function getSnapshot(): LineItem[] {
   return cartItems;
 }
 
-function getServerSnapshot(): LineItem[] {
-  // Must return a referentially stable value — a fresh [] here triggers
-  // React's "getServerSnapshot should be cached" infinite-loop warning.
+function getServerSnapshot(): CartItem[] {
+  // Must return a referentially stable value: a fresh [] here triggers React's
+  // "getServerSnapshot should be cached" infinite-loop warning.
   return EMPTY_CART;
 }
 
-function setCart(next: LineItem[]) {
-  cartItems = next;
+function setCart(next: CartItem[]) {
+  cartItems = next.length === 0 ? EMPTY_CART : next;
   persist();
   notify();
 }
 
-function addItem(item: LineItem) {
-  const existing = cartItems.find(
-    (i) => i.productId === item.productId && i.vialId === item.vialId
-  );
+function addItem(productId: string, quantity = 1) {
+  const existing = cartItems.find((i) => i.productId === productId);
   if (existing) {
     setCart(
       cartItems.map((i) =>
-        i === existing
-          ? {
-              ...i,
-              quantity: Math.min(MAX_LINE_QUANTITY, i.quantity + item.quantity),
-            }
-          : i
+        i === existing ? { ...i, quantity: clamp(i.quantity + quantity) } : i
       )
     );
   } else {
-    setCart([
-      ...cartItems,
-      { ...item, quantity: Math.min(MAX_LINE_QUANTITY, item.quantity) },
-    ]);
+    setCart([...cartItems, { productId, quantity: clamp(quantity) }]);
   }
 }
 
-function updateQuantity(productId: string, vialId: string, quantity: number) {
-  setCart(
-    cartItems.map((i) =>
-      i.productId === productId && i.vialId === vialId
-        ? { ...i, quantity: Math.max(1, Math.min(MAX_LINE_QUANTITY, quantity)) }
-        : i
-    )
-  );
+function setQuantity(productId: string, quantity: number) {
+  setCart(cartItems.map((i) => (i.productId === productId ? { ...i, quantity: clamp(quantity) } : i)));
 }
 
-function removeItem(productId: string, vialId: string) {
-  setCart(cartItems.filter((i) => !(i.productId === productId && i.vialId === vialId)));
+function removeItem(productId: string) {
+  setCart(cartItems.filter((i) => i.productId !== productId));
 }
 
 function clear() {
@@ -117,10 +124,10 @@ export function __resetCartStoreForTests() {
 }
 
 interface CartContextValue {
-  items: LineItem[];
-  addItem: (item: LineItem) => void;
-  updateQuantity: (productId: string, vialId: string, quantity: number) => void;
-  removeItem: (productId: string, vialId: string) => void;
+  items: CartItem[];
+  addItem: (productId: string, quantity?: number) => void;
+  setQuantity: (productId: string, quantity: number) => void;
+  removeItem: (productId: string) => void;
   clear: () => void;
 }
 
@@ -130,7 +137,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const items = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const value = useMemo<CartContextValue>(
-    () => ({ items, addItem, updateQuantity, removeItem, clear }),
+    () => ({ items, addItem, setQuantity, removeItem, clear }),
     [items]
   );
 

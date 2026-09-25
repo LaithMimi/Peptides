@@ -1,6 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { useTransition } from "react";
@@ -10,12 +11,23 @@ const LOCALE_LABELS: Record<string, string> = {
   ar: "AR",
 };
 
-export function LocaleSwitcher() {
+/**
+ * Language toggle. `locales` are the languages enabled in admin Settings; with
+ * only one there is nothing to switch. Switching keeps the same page, including
+ * its query string (filters, `?purpose=`, order links), so nothing is lost.
+ */
+export function LocaleSwitcher({ locales }: { locales?: string[] }) {
   const t = useTranslations("nav");
   const locale = useLocale();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  const available = routing.locales.filter(
+    (l) => !locales || locales.includes(l) || l === locale
+  );
+  if (available.length < 2) return null;
 
   return (
     <div
@@ -23,7 +35,7 @@ export function LocaleSwitcher() {
       role="group"
       aria-label={t("language")}
     >
-      {routing.locales.map((loc) => {
+      {available.map((loc) => {
         const active = loc === locale;
         return (
           <button
@@ -31,8 +43,9 @@ export function LocaleSwitcher() {
             type="button"
             disabled={isPending}
             onClick={() => {
+              const query = Object.fromEntries(searchParams.entries());
               startTransition(() => {
-                router.replace(pathname, { locale: loc });
+                router.replace({ pathname, query }, { locale: loc });
               });
             }}
             aria-pressed={active}

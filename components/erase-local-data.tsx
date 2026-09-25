@@ -2,26 +2,20 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { signOut } from "@/app/[locale]/quote/otp-actions";
 import { eraseLocalData } from "@/lib/consent";
 
 /**
- * Self-serve erasure for this browser: ends the verified-phone session (drops
- * the cookie) and removes the cart, remembered details, draft and consent
- * choice. Data the business already holds is handled by the data request form.
+ * Self-serve erasure for this browser: removes the cart, checkout draft and
+ * cookie choice. Data the business already holds (orders) is handled by the
+ * data request form.
  */
 export function EraseLocalData() {
   const t = useTranslations("legal.erase");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
 
-  async function erase() {
+  function erase() {
     setBusy(true);
-    try {
-      await signOut();
-    } catch {
-      // still erase what is local
-    }
     eraseLocalData();
     setBusy(false);
     setDone(true);

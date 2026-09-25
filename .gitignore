@@ -49,3 +49,6 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# embedded dev database
+/.pglite/
