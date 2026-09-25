@@ -1,14 +1,22 @@
 {
   "site": {
     "name": "Pep Club",
-    "tagline": "Premium Peptides"
+    "tagline": "Research peptides from trusted brands"
   },
   "nav": {
     "catalog": "Catalog",
     "quote": "Quote Request",
     "language": "Language",
     "cartCount": "{count, plural, =0 {No items} one {# item} other {# items}}",
-    "contact": "Contact us"
+    "contact": "Contact us",
+    "home": "Home",
+    "shop": "Shop",
+    "researchAreas": "Research areas",
+    "brands": "Brands",
+    "cart": "Cart",
+    "menu": "Menu",
+    "closeMenu": "Close menu",
+    "mainNav": "Main navigation"
   },
   "disclaimer": {
     "short": "For Research Use Only — Not for Human Use.",
@@ -31,7 +39,17 @@
     "selectVialFirst": "Please select a vial size before adding to your quote request.",
     "addedToQuote": "Added to your quote request.",
     "notFoundTitle": "Product not found",
-    "notFoundBody": "This product is not currently available."
+    "notFoundBody": "This product is not currently available.",
+    "backToShop": "Back to shop",
+    "brandLabel": "Brand",
+    "priceLabel": "Price",
+    "researchFocusLabel": "Research focus",
+    "usageTitle": "Laboratory handling",
+    "warningsTitle": "Warnings",
+    "noImage": "No image available",
+    "imageGallery": "Product images",
+    "unavailableTitle": "This product is unavailable",
+    "unavailableBody": "It may have been removed or is not currently listed."
   },
   "quoteCart": {
     "title": "Your quote request",
@@ -80,29 +98,36 @@
   "errors": {
     "required": "This field is required.",
     "invalidEmail": "Please enter a valid email address.",
-    "invalidPhone": "Enter a valid phone number with the country code, e.g. +1 555 010 0100.",
-    "emptyCart": "Please add at least one item to your quote request.",
-    "ackRequired": "You must confirm this before submitting.",
+    "invalidPhone": "Enter a valid phone number, for example 050 123 4567.",
+    "emptyCart": "Your cart is empty. Add at least one product.",
+    "ackRequired": "You must confirm this before placing your order.",
     "phoneNotVerified": "Please verify your phone number with the code we text you.",
     "otpSendFailed": "We couldn't send a code to that number. Please check it and try again.",
     "otpInvalidCode": "That code isn't correct. Please try again.",
     "otpCodeExpired": "That code has expired. Please request a new one.",
     "otpVerifyFailed": "We couldn't verify your phone number just now. Please try again in a moment.",
     "otpRateLimited": "Too many code requests. Please wait a few minutes and try again.",
-    "itemUnavailable": "One of the items in your request is no longer available: {name}. Please remove or update it.",
+    "itemUnavailable": "An item in your cart is no longer available. Remove it and try again.",
     "emailFailed": "We couldn't send your quote request just now. Please try again — your information has been kept.",
-    "rateLimited": "Too many requests from your connection. Please wait a few minutes and try again — your information has been kept.",
-    "genericSubmit": "Something went wrong submitting your request. Please try again.",
+    "rateLimited": "Too many orders from your connection. Please wait a few minutes and try again. Your details have been kept.",
+    "genericSubmit": "Something went wrong placing your order. Please try again.",
     "feedbackFailed": "We couldn't send your feedback just now. Please try again — your message has been kept.",
     "notSignedIn": "Please verify your phone number to continue — your information has been kept.",
-    "dataRequestFailed": "We couldn't send your request just now. Please try again or email us directly."
+    "dataRequestFailed": "We couldn't send your request just now. Please try again or email us directly.",
+    "tooShort": "This is too short.",
+    "tooLong": "This is too long.",
+    "quantityTooHigh": "That quantity is above the maximum for one item.",
+    "tooManyLines": "Your cart has too many different items for one order.",
+    "duplicateItem": "The same item appears twice in your cart.",
+    "itemUnpriced": "An item in your cart has no listed price. Remove it or contact the store.",
+    "networkError": "There was a network problem. Your details have been kept, please try again."
   },
   "legal": {
     "skipToContent": "Skip to main content",
     "lastUpdated": "Last updated",
     "banner": {
       "title": "Cookies and browser storage",
-      "body": "We use only the storage the site needs to work: a sign-in cookie, your quote cart and your language. We use no advertising or tracking. You can also let us remember your name, email and address on this device for next time.",
+      "body": "We use only the storage the site needs to work: your cart, your language and, while you check out, the details you type. We use no advertising or tracking.",
       "learnMore": "Cookie policy",
       "essentialOnly": "Essential only",
       "acceptAll": "Accept optional storage"
@@ -110,15 +135,18 @@
     "footer": {
       "navLabel": "Legal",
       "privacy": "Privacy policy",
-      "terms": "Terms of service",
+      "terms": "Terms & conditions",
       "refunds": "Refund policy",
       "cookies": "Cookie policy",
       "dataRequest": "Data request (delete or access my data)",
       "cookieSettings": "Cookie settings",
-      "contact": "Contact us"
+      "contact": "Contact us",
+      "shippingReturns": "Shipping & returns",
+      "productDisclaimer": "Product disclaimer",
+      "about": "About"
     },
     "note": {
-      "quote": "We use these details only to verify your phone and answer your quote request.",
+      "quote": "We use these details only to arrange delivery of your order.",
       "feedback": "We use these details only to read and reply to your message.",
       "otp": "We use your number only to send the verification code.",
       "prefix": "By continuing you accept our",
@@ -128,7 +156,7 @@
     },
     "erase": {
       "title": "Delete my data in this browser",
-      "body": "Signs you out and removes your quote cart, remembered details, unsent draft and cookie choice from this browser.",
+      "body": "Removes your cart, unsent checkout details and cookie choice from this browser.",
       "button": "Delete data in this browser",
       "done": "Done — everything this site stored in this browser was removed."
     }
@@ -175,14 +203,20 @@
     "successBody": "Your feedback has been sent."
   },
   "trust": {
-    "curated": "Curated catalog",
-    "quoteBased": "Quote-based, no payment on site",
+    "curated": "Multiple brands",
+    "quoteBased": "Cash on delivery",
     "bilingual": "English and Arabic"
   },
   "confirmation": {
-    "title": "Quote request received",
-    "body": "Thank you — we've received your request. Our team will follow up by email with pricing and next steps shortly.",
-    "backToCatalog": "Back to catalog"
+    "title": "Order received",
+    "body": "Thank you, {name}. We have received your order and will contact you to arrange delivery.",
+    "backToCatalog": "Back to catalog",
+    "orderNumber": "Order number",
+    "itemsTitle": "Your items",
+    "payment": "Payment method",
+    "paymentValue": "Cash on delivery",
+    "deliveryTo": "Delivery address",
+    "continueShopping": "Continue shopping"
   },
   "footer": {
     "disclaimer": "For Research Use Only — Not for Human Use. Not for diagnostic or therapeutic use in humans or animals.",
@@ -190,12 +224,128 @@
   },
   "contact": {
     "title": "Contact us",
-    "intro": "Questions about a product or your quote request? Reach us by phone.",
+    "intro": "Questions about a product or your order? Reach us by phone or WhatsApp.",
     "location": "Location",
     "locationValue": "Jerusalem",
     "phone": "Phone",
     "email": "Email",
     "call": "Call us",
-    "note": "We follow up on quote requests directly. Please do not send medical questions — our products are for laboratory research use only."
+    "note": "We arrange delivery and answer product questions directly. Please do not send medical questions: our products are for laboratory research use only."
+  },
+  "home": {
+    "heroTitle": "Research peptides from trusted brands, in one place",
+    "heroBody": "Browse laboratory research peptides by brand and by research area. Order online and pay in cash on delivery.",
+    "heroCta": "Shop now",
+    "researchAreasTitle": "Research areas",
+    "featuredTitle": "Featured products",
+    "brandsTitle": "Brands",
+    "viewAll": "View all products",
+    "productCount": "{count, plural, one {# product} other {# products}}",
+    "pickerCta": "Choose a research area"
+  },
+  "shop": {
+    "title": "Shop",
+    "subtitle": "Every research peptide in the store, grouped by brand.",
+    "filtersTitle": "Filter products",
+    "brandFilter": "Brand",
+    "areaFilter": "Research area",
+    "priceFilter": "Price",
+    "allBrands": "All brands",
+    "allAreas": "All research areas",
+    "priceAny": "Any",
+    "priceListed": "Price listed",
+    "apply": "Apply filters",
+    "clear": "Clear filters",
+    "results": "{count, plural, =0 {No products} one {# product} other {# products}}",
+    "empty": "No products match these filters.",
+    "emptyHelp": "Try removing a filter to see more products.",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {pages}",
+    "paginationLabel": "Pagination",
+    "areaBrands": "Brands with products in this research area",
+    "brandProductsHeading": "{brand} products"
+  },
+  "brands": {
+    "title": "Brands",
+    "subtitle": "The manufacturers whose research peptides we carry.",
+    "empty": "No brands are available right now."
+  },
+  "unavailable": {
+    "browse": "Browse the shop"
+  },
+  "price": {
+    "unavailable": "Price unavailable",
+    "askAbout": "Ask about price",
+    "contactStore": "Contact the store",
+    "whatsappLabel": "Chat on WhatsApp",
+    "whatsappInquiry": "Hi, I would like to know the price of {product}."
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty",
+    "emptyHelp": "Browse the shop and add products to your cart.",
+    "browse": "Browse the shop",
+    "quantity": "Quantity",
+    "quantityFor": "Quantity of {name}",
+    "decrease": "Decrease quantity of {name}",
+    "increase": "Increase quantity of {name}",
+    "addToCart": "Add to cart",
+    "added": "Added to your cart.",
+    "viewCart": "View cart",
+    "unitPrice": "Unit price",
+    "remove": "Remove",
+    "removeItem": "Remove {name} from cart",
+    "thisItem": "this item",
+    "subtotal": "Subtotal",
+    "deliveryFee": "Delivery fee",
+    "freeDelivery": "Free",
+    "total": "Total",
+    "summary": "Order summary",
+    "checkout": "Proceed to checkout",
+    "updating": "Updating your cart…",
+    "cashOnDelivery": "Payment is cash on delivery. Nothing is charged online.",
+    "loadingLine": "Loading item…",
+    "loadFailed": "We couldn't update your cart. Check your connection and try again.",
+    "retry": "Try again",
+    "blockedTitle": "Some items can't be ordered online",
+    "blockedBody": "Remove them to continue checking out, or contact the store to ask about them.",
+    "unavailableLine": "This item is no longer available. Remove it to continue.",
+    "unpricedLine": "{name} has no listed price yet.",
+    "contactStore": "Contact the store"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "detailsTitle": "Your details",
+    "nameLabel": "Full name",
+    "phoneLabel": "Phone number",
+    "phoneHelp": "The number we will call to arrange delivery, for example 050 123 4567.",
+    "addressLabel": "Delivery area and address",
+    "addressHelp": "City or area, street, and any directions for the driver.",
+    "notesLabel": "Order notes",
+    "optional": "optional",
+    "paymentTitle": "Payment: cash on delivery",
+    "paymentBody": "You pay the driver in cash when your order arrives. No online payment is taken.",
+    "reviewTitle": "Review your order",
+    "ackLabel": "I confirm I am 18 years of age or older and that these products are for research and laboratory use only, not for human consumption.",
+    "confirm": "Confirm order",
+    "confirming": "Placing your order…",
+    "backToCart": "Back to cart",
+    "emptyTitle": "Your cart is empty",
+    "emptyBody": "Add at least one product before checking out.",
+    "priceChangedTitle": "Prices have changed",
+    "priceChangedBody": "Some prices changed since you added items. Review the updated total below, then confirm again."
+  },
+  "start": {
+    "title": "Find products by research purpose",
+    "subtitle": "Choose the research areas you are interested in and we will show the related products, grouped by brand.",
+    "pickerTitle": "What are you researching?",
+    "select": "Select {name}",
+    "deselect": "Remove {name} from your selection",
+    "selected": "Selected",
+    "clear": "Clear selection",
+    "resultsTitle": "Related products",
+    "choosePrompt": "Choose one or more research areas above to see the related products.",
+    "noAreas": "No research areas are available right now."
   }
 }

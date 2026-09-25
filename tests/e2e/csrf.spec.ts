@@ -6,7 +6,7 @@ test("server action POST with a forged Origin is rejected", async ({
   request,
   baseURL,
 }) => {
-  const url = `${baseURL}/en/quote`;
+  const url = `${baseURL}/en/checkout`;
   const post = (origin: string) =>
     request.post(url, {
       headers: {

@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Fraunces, DM_Sans, IBM_Plex_Mono, Noto_Kufi_Arabic } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { CartProvider } from "@/lib/cart-store";
+import { siteUrl } from "@/lib/seo";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CookieConsent } from "@/components/cookie-consent";
@@ -44,7 +45,8 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "site" });
   return {
-    title: t("name"),
+    metadataBase: new URL(siteUrl()),
+    title: { default: t("name"), template: `%s | ${t("name")}` },
     description: t("tagline"),
   };
 }
