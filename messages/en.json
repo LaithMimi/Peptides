@@ -243,6 +243,21 @@
     "productCount": "{count, plural, one {# product} other {# products}}",
     "pickerCta": "Choose a research area"
   },
+  "howToUse": {
+    "title": "How to prepare a vial",
+    "intro": "A quick laboratory reference for reconstituting a lyophilized research peptide.",
+    "stepLabel": "Step {n}",
+    "step1": "Remove the plastic cap from the peptide vial",
+    "step2": "Wipe the stoppers with an alcohol swab",
+    "step3": "Draw up the chosen amount of bacteriostatic water",
+    "step3Note": "Example: <v>2–4 mL</v>",
+    "step4": "Slowly inject down the inside wall of the peptide vial",
+    "step5": "Gently swirl until dissolved",
+    "step5Note": "Do not shake.",
+    "step6": "Store in the fridge",
+    "step6Note": "<v>2–8 °C</v>",
+    "researchNote": "For laboratory research use only — not for human use. Follow your lab's own protocols and safety procedures."
+  },
   "shop": {
     "title": "Shop",
     "subtitle": "Every research peptide in the store, grouped by brand.",

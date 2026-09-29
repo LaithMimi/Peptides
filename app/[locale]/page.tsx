@@ -5,6 +5,7 @@ import { getSettings } from "@/lib/db/queries/settings";
 import { pick } from "@/lib/i18n-fields";
 import { ProductCard } from "@/components/product-card";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
+import { HowToUse } from "@/components/how-to-use";
 import { FeedbackSection } from "@/components/feedback-section";
 import { CategoryChips } from "@/components/store/category-chips";
 import { VialGlyph } from "@/components/vial-glyph";
@@ -147,6 +148,8 @@ export default async function HomePage({
           </div>
         </section>
       )}
+
+      <HowToUse />
 
       {brands.length > 0 && (
         <section aria-labelledby="home-brands" className="flex flex-col gap-3">
