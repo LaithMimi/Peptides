@@ -131,7 +131,7 @@ export function CartLines({
                   type="button"
                   onClick={() => onRemove?.(line.productId)}
                   aria-label={t("removeItem", { name: line.name || t("thisItem") })}
-                  className="inline-flex min-h-11 items-center rounded-full border border-border-strong px-4 font-serif text-xs font-semibold uppercase tracking-wide text-navy hover:border-navy"
+                  className="inline-flex min-h-11 items-center rounded-full border border-border-strong px-4 font-serif text-xs font-semibold uppercase tracking-wide text-navy hover:border-accent"
                 >
                   {t("remove")}
                 </button>

@@ -23,7 +23,7 @@ export function CartView() {
         <p className="text-muted">{t("emptyHelp")}</p>
         <Link
           href="/shop"
-          className="btn-glass inline-flex min-h-11 items-center justify-center rounded-full px-6 py-2 font-serif text-sm font-semibold uppercase tracking-wide text-white"
+          className="btn-glass inline-flex min-h-11 items-center justify-center rounded-full px-6 py-2 font-serif text-sm font-semibold uppercase tracking-wide"
         >
           {t("browse")}
         </Link>
@@ -68,7 +68,7 @@ export function CartView() {
         {cart.canCheckout ? (
           <Link
             href="/checkout"
-            className="btn-glass inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide text-white"
+            className="btn-glass inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide"
           >
             {t("checkout")}
           </Link>
@@ -76,7 +76,7 @@ export function CartView() {
           <button
             type="button"
             disabled
-            className="btn-glass inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide text-white opacity-50"
+            className="btn-glass inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide opacity-60"
           >
             {cart.status === "loading" ? t("updating") : t("checkout")}
           </button>

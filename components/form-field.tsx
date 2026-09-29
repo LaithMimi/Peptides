@@ -7,7 +7,7 @@ export const inputClass =
 
 // Secondary (outlined) action, sized to a 44px touch target.
 export const secondaryButtonClass =
-  "inline-flex min-h-11 w-fit items-center justify-center rounded-full border border-border-strong px-5 py-2 font-serif text-xs font-semibold uppercase tracking-wide text-navy transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50";
+  "inline-flex min-h-11 w-fit items-center justify-center rounded-full border-2 border-accent px-5 py-2 font-serif text-xs font-semibold uppercase tracking-wide text-accent transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50";
 
 export function Field({
   label,

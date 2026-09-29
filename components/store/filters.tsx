@@ -79,7 +79,7 @@ export function Filters({
       <div className="flex flex-wrap items-center gap-2">
         <button
           type="submit"
-          className="btn-glass inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2 font-serif text-xs font-semibold uppercase tracking-wide text-white"
+          className="btn-glass inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2 font-serif text-xs font-semibold uppercase tracking-wide"
         >
           {t("apply")}
         </button>

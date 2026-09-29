@@ -119,7 +119,7 @@ export function FeedbackForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="btn-glass inline-flex w-fit items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide text-white disabled:opacity-60"
+        className="btn-glass inline-flex w-fit items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide disabled:opacity-60"
       >
         {isSubmitting ? t("submitting") : t("submit")}
       </button>

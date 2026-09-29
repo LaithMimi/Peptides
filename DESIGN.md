@@ -6,13 +6,17 @@ colors:
   surface: "#ffffff"
   surface-raised: "#f7f7f8"
   ink-navy: "#0a1933"
-  muted-ink: "#6b7280"
+  muted-ink: "#5f6673"
   hairline: "#e5e7eb"
   hairline-strong: "#d1d5db"
   accent-blue: "#0000ff"
   input-border: "#9ca3af"
   danger: "#a23b2e"
   danger-bg: "#fbeae7"
+  accent-blue-dark: "#6669ff"
+  glass-dark-tint: "rgba(102, 105, 255, 0.22)"
+  glass-dark-button: "rgba(102, 105, 255, 0.3)"
+  glass-dark-button-hover: "rgba(102, 105, 255, 0.45)"
 typography:
   display:
     fontFamily: "Geist Sans, ui-sans-serif, system-ui, sans-serif"
@@ -63,7 +67,7 @@ The named craft bar is **Apple.com** (restrained, high-contrast typography, mini
 
 **Key Characteristics:**
 - Plain bordered cards (`rounded-xl border border-border-strong shadow-sm`, `shadow-md` on hover) — no signature glow, glass, or backlight device
-- White and light neutral gray (`#f7f7f8`) dominate; navy ink stays for headings/body text, while cornflower blue carries every action surface — buttons and the footer band — per the client's explicit "blue, not navy blue" direction
+- White and light neutral gray (`#f7f7f8`) dominate; navy ink stays for headings/body text, while cornflower blue carries every action surface — buttons (clear glass with blue ink) and the glass footer card — per the client's explicit "blue, not navy blue" direction
 - Real seeded product photography carries visual weight — the homepage hero features four real product photos in a Sephora-style collage instead of an abstract motif or generated imagery
 - No customer account/sign-in affordance anywhere (hard product constraint) and no fabricated discount or "deal" badges (no discount field exists in the schema; the No Fabricated Data Rule)
 - Bilingual EN/AR with true RTL mirroring; Geist Mono bidi-isolates Latin/numeric values (vial size, purity) inside Arabic text via `components/ltr-value.tsx`
@@ -73,17 +77,18 @@ The named craft bar is **Apple.com** (restrained, high-contrast typography, mini
 Plain and restrained — white, light gray, navy ink, and one disciplined blue accent. No invented tertiary colors, no signature glow palette.
 
 ### Primary
-- **Ink Navy** (`#0a1933`): headings and body-adjacent text, the chosen state of pills/toggles (research-area chips, locale switcher, purpose picker). From the logo's "PEP" wordmark and icon outline. No longer used as a button or footer fill — see Named Rules.
+- **Ink Navy** (`#0a1933`): headings and body-adjacent text, text only; it is never a fill, border, or selected state. From the logo's "PEP" wordmark and icon outline. No longer used as a button or footer fill — see Named Rules.
 
 ### Secondary
-- **Accent Blue** (`#0000ff` light mode, `#6669ff` dark mode): a pure, saturated blue per the client's explicit hex instruction — no longer matched to the logo's softer cornflower tone. Carries every action surface: all primary and secondary buttons (solid and outline), the footer band, links, and the focus ring. The dark-mode value is lightened from the exact hex (`#0000ff` fails WCAG AA as text/fill against the dark background); `#6669ff` holds 4.59:1 contrast both directions. Revised in two steps: first from a "rare accent" reserved for one CTA to carrying every button + the footer, then from the logo-matched cornflower blue to this pure blue.
+- **Accent Blue** (`#0000ff` light mode, `#6669ff` dark mode): a pure, saturated blue per the client's explicit hex instruction — no longer matched to the logo's softer cornflower tone. Carries every action surface: all primary and secondary buttons (solid and outline), links, and the focus ring. The dark-mode value is lightened from the exact hex (`#0000ff` fails WCAG AA as text/fill against the dark background); `#6669ff` holds 4.59:1 contrast both directions. Revised in two steps: first from a "rare accent" reserved for one CTA to carrying every button + the footer, then from the logo-matched cornflower blue to this pure blue.
 
 ### Neutral
 - **Background / Surface** (`#ffffff`): page and card background.
 - **Surface Raised** (`#f7f7f8`): a barely-tinted neutral gray for image placeholders, elevated panels, and input fields.
-- **Muted Ink** (`#6b7280`): secondary text, a plain neutral gray.
+- **Muted Ink** (`#5f6673`): secondary text, a plain neutral gray.
 - **Hairline** (`#e5e7eb`) / **Hairline Strong** (`#d1d5db`): ordinary neutral card borders and dividers.
 - **Danger** (`#a23b2e`) / **Danger Background** (`#fbeae7`): validation and submission errors only.
+- **Dark glass tint** (`rgba(102,105,255,.22–.45)` over a faint white wash): the dark-theme fill for `.nav-glass` and `.btn-glass`, the accent-dark `#6669ff` at low alpha. Never used as a solid.
 
 ### Named Rules
 **The No Fabricated Data Rule.** Nothing in the UI states as fact what isn't real product data. No invented discount percentages, "Super Deals" badges, lot numbers, or certifications; only `lib/db` fields (vial size, purity, price) ever appear as data.
@@ -131,9 +136,9 @@ Two families: **pills** (`rounded-full`) for every button, chip, and toggle, and
 
 ### Buttons
 - **Shape:** full pill (`rounded-full`).
-- **Primary (navy):** `bg-navy text-navy-foreground`, used for secondary/navigational actions.
-- **CTA (accent blue):** `bg-accent text-accent-foreground`, used only for the one primary commercial action per page (Shop now, Submit).
-- **Hover/Focus:** opacity fade on hover; a 2px accent or navy focus-visible ring, offset, never removed.
+- **Solid CTA buttons (glass):** `.btn-glass` in `app/globals.css` — the same clear-glass material as the nav, sized for buttons: `backdrop-filter: blur(10px)`, a light brand-blue tint (`rgba(0,0,255,.16→.07)`), a blue rim (`rgba(0,0,255,.35)`), a bright inset highlight. Ink is accent blue on light theme (≥6:1 over the tint, 4.8:1 on hover) and near-white on dark theme. The class sets its own `color` in unlayered CSS so it wins over any leftover `text-*` utility. Used on every filled action: Shop now, Apply filters, Add to cart, checkout/browse/continue buttons, form submits, the solid WhatsApp button.
+- **Outline buttons:** `border-2 border-accent text-accent`, transparent at rest, solid accent fill on hover (Choose a research area, cookie choices, erase-local-data). They were left as-is: already transparent, so "glass" adds nothing at rest.
+- **Hover/Focus:** glass tint deepens on hover; a 2px accent focus-visible ring, offset, never removed.
 
 ### Chips
 - **Research-area / locale toggle:** pill, neutral border, navy fill when selected, `surface-raised` + `border-strong` otherwise. Mono uppercase label.
@@ -150,9 +155,9 @@ Two families: **pills** (`rounded-full`) for every button, chip, and toggle, and
 - **Error:** field-level message in `danger`; page-level failures in a `danger-bg` block.
 
 ### Navigation (deliberate exception to the rest of the system)
-- The header is a **floating capsule**, not a full-width bar: `app/[locale]/layout.tsx`'s `<header>` adds page-edge padding and a top gap, then the actual bar (`.nav-gradient` in `app/globals.css`, `rounded-full`, `shadow-lg`) sits inset from the viewport edges at `max-w-6xl`. The gradient — `linear-gradient(115deg, #060e1e 0%, #0a1933 22%, var(--accent) 68%, #5a5aff 100%)`, dark mode swapping the two fixed endpoints for `#04070f`/`#8386ff` — carries only the brand's own two colors, no invented hue, and no decorative pattern (an earlier dot-chain overlay was tried and removed at the client's request — flat gradient only). This was an explicit, scoped client request ("change the nav bar, make it very creative... as a capsule") layered on top of the otherwise-plain "category standard" system; it is intentionally the one loud moment on the page, not a signal to extend gradients or the capsule shape elsewhere.
-- Logo, nav links, cart label, and the mobile-menu button all render white (`.brand-mark-on-gradient` reuses the existing dark-mode logo-inversion trick unconditionally, since the header background is now always dark). Cart count badge is a white dot with accent-colored text for contrast against every part of the gradient. The locale switcher is unchanged — its white pill already reads as a floating control against the new backdrop.
-- The mobile disclosure menu floats as its own `absolute`-positioned card below the capsule (same `.nav-gradient` + `rounded-2xl`), not nested inside the pill — opening it never stretches the capsule into a tall stadium shape.
+- The header is a **floating capsule of clear glass**, not a full-width bar and not a colored fill: `app/[locale]/layout.tsx`'s `<header>` adds page-edge padding and a top gap, then the bar (`.nav-glass` in `app/globals.css`, `rounded-full`) sits inset from the viewport edges at `max-w-6xl`. The material is real `backdrop-filter: blur(20px) saturate(180%)` under only a whisper of brand blue (`rgba(0,0,255,.13→.04)` gradient), a blue-tinted 1px edge (`rgba(0,0,255,.22)`), and a bright inset top rim (`inset 0 1px 0 rgba(255,255,255,.85)`). Dark mode swaps the tint for `rgba(102,105,255,.22)` over a faint white wash with a white-alpha edge. History, so it isn't retried: a solid navy→blue gradient, then a dot-chain overlay, then a *dark tinted* glass were each tried; the dark tinted pane put white ink over a pale pane (≈2.7:1, failing AA), so the glass is deliberately **light and clear with dark ink**. This was an explicit, scoped client request layered on top of the otherwise-plain "category standard" system — the one loud moment on the page, not a signal to extend glass or the capsule shape to cards or content.
+- Ink stays normal: nav links `text-navy` (hover `text-accent`), the logo uses the ordinary `.brand-mark`, the cart badge is the usual accent dot, and the mobile-menu button is an accent outline. Because ink is set by the theme tokens (dark ink on light theme, light ink on dark), legibility never depends on what sits behind the glass. Measured: navy ink over the glass ≥13:1, accent ink ≥6:1. The locale switcher is unchanged.
+- The mobile disclosure menu floats as its own `absolute`-positioned card below the capsule (same `.nav-glass` + `rounded-2xl`), not nested inside the pill — opening it never stretches the capsule into a tall stadium shape.
 - No account/sign-in control — this product has none, by hard constraint.
 
 ### Trust Markers
@@ -180,3 +185,6 @@ The homepage hero's right column (`app/[locale]/page.tsx`) shows four real featu
 - **Don't** use AI-generated images anywhere on the storefront — real product photography or authored SVG only, per the client's explicit instruction.
 - **Don't** mix Latin and Arabic faces on one line — swap the whole typeface stack at the `dir="rtl"` boundary instead.
 - **Don't** show a price or payment field anywhere — no online payment gateway exists in this product, ever (constitutional constraint, not a visual preference).
+
+### Color Consistency Rule
+Navy is ink only (text). Every interactive surface — borders, hover borders, focus, selected chips/toggles/badges, steppers, the cookie banner rule — uses accent blue; selected states use `.btn-glass`. No navy fills or borders on the storefront.

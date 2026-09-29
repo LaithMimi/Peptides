@@ -50,7 +50,7 @@ export function CookieConsent() {
   return (
     <section
       aria-label={t("title")}
-      className="fixed inset-x-0 bottom-0 z-50 border-t-2 border-navy bg-surface shadow-lg"
+      className="fixed inset-x-0 bottom-0 z-50 border-t-2 border-accent bg-surface shadow-lg"
     >
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6 lg:px-8">
         <p className="max-w-2xl text-xs text-foreground sm:text-sm">

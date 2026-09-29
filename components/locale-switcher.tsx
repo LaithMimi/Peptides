@@ -31,7 +31,7 @@ export function LocaleSwitcher({ locales }: { locales?: string[] }) {
 
   return (
     <div
-      className="inline-flex items-center gap-1 rounded-full border-2 border-navy bg-surface p-1"
+      className="inline-flex items-center gap-1 rounded-full border-2 border-accent bg-surface p-1"
       role="group"
       aria-label={t("language")}
     >
@@ -51,8 +51,8 @@ export function LocaleSwitcher({ locales }: { locales?: string[] }) {
             aria-pressed={active}
             className={`inline-flex min-h-9 min-w-11 items-center justify-center rounded-full px-3 font-mono text-xs font-semibold tracking-wide transition-colors ${
               active
-                ? "bg-navy text-navy-foreground"
-                : "text-muted hover:text-navy"
+                ? "btn-glass"
+                : "text-muted hover:text-accent"
             }`}
           >
             {LOCALE_LABELS[loc] ?? loc}

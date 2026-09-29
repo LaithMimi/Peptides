@@ -50,8 +50,8 @@ export function PurposePicker({
                 aria-label={isSelected ? t("deselect", { name }) : t("select", { name })}
                 className={`flex h-full min-h-28 flex-col gap-2 rounded-xl border-2 p-4 transition-colors ${
                   isSelected
-                    ? "border-navy bg-surface-raised"
-                    : "border-border-strong bg-surface hover:border-navy"
+                    ? "border-accent bg-surface-raised"
+                    : "border-border-strong bg-surface hover:border-accent"
                 }`}
               >
                 <span className="flex items-start justify-between gap-2">
@@ -59,7 +59,7 @@ export function PurposePicker({
                     {name}
                   </span>
                   {isSelected && (
-                    <span className="shrink-0 rounded-full bg-navy px-2 py-0.5 font-mono text-xs uppercase tracking-wide text-navy-foreground">
+                    <span className="shrink-0 btn-glass rounded-full px-2 py-0.5 font-mono text-xs uppercase tracking-wide">
                       {t("selected")}
                     </span>
                   )}

@@ -7,7 +7,7 @@ import { useCart } from "@/lib/cart-store";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 
 const linkClass =
-  "inline-flex min-h-11 items-center rounded px-2 font-serif text-sm font-semibold uppercase tracking-wide text-white transition-opacity hover:opacity-75";
+  "inline-flex min-h-11 items-center rounded px-2 font-serif text-sm font-semibold uppercase tracking-wide text-navy transition-colors hover:text-accent";
 
 /**
  * Primary navigation. Wide screens show the links inline; on phones they sit
@@ -55,7 +55,7 @@ export function HeaderNav({ locales }: { locales?: string[] }) {
         {count > 0 && (
           <span
             aria-hidden="true"
-            className="ms-1 inline-flex min-w-5 items-center justify-center rounded-full bg-white px-1.5 py-0.5 font-sans text-xs font-semibold text-accent shadow-sm"
+            className="ms-1 inline-flex min-w-5 items-center justify-center rounded-full bg-accent px-1.5 py-0.5 font-sans text-xs font-semibold text-accent-foreground"
           >
             {count}
           </span>
@@ -71,7 +71,7 @@ export function HeaderNav({ locales }: { locales?: string[] }) {
         aria-expanded={open}
         aria-controls="mobile-menu"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 border-white px-3 font-mono text-xs font-semibold uppercase tracking-wide text-white transition-colors hover:bg-white hover:text-accent md:hidden"
+        className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 border-accent px-3 font-mono text-xs font-semibold uppercase tracking-wide text-accent transition-colors hover:bg-accent hover:text-accent-foreground md:hidden"
       >
         {open ? t("closeMenu") : t("menu")}
       </button>
@@ -79,7 +79,7 @@ export function HeaderNav({ locales }: { locales?: string[] }) {
       {open && (
         <div
           id="mobile-menu"
-          className="nav-gradient absolute inset-x-0 top-full mt-2 flex flex-col items-stretch gap-1 rounded-2xl p-3 shadow-lg md:hidden"
+          className="nav-glass absolute inset-x-0 top-full mt-2 flex flex-col items-stretch gap-1 rounded-2xl p-3 shadow-lg md:hidden"
         >
           {links}
         </div>
