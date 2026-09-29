@@ -76,7 +76,7 @@ export default async function HomePage({
           </ul>
         </div>
         {heroProducts.length > 0 && (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-8 pb-6">
             {heroProducts.map((product, i) => {
               const name = pick(product, "name", locale) ?? product.nameEn;
               const alt = (product.image && pick(product.image, "alt", locale)) || name;
@@ -91,6 +91,7 @@ export default async function HomePage({
                       alt={alt}
                       width={320}
                       height={320}
+                      sizes="(min-width: 1024px) 16rem, 42vw"
                       priority={i === 0}
                       className="h-full w-full object-cover"
                     />

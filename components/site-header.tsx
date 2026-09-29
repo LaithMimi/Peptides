@@ -10,7 +10,7 @@ export async function SiteHeader() {
 
   return (
     <header className="px-4 pt-4 sm:px-6 lg:px-8">
-      <div className="nav-glass relative mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-full px-4 py-2 shadow-lg sm:px-6">
+      <div className="nav-glass relative mx-auto flex w-full max-w-6xl items-center justify-between gap-x-2 rounded-full px-3 py-2 sm:flex-wrap sm:gap-x-4 sm:gap-y-2 shadow-lg sm:px-6">
         <Link href="/" className="flex items-center" aria-label={`${settings.storeName}`}>
           <Image
             src={logo}

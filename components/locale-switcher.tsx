@@ -49,7 +49,7 @@ export function LocaleSwitcher({ locales }: { locales?: string[] }) {
               });
             }}
             aria-pressed={active}
-            className={`inline-flex min-h-9 min-w-11 items-center justify-center rounded-full px-3 font-mono text-xs font-semibold tracking-wide transition-colors ${
+            className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-full px-3 font-mono text-xs font-semibold tracking-wide transition-colors ${
               active
                 ? "btn-glass"
                 : "text-muted hover:text-accent"

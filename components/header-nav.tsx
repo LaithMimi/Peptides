@@ -7,7 +7,7 @@ import { useCart } from "@/lib/cart-store";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 
 const linkClass =
-  "inline-flex min-h-11 items-center rounded px-2 font-serif text-sm font-semibold uppercase tracking-wide text-navy transition-colors hover:text-accent";
+  "inline-flex min-h-11 items-center rounded px-1.5 font-serif sm:px-2 text-sm font-semibold uppercase tracking-wide text-navy transition-colors hover:text-accent";
 
 /**
  * Primary navigation. Wide screens show the links inline; on phones they sit
@@ -43,7 +43,7 @@ export function HeaderNav({ locales }: { locales?: string[] }) {
   );
 
   return (
-    <nav aria-label={t("mainNav")} className="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-x-2 gap-y-1 sm:gap-x-4">
+    <nav aria-label={t("mainNav")} className="flex min-w-0 flex-1 items-center justify-end gap-x-1 sm:flex-wrap sm:gap-x-4 sm:gap-y-1">
       <div className="hidden flex-wrap items-center gap-x-2 md:flex lg:gap-x-4">{links}</div>
 
       <Link
@@ -79,7 +79,7 @@ export function HeaderNav({ locales }: { locales?: string[] }) {
       {open && (
         <div
           id="mobile-menu"
-          className="nav-glass absolute inset-x-0 top-full mt-2 flex flex-col items-stretch gap-1 rounded-2xl p-3 shadow-lg md:hidden"
+          className="menu-panel absolute inset-x-0 top-full mt-2 flex flex-col items-stretch gap-1 rounded-2xl p-3 shadow-lg md:hidden"
         >
           {links}
         </div>
