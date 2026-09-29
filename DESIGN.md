@@ -1,49 +1,48 @@
 ---
 name: Pep Club
-description: A boutique apothecary catalog built from one repeating unit — the die-cut vial label — not a clinical warehouse or a neon research-chemical site.
+description: The category-standard e-commerce storefront, executed at real craft — a clean, familiar shopping pattern with real product photography, not an experimental visual world.
 colors:
-  paper: "#ffffff"
+  background: "#ffffff"
   surface: "#ffffff"
-  surface-raised: "#f5f5f5"
+  surface-raised: "#f7f7f8"
   ink-navy: "#0a1933"
-  muted-ink: "#5c6b85"
-  hairline: "#f5f5f5"
-  hairline-strong: "#e2e2e2"
-  accent-blue: "#3671b8"
-  input-border: "#7f8ca6"
+  muted-ink: "#6b7280"
+  hairline: "#e5e7eb"
+  hairline-strong: "#d1d5db"
+  accent-blue: "#0000ff"
+  input-border: "#9ca3af"
   danger: "#a23b2e"
   danger-bg: "#fbeae7"
 typography:
   display:
-    fontFamily: "Fraunces, Georgia, serif"
+    fontFamily: "Geist Sans, ui-sans-serif, system-ui, sans-serif"
     fontWeight: 600
     letterSpacing: "0.02em"
-    fontFeature: "small-caps character via uppercase text-transform"
+    fontFeature: "uppercase tracking-wide"
   body:
-    fontFamily: "DM Sans, Arial, sans-serif"
+    fontFamily: "Geist Sans, ui-sans-serif, system-ui, sans-serif"
     fontWeight: 400
   label:
-    fontFamily: "IBM Plex Mono, Consolas, monospace"
+    fontFamily: "Geist Mono, ui-monospace, monospace"
     fontSize: "0.75rem"
     letterSpacing: "0.1em"
   arabic:
     fontFamily: "Noto Kufi Arabic, Arial, sans-serif"
 rounded:
   chip: "9999px"
-  card: "1rem"
-  cardLarge: "1rem"
+  card: "0.75rem"
 spacing:
   cardPadding: "1.25rem"
   sectionGap: "2.5rem"
 components:
   button-primary:
-    backgroundColor: "{colors.ink-navy}"
-    textColor: "{colors.paper}"
+    backgroundColor: "{colors.accent-blue}"
+    textColor: "{colors.background}"
     rounded: "{rounded.chip}"
     padding: "0.625rem 1.5rem"
   button-cta:
     backgroundColor: "{colors.accent-blue}"
-    textColor: "{colors.surface}"
+    textColor: "{colors.background}"
     rounded: "{rounded.chip}"
     padding: "0.75rem 1.5rem"
   card-product:
@@ -56,265 +55,128 @@ components:
 
 ## Overview
 
-**Creative North Star: "The Apothecary's Label Wall"**
+**Creative North Star: "The Category Standard, at Craft"**
 
-Pep Club is built from one repeating unit — the die-cut pharmaceutical vial
-label — used as the actual UI vocabulary, not as illustration. Every card,
-chip, and panel borrows the label's grammar: a rounded plate, a hairline
-rule under a seal mark, small-caps serif identity type, and a monospace
-line for batch-style data. The system was chosen by a structured direction
-roll (concept-seed, mode: persuade, seed key `44cf6903`) that weighed it
-against six catalog challengers — closest being an aviation-instrument
-dashboard — and won on both audience identification and product clarity:
-it reads as boutique, verified, and curated rather than either a sterile
-clinical site or a neon "research-chemical" warehouse. The palette and mark
-are drawn directly from the brand logo (`public/brand/pep-club-logo.png`):
-deep navy ink and a single cornflower-blue accent, set on the logo's own
-white/off-white ground rather than an invented paper tone.
+Pep Club's storefront went through two visual-world experiments — the "Vial-Label System" (flat, bordered, die-cut paper labels) and "The Glass Case" (a backlit glass display case) — before the client asked directly for the plain, familiar e-commerce pattern instead, executed with real craft rather than a signature "world." This is the resulting system: white and light neutral gray carry almost every surface; deep navy ink and the logo's cornflower blue are the only two brand colors, with blue spent rarely (one CTA, links, focus rings); cards are ordinary bordered rectangles with a conventional shadow on hover; and the storefront leans on real seeded product photography — not an invented signature device — to carry visual interest, per the client's explicit "no AI-generated images" instruction.
 
-This is a Persuade-mode catalog (the visitor decides whether to trust the
-site enough to submit a quote) wrapping an Operate-mode form (the quote
-request itself stays plain and legible — a ledger, not a spectacle).
-Product cards carry a small independent tilt, as if pinned slightly askew
-on a shelf, and straighten on hover/focus. There is no product photography
-on hand, so the vial-glyph seal mark (an authored SVG, not a photo) carries
-that role everywhere a product image would normally sit.
+The named craft bar is **Apple.com** (restrained, high-contrast typography, minimal color, confident spacing) and **Sephora/Glossier-style beauty retail** (clean grid, real product photography, understated chrome). This is a standing brand commitment recorded in PRODUCT.md — future storefront work should hold to this quality bar rather than reopening a new visual-world roll unless the client explicitly asks for one again.
 
 **Key Characteristics:**
-- One repeating label unit (rounded plate + seal + hairline rule + mono
-  data line) builds cards, chips, form sections, and the confirmation panel
-- White/off-white ground matched to the brand logo, navy ink, one
-  cornflower-blue accent — no invented tertiary colors
-- Serif small-caps identity type paired with monospace for anything that
-  is actually data (vial size, purity, quantity) — never monospace as
-  costume
-- Flat, bordered depth — almost no shadow — with dashed vs. solid rules
-  doing the work shadows would otherwise do
-- Bilingual EN/AR with true RTL mirroring; any Latin/numeric value (vial
-  size, purity) is bidi-isolated so it never reverses inside Arabic text
+- Plain bordered cards (`rounded-xl border border-border-strong shadow-sm`, `shadow-md` on hover) — no signature glow, glass, or backlight device
+- White and light neutral gray (`#f7f7f8`) dominate; navy ink stays for headings/body text, while cornflower blue carries every action surface — buttons and the footer band — per the client's explicit "blue, not navy blue" direction
+- Real seeded product photography carries visual weight — the homepage hero features four real product photos in a Sephora-style collage instead of an abstract motif or generated imagery
+- No customer account/sign-in affordance anywhere (hard product constraint) and no fabricated discount or "deal" badges (no discount field exists in the schema; the No Fabricated Data Rule)
+- Bilingual EN/AR with true RTL mirroring; Geist Mono bidi-isolates Latin/numeric values (vial size, purity) inside Arabic text via `components/ltr-value.tsx`
 
 ## Colors
 
-Matched directly to the brand logo — white/off-white at rest, with navy
-carrying nearly all identity weight and cornflower blue reserved strictly
-for action and verification. No invented colors outside this set.
+Plain and restrained — white, light gray, navy ink, and one disciplined blue accent. No invented tertiary colors, no signature glow palette.
 
 ### Primary
-- **Ink Navy** (`#0a1933`): headings, primary buttons, footer band, the
-  chosen state of pills/toggles. Carries the brand's identity weight —
-  this is the color from the logo's "PEP" wordmark and icon outline.
-
-### Form control edge
-- **Input Border** (`#7f8ca6`, dark `#6b83a8`): the edge of inputs and the
-  checkbox, at least 3:1 against the field fill. Card and hairline edges
-  keep the lighter border tokens.
+- **Ink Navy** (`#0a1933`): headings and body-adjacent text, the chosen state of pills/toggles (research-area chips, locale switcher, purpose picker). From the logo's "PEP" wordmark and icon outline. No longer used as a button or footer fill — see Named Rules.
 
 ### Secondary
-- **Accent Blue** (`#3671b8`): the logo's "CLUB" wordmark and molecule
-  node, a medium royal/cornflower blue, deepened slightly from the logo's
-  `#4281c9` so accent text and the white-on-blue CTA reach 4.5:1 contrast. Used only for the primary CTA
-  ("Add to quote request" / "Submit quote request"), the confirmation
-  seal, and links — never for large fields. **The Rare Accent Rule.**
-  Blue marks the one action on a page; if more than one element needs
-  it, something else should be carrying that weight instead.
+- **Accent Blue** (`#0000ff` light mode, `#6669ff` dark mode): a pure, saturated blue per the client's explicit hex instruction — no longer matched to the logo's softer cornflower tone. Carries every action surface: all primary and secondary buttons (solid and outline), the footer band, links, and the focus ring. The dark-mode value is lightened from the exact hex (`#0000ff` fails WCAG AA as text/fill against the dark background); `#6669ff` holds 4.59:1 contrast both directions. Revised in two steps: first from a "rare accent" reserved for one CTA to carrying every button + the footer, then from the logo-matched cornflower blue to this pure blue.
 
 ### Neutral
-- **Background** (`#ffffff`): page background — the logo's own white
-  ground, not an invented paper tone.
-- **Surface** (`#ffffff`): card and component background, flush with the
-  page; separation comes from border weight, not a tint shift.
-- **Surface Raised** (`#f5f5f5`): the very light gray tier, used for
-  panels that should read as recessed or subtly set apart (hero card,
-  product image panel, input fields).
-- **Muted Ink** (`#5c6b85`): secondary text — a desaturated tint of the
-  ink navy.
-- **Hairline** (`#f5f5f5`): dashed dividers and rest-state chip borders —
-  deliberately subtle, matching the logo's light-gray edge/shadow tone.
-- **Hairline Strong** (`#e2e2e2`): solid card borders, the label's "die
-  cut" edge — a touch deeper than Hairline so structure stays legible on
-  white.
-- **Danger** (`#a23b2e`) / **Danger Background** (`#fbeae7`): validation
-  and submission errors only.
+- **Background / Surface** (`#ffffff`): page and card background.
+- **Surface Raised** (`#f7f7f8`): a barely-tinted neutral gray for image placeholders, elevated panels, and input fields.
+- **Muted Ink** (`#6b7280`): secondary text, a plain neutral gray.
+- **Hairline** (`#e5e7eb`) / **Hairline Strong** (`#d1d5db`): ordinary neutral card borders and dividers.
+- **Danger** (`#a23b2e`) / **Danger Background** (`#fbeae7`): validation and submission errors only.
 
 ### Named Rules
-**The No Fabricated Data Rule.** Nothing in the UI states as fact what
-isn't real product data. An earlier draft showed an invented "Lot" code
-per product; it was removed because the business has no real batch/COA
-data to back it, and a specific-looking identifier reads as a claim, not
-decoration. Only `lib/products.ts` fields (vial size, purity) ever appear
-as data.
+**The No Fabricated Data Rule.** Nothing in the UI states as fact what isn't real product data. No invented discount percentages, "Super Deals" badges, lot numbers, or certifications; only `lib/db` fields (vial size, purity, price) ever appear as data.
+
+**The No Signature Device Rule.** This system deliberately has no repeating glow, glass, or backlight motif *across cards and content*. Two prior passes each introduced one (die-cut label tilt, then a backlit glass shelf-cell) and both were retired at the client's request. Reach for a plain bordered card before inventing a new visual device. The header's `.nav-gradient` (see Navigation) is a one-off, explicitly-requested exception scoped to that single component, not a reopening of this rule — don't generalize it to cards, buttons, or other chrome.
 
 ## Typography
 
-**Display Font:** Fraunces (with Georgia, serif fallback)
-**Body Font:** DM Sans (with Arial, sans-serif fallback)
-**Label/Mono Font:** IBM Plex Mono (with Consolas, monospace fallback)
-**Arabic:** Noto Kufi Arabic — swapped in whole-cloth under `dir="rtl"`,
-never mixed with the Latin faces on the same line.
+**Display Font:** Geist Sans (variable, self-hosted via the `geist` package)
+**Body Font:** Geist Sans
+**Label/Mono Font:** Geist Mono (self-hosted, same package)
+**Arabic:** Noto Kufi Arabic — swapped in whole-cloth under `dir="rtl"`, never mixed with the Latin face on the same line.
 
-**Character:** Fraunces carries the apothecary-label identity — a serif
-with real presence, set in uppercase small-caps tracking for headings,
-product names, and buttons. DM Sans stays quiet underneath it for anything
-meant to be read at length. Plex Mono is reserved for values, never used
-as a "technical" costume on prose.
+**Character:** A single clean geometric grotesk family (Geist) carries both display and body weight — confident, high-contrast, Apple-register typography. Geist Mono is reserved for values (price, vial size, purity, quantity) and micro-labels, never prose.
 
 ### Hierarchy
-- **Display** (Fraunces, 600, 1.875–2.25rem, uppercase, tracking-wide):
-  page-level H1s (catalog title, product name).
-- **Headline** (Fraunces, 600, 1.125–1.5rem, uppercase, tracking-wide):
-  section headings (quote form title, confirmation title).
-- **Body** (DM Sans, 400, 0.875–1rem): descriptions, research-area lists,
-  form help text.
-- **Label** (Plex Mono, 500, 0.75rem, uppercase, tracked 0.1em):
-  field labels, vial-size/purity values, quantity, nav micro-labels, and
-  the landing hero's trust-marker chips.
+- **Display** (Geist Sans, 600, 2.25–3rem, uppercase, tracking-wide): the homepage hero H1 (largest in the system, per the Apple-register craft bar).
+- **Headline** (Geist Sans, 600, 1.125–2rem, uppercase, tracking-wide): page-level H1s (catalog title, product name) and section headings.
+- **Body** (Geist Sans, 400, 0.875–1.125rem): descriptions, research-area lists, form help text.
+- **Label** (Geist Mono, 500, 0.75rem, uppercase, tracked 0.1em): field labels, vial-size/purity values, quantity, nav micro-labels, trust-marker chips.
 
 ### Named Rules
-**The Kicker Ban.** No small-caps label ever sits directly above a
-heading as a standalone eyebrow line. An earlier draft used
-"PEP CLUB — CURATED CATALOG" above the catalog H1 and a similar line above
-the quote form's H2; both were removed. The heading carries its own
-weight, and any brand/context cue that line was providing was already
-present in the header logo or the surrounding copy.
+**The Kicker Ban.** No small-caps or tracked label ever sits directly above a heading as a standalone eyebrow line — the heading carries its own weight.
 
 ## Layout
 
-Single-column content shell, `max-w-6xl`, centered, with `px-4 sm:px-6
-lg:px-8` gutters — the same container width the original MVP established.
-The catalog grid steps `1 → 2 → 3` columns at `sm`/`lg`. Section rhythm
-uses generous vertical gaps (`gap-6`–`gap-10` between major blocks) with
-tighter internal card padding (`p-5`–`p-6`), so grouped content stays
-close and sections stay clearly separated. Product/quote pages use a
-two-column `md:grid-cols-2` split (image/glyph panel beside content) that
-collapses to one column below `md`.
+Single-column content shell, `max-w-6xl`, centered, `px-4 sm:px-6 lg:px-8` gutters. The homepage hero is a `lg:grid-cols-2` split: headline/subhead/CTA at left, a 2×2 real-photo collage at right (one tile offset for visual interest, in the Sephora/beauty-retail register). The catalog grid steps `1 → 2 → 3` (and up to 5 on the shop grid) columns at `sm`/`lg`/`xl`. Product/product-detail pages use a two-column `md:grid-cols-2` split (image panel beside content) that collapses to one column below `md`.
 
 ## Elevation & Depth
 
-Almost flat. Depth comes from border weight and rule style, not shadow:
-a 1px `border-strong` on resting cards, a soft `shadow-sm` that firms to
-`shadow-md` only on product-card hover, and dashed vs. solid rules marking
-different kinds of boundary (dashed = a divider inside a group; solid =
-the edge of a distinct object). The confirmation panel and empty-cart
-states use a dashed 2px border with no shadow at all, reading as an
-outline waiting to be filled rather than a raised surface.
+Conventional, unremarkable depth — exactly what the category standard expects. Cards are flat at rest with a `shadow-sm`, deepening to `shadow-md` on hover; borders are always visible (`border-border-strong`), not something that only appears on interaction. No glow, no backdrop-filter, no signature lighting effect anywhere in the storefront.
 
 ### Shadow Vocabulary
-- **Card Rest** (`shadow-sm`): default product-card elevation.
-- **Card Hover/Focus** (`shadow-md` + `-translate-y-0.5` + un-rotate):
-  the only elevation change in the system, paired with the card
-  straightening out of its resting tilt.
+- **Card Rest** (`shadow-sm`): default resting elevation for every product card, panel, and form.
+- **Card Hover** (`shadow-md`): the only elevation change — a plain, standard hover response.
 
 ### Named Rules
-**The Flat-at-Rest Rule.** Nothing floats until it's interacted with.
-Shadow is a response to hover/focus, never a static decoration.
+**The Ordinary Depth Rule.** Depth in this system is exactly what a competent conventional storefront uses — border plus a soft shadow, deepening on hover — and nothing more. This is a deliberate choice, not an unfinished one: the craft bar (Apple.com, Sephora) is confident precisely because it doesn't reach for novelty in its depth system.
 
 ## Shapes
 
-Two families, used consistently: **pills** (`rounded-full`) for every
-button, chip, and toggle — vial-size selectors, the locale switcher, the
-CTA — and **soft rectangles** (`rounded-xl`/`rounded-2xl`) for cards and
-panels. Circles appear only for the seal/glyph marks (the vial icon, the
-disclaimer check-seal, the confirmation stamp). Product-card borders read
-as a "die-cut" edge: a solid `border-strong` rectangle with a very slight
-independent rotation per card (±1.4° max, deterministic per product id via
-`lib/label-rotation.ts`), never randomized per render.
+Two families: **pills** (`rounded-full`) for every button, chip, and toggle, and **soft rectangles** (`rounded-xl`, 0.75rem) for cards and panels — a conventional, moderate radius, not the rounder `rounded-2xl` of the retired Glass Case system. No independent card rotation/tilt, no experimental card shape.
 
 ## Components
 
 ### Buttons
 - **Shape:** full pill (`rounded-full`).
-- **Primary (navy):** `bg-navy text-navy-foreground`, Fraunces uppercase
-  label, used for navigational/secondary actions (locale toggle selected
-  state, "go to quote" link, confirmation's "back to catalog").
-- **CTA (accent blue):** `bg-accent text-accent-foreground`, used only for
-  the one primary commercial action per page (add to quote / submit quote
-  request).
-- **Hover/Focus:** opacity fade on hover; a 2px accent or navy
-  focus-visible ring, offset, never removed.
+- **Primary (navy):** `bg-navy text-navy-foreground`, used for secondary/navigational actions.
+- **CTA (accent blue):** `bg-accent text-accent-foreground`, used only for the one primary commercial action per page (Shop now, Submit).
+- **Hover/Focus:** opacity fade on hover; a 2px accent or navy focus-visible ring, offset, never removed.
 
 ### Chips
-- **Vial-size / language toggle:** pill, 2px border, navy fill when
-  selected, `surface-raised` + `border-strong` when not. Mono uppercase
-  label text.
+- **Research-area / locale toggle:** pill, neutral border, navy fill when selected, `surface-raised` + `border-strong` otherwise. Mono uppercase label.
 
 ### Cards / Containers
-- **Corner Style:** `rounded-2xl` for hero/panels, `rounded-xl` for
-  product cards and form sections.
-- **Background:** `surface` (cards) or `surface-raised` (elevated panels
-  like the hero and the product image slot).
-- **Shadow Strategy:** see Elevation & Depth — flat at rest.
-- **Border:** 1px `border-strong` (product cards), 2px solid `navy`
-  (hero, product image panel), or 2px dashed `border-strong` (empty
-  states, confirmation panel).
-- **Internal Padding:** `p-5` to `p-6` (`p-8`–`p-10` for the catalog hero).
-- **Signature behavior:** product cards carry a deterministic slight
-  rotation at rest and straighten on hover/focus (see Shapes).
+- **Corner Style:** `rounded-xl` throughout (product cards, panels, the disclaimer note).
+- **Background:** `surface` or `surface-raised`, always with a visible `border-border-strong`.
+- **Shadow Strategy:** see Elevation & Depth — `shadow-sm` at rest, `shadow-md` on hover.
+- **Internal Padding:** `p-5`–`p-6`.
 
 ### Inputs / Fields
-- **Style:** 1px `border-strong`, `surface-raised` background,
-  `rounded-md`, mono-uppercase label above the field (never inside it as
-  a placeholder-only label).
+- **Style:** 1px `input-border`, `surface-raised` background, `rounded-md`, mono-uppercase label above the field.
 - **Focus:** 2px accent outline, offset.
-- **Error:** field-level message in `danger`, page-level submit failures
-  in a `danger-bg` block — both share the same translated-error-code path
-  (`components/quote-form.tsx`'s `translateFieldError`) so no raw
-  validation code ever reaches the UI in either language.
+- **Error:** field-level message in `danger`; page-level failures in a `danger-bg` block.
 
-### Navigation
-- White header band, 4px double navy rule as its bottom edge (a
-  "label-plate" seam rather than a plain 1px divider). Nav links in
-  Fraunces uppercase tracking; the active quote-count badge is a small
-  accent-filled circle. The locale switcher is the same pill-chip
-  language as vial selectors, for visual consistency across every choice
-  control in the system.
+### Navigation (deliberate exception to the rest of the system)
+- The header is a **floating capsule**, not a full-width bar: `app/[locale]/layout.tsx`'s `<header>` adds page-edge padding and a top gap, then the actual bar (`.nav-gradient` in `app/globals.css`, `rounded-full`, `shadow-lg`) sits inset from the viewport edges at `max-w-6xl`. The gradient — `linear-gradient(115deg, #060e1e 0%, #0a1933 22%, var(--accent) 68%, #5a5aff 100%)`, dark mode swapping the two fixed endpoints for `#04070f`/`#8386ff` — carries only the brand's own two colors, no invented hue, and no decorative pattern (an earlier dot-chain overlay was tried and removed at the client's request — flat gradient only). This was an explicit, scoped client request ("change the nav bar, make it very creative... as a capsule") layered on top of the otherwise-plain "category standard" system; it is intentionally the one loud moment on the page, not a signal to extend gradients or the capsule shape elsewhere.
+- Logo, nav links, cart label, and the mobile-menu button all render white (`.brand-mark-on-gradient` reuses the existing dark-mode logo-inversion trick unconditionally, since the header background is now always dark). Cart count badge is a white dot with accent-colored text for contrast against every part of the gradient. The locale switcher is unchanged — its white pill already reads as a floating control against the new backdrop.
+- The mobile disclosure menu floats as its own `absolute`-positioned card below the capsule (same `.nav-gradient` + `rounded-2xl`), not nested inside the pill — opening it never stretches the capsule into a tall stadium shape.
+- No account/sign-in control — this product has none, by hard constraint.
 
 ### Trust Markers
-Three short, strictly factual chips under the landing hero's subtitle
-(curated catalog / quote-based with no on-site payment / English and
-Arabic). Pill, 1px `border-strong`, `surface` fill, mono uppercase label.
-Every chip must be verifiably true of the site as built — never a claim
-about verification, certification, or customers the business hasn't
-confirmed.
+Short, strictly factual pill chips under the hero subtitle. Every chip must be verifiably true of the site as built — never a claim about verification, certification, or customers the business hasn't confirmed.
 
-### Feedback Section
-A two-column landing-page block (heading + vial glyph left, form card
-right; stacks on mobile) after the catalog grid, opened by a dashed top
-rule. The form reuses the shared `components/form-field.tsx` field and
-input styles so it matches the quote form exactly; success replaces the
-form in place with a dashed-border status panel rather than navigating
-away. It is a feedback *collection* form — the site has no real
-testimonials, so no testimonial or review content may be shown here.
+### Homepage Hero Photo Collage (signature moment, not a signature device)
+The homepage hero's right column (`app/[locale]/page.tsx`) shows four real featured-product photos in a `grid-cols-2` collage, one tile offset downward (`translate-y-6`) for visual rhythm — the closest this system has to a "moment," and it is built entirely from real seeded photography, never generated imagery, per the client's explicit instruction. It is not a reusable component or repeating unit elsewhere in the system; it is specific to this one hero.
 
-### Vial Glyph (signature component)
-The brand's stand-in for product photography (`components/vial-glyph.tsx`):
-an authored SVG vial silhouette with a small peptide-bond dot-chain accent
-inside a thin circular seal ring, in `currentColor`. Used at three scales:
-small (catalog card corner), medium (disclaimer/seal icon), large (product
-detail panel). Never a stock icon library glyph — drawn specifically to
-echo the logo's own dot-chain "P" mark.
+### Vial Glyph
+`components/vial-glyph.tsx`: an authored SVG — a cylindrical, crimp-capped vial (matching the real seeded product photography's shape) with a small peptide-bond dot-chain accent, in `currentColor`. Shown directly (no wrapper/mount) wherever a product has no photo of its own.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** treat the vial label (rounded plate + seal + hairline rule +
-  mono data line) as the one reusable unit — reach for it before inventing
-  a new card shape.
-- **Do** bidi-isolate any Latin/numeric value rendered inside Arabic copy
-  with `components/ltr-value.tsx` — vial sizes and purity values reverse
-  visually otherwise.
-- **Do** reserve Accent Blue for the single primary action on a page —
-  including the confirmation seal, its one non-CTA appearance.
+- **Do** use a plain bordered card (`rounded-xl border border-border-strong shadow-sm hover:shadow-md`) as the one reusable container — reach for it before inventing a new card treatment.
+- **Do** use real seeded product photography wherever the design needs visual weight; never AI-generated imagery, per the client's explicit instruction.
+- **Do** bidi-isolate any Latin/numeric value rendered inside Arabic copy with `components/ltr-value.tsx`.
+- **Do** reserve the solid accent-blue fill for the single primary CTA per page.
 
 ### Don't:
-- **Don't** add a kicker/eyebrow line above any heading, ever — this was
-  tried and explicitly removed (see Typography's Named Rule).
-- **Don't** invent specific-looking data (lot numbers, batch codes,
-  certifications) that isn't sourced from `lib/products.ts` — see the
-  Colors section's Named Rule.
-- **Don't** reach for a shadow as decoration; shadow only responds to
-  hover/focus state.
-- **Don't** mix Latin and Arabic faces on one line — swap the whole
-  typeface stack at the `dir="rtl"` boundary instead.
-- **Don't** show a price or payment field anywhere — this is a
-  constitutional constraint from `.specify/memory/constitution.md`
-  Principle II/V, not a visual preference.
+- **Don't** introduce a new signature visual device (glow, glass, backlight, or similar) without the client explicitly asking for a new visual-world exploration — see the No Signature Device Rule.
+- **Don't** add a kicker/eyebrow line above any heading, ever.
+- **Don't** invent specific-looking data (discount percentages, lot numbers, certifications) that isn't sourced from the database.
+- **Don't** show an account/sign-in affordance anywhere on the customer-facing storefront — this product has none, by hard constitutional constraint.
+- **Don't** use AI-generated images anywhere on the storefront — real product photography or authored SVG only, per the client's explicit instruction.
+- **Don't** mix Latin and Arabic faces on one line — swap the whole typeface stack at the `dir="rtl"` boundary instead.
+- **Don't** show a price or payment field anywhere — no online payment gateway exists in this product, ever (constitutional constraint, not a visual preference).

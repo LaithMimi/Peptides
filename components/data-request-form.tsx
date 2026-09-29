@@ -48,7 +48,7 @@ export function DataRequestForm() {
     return (
       <div
         role="status"
-        className="flex flex-col gap-2 rounded-xl border-2 border-dashed border-border-strong p-6"
+        className="flex flex-col gap-2 rounded-xl border border-border-strong bg-surface-raised p-6"
       >
         <h2 className="font-serif text-xl font-semibold uppercase tracking-wide text-navy">
           {t("successTitle")}
@@ -147,7 +147,7 @@ export function DataRequestForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex w-fit items-center justify-center rounded-full bg-accent px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="btn-glass inline-flex w-fit items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide text-white disabled:opacity-60"
       >
         {isSubmitting ? t("submitting") : t("submit")}
       </button>

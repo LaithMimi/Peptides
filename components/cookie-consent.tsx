@@ -27,7 +27,7 @@ const getServerSnapshot = () => "unknown";
 // Both buttons share one style on purpose: declining must be exactly as easy
 // and as visible as accepting.
 const choiceClass =
-  "inline-flex items-center justify-center rounded-full border-2 border-navy bg-surface px-5 py-2 font-serif text-xs font-semibold uppercase tracking-wide text-navy transition-colors hover:bg-navy hover:text-navy-foreground";
+  "inline-flex min-h-11 items-center justify-center rounded-full border-2 border-accent bg-surface px-4 py-2 font-serif text-xs font-semibold uppercase tracking-wide text-accent transition-colors hover:bg-accent hover:text-accent-foreground";
 
 export function CookieConsent() {
   const t = useTranslations("legal.banner");
@@ -52,22 +52,17 @@ export function CookieConsent() {
       aria-label={t("title")}
       className="fixed inset-x-0 bottom-0 z-50 border-t-2 border-navy bg-surface shadow-lg"
     >
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-4 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
-        <div className="max-w-3xl text-sm text-foreground">
-          <p className="font-serif font-semibold uppercase tracking-wide text-navy">
-            {t("title")}
-          </p>
-          <p className="mt-1">
-            {t("body")}{" "}
-            <Link
-              href="/legal/cookies"
-              className="font-semibold text-accent underline underline-offset-2"
-            >
-              {t("learnMore")}
-            </Link>
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-3">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6 lg:px-8">
+        <p className="max-w-2xl text-xs text-foreground sm:text-sm">
+          {t("body")}{" "}
+          <Link
+            href="/legal/cookies"
+            className="font-semibold text-accent underline underline-offset-2"
+          >
+            {t("learnMore")}
+          </Link>
+        </p>
+        <div className="flex flex-wrap gap-2">
           <button type="button" className={choiceClass} onClick={() => choose("essential")}>
             {t("essentialOnly")}
           </button>

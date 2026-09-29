@@ -5,7 +5,6 @@ import {
   readConsent,
   writeConsent,
 } from "@/lib/consent";
-import { readProfile, writeProfile } from "@/lib/quote-storage";
 import { dataRequestFormSchema } from "@/lib/data-request-schema";
 
 beforeEach(() => {
@@ -26,26 +25,21 @@ describe("consent", () => {
     expect(hasOptionalConsent()).toBe(true);
   });
 
-  it("choosing essential-only removes remembered details", () => {
-    writeProfile({
-      phone: "+14155552671",
-      customerName: "Jane",
-      customerEmail: "jane@example.com",
-      shippingAddress: "1 Lab Way",
-    });
+  it("choosing essential-only removes legacy remembered details", () => {
+    window.localStorage.setItem("pepclub.profile", '{"version":1}');
     writeConsent("essential");
-    expect(readProfile()).toBeNull();
+    expect(window.localStorage.getItem("pepclub.profile")).toBeNull();
   });
 
   it("eraseLocalData removes everything this site stored", () => {
-    window.localStorage.setItem("peptides:quote-cart", "[]");
+    window.localStorage.setItem("peptides:cart", "[]");
     window.localStorage.setItem("pepclub.consent", "all");
     window.localStorage.setItem("unrelated", "keep");
-    window.sessionStorage.setItem("pepclub.quoteDraft", "{}");
+    window.sessionStorage.setItem("pepclub.checkoutDraft", "{}");
     eraseLocalData();
-    expect(window.localStorage.getItem("peptides:quote-cart")).toBeNull();
+    expect(window.localStorage.getItem("peptides:cart")).toBeNull();
     expect(readConsent()).toBeNull();
-    expect(window.sessionStorage.getItem("pepclub.quoteDraft")).toBeNull();
+    expect(window.sessionStorage.getItem("pepclub.checkoutDraft")).toBeNull();
     expect(window.localStorage.getItem("unrelated")).toBe("keep");
   });
 });

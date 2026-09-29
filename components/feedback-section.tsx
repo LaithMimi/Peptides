@@ -11,7 +11,9 @@ export async function FeedbackSection() {
       className="grid grid-cols-1 gap-8 border-t border-dashed border-border-strong pt-10 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-12"
     >
       <div className="flex flex-col gap-4">
-        <VialGlyph className="size-12 text-accent" />
+        <span className="inline-flex size-16 items-center justify-center rounded-full bg-surface-raised p-3 text-accent">
+          <VialGlyph className="size-10" />
+        </span>
         <h2
           id="feedback-heading"
           className="font-serif text-2xl font-semibold uppercase tracking-wide text-navy sm:text-3xl"
