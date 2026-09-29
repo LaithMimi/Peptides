@@ -17,8 +17,8 @@ export function WhatsAppButton({
 
   const style =
     variant === "solid"
-      ? "bg-navy text-navy-foreground hover:opacity-90"
-      : "border-2 border-navy text-navy hover:bg-navy hover:text-navy-foreground";
+      ? "btn-glass text-white"
+      : "border-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground";
 
   return (
     <a

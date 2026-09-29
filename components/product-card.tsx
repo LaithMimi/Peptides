@@ -36,7 +36,7 @@ export function ProductCard({
             height={240}
             sizes="(min-width: 1280px) 15rem, (min-width: 640px) 30vw, 46vw"
             loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.03]"
+            className="h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:scale-[1.03]"
           />
         ) : (
           <div

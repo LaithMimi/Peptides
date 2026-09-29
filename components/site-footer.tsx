@@ -16,9 +16,9 @@ export async function SiteFooter() {
   const whatsapp = whatsappLink(settings.whatsappNumber);
 
   return (
-    <footer className="border-t border-border-strong bg-navy text-navy-foreground">
+    <footer className="border-t border-border-strong bg-accent text-accent-foreground">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-6 text-sm sm:px-6 lg:px-8">
-        <p className="opacity-90">{t("disclaimer")}</p>
+        <p className="max-w-3xl opacity-90">{t("disclaimer")}</p>
 
         <nav aria-label={tl("navLabel")}>
           <ul className="flex flex-wrap gap-x-5 gap-y-2 opacity-90">

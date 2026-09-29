@@ -7,6 +7,8 @@ import { ProductCard } from "@/components/product-card";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 import { FeedbackSection } from "@/components/feedback-section";
 import { CategoryChips } from "@/components/store/category-chips";
+import { VialGlyph } from "@/components/vial-glyph";
+import Image from "next/image";
 
 export default async function HomePage({
   params,
@@ -17,46 +19,95 @@ export default async function HomePage({
   setRequestLocale(locale);
   const t = await getTranslations("home");
   const tTrust = await getTranslations("trust");
-  const [categories, featured, brands, settings] = await Promise.all([
+  const [categories, featuredAll, brands, settings] = await Promise.all([
     listCategories(),
-    listFeatured(4),
+    listFeatured(8),
     listActiveBrands(),
     getSettings(),
   ]);
 
-  const trustMarkers = [tTrust("curated"), tTrust("quoteBased"), tTrust("bilingual")];
+  // "Multiple brands" is only true once the catalog actually has more than
+  // one active brand — showing it against a single-brand launch catalog
+  // would be a claim the site can't back, which the design system forbids.
+  const trustMarkers = [
+    ...(brands.length > 1 ? [tTrust("curated")] : []),
+    tTrust("quoteBased"),
+    tTrust("bilingual"),
+  ];
+
+  // Hero shows the first 4 as a photo collage; the Featured section below shows
+  // the full fetched set. These can overlap on a small catalog — that's fine,
+  // an empty "Featured products" section (from slicing one small result into
+  // two disjoint ranges) is worse than a little repetition.
+  const heroProducts = featuredAll.slice(0, 4);
+  const featured = featuredAll;
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="rounded-2xl border-2 border-navy bg-surface-raised p-6 sm:p-10">
-        <h1 className="max-w-3xl font-serif text-3xl font-semibold uppercase tracking-wide text-navy sm:text-4xl">
-          {t("heroTitle")}
-        </h1>
-        <p className="mt-3 max-w-2xl text-muted">{t("heroBody")}</p>
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          <Link
-            href="/shop"
-            className="inline-flex min-h-11 items-center justify-center rounded-full bg-accent px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide text-accent-foreground hover:opacity-90"
-          >
-            {t("heroCta")}
-          </Link>
-          <Link
-            href="/start"
-            className="inline-flex min-h-11 items-center justify-center rounded-full border-2 border-navy px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide text-navy hover:bg-navy hover:text-navy-foreground"
-          >
-            {t("pickerCta")}
-          </Link>
-        </div>
-        <ul className="mt-6 flex flex-wrap gap-2">
-          {trustMarkers.map((marker) => (
-            <li
-              key={marker}
-              className="rounded-full border border-border-strong bg-surface px-3 py-1 font-mono text-xs uppercase tracking-widest text-navy"
+      <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12">
+        <div>
+          <h1 className="font-serif text-4xl font-semibold uppercase tracking-wide text-navy sm:text-5xl">
+            {t("heroTitle")}
+          </h1>
+          <p className="mt-4 max-w-lg text-lg text-muted">{t("heroBody")}</p>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Link
+              href="/shop"
+              className="btn-glass inline-flex min-h-11 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide text-white"
             >
-              {marker}
-            </li>
-          ))}
-        </ul>
+              {t("heroCta")}
+            </Link>
+            <Link
+              href="/start"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border-2 border-accent px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide text-accent hover:bg-accent hover:text-accent-foreground"
+            >
+              {t("pickerCta")}
+            </Link>
+          </div>
+          <ul className="mt-8 flex flex-wrap gap-2">
+            {trustMarkers.map((marker) => (
+              <li
+                key={marker}
+                className="rounded-full border border-border-strong bg-surface-raised px-3 py-1 font-mono text-xs uppercase tracking-widest text-navy"
+              >
+                {marker}
+              </li>
+            ))}
+          </ul>
+        </div>
+        {heroProducts.length > 0 && (
+          <div className="grid grid-cols-2 gap-4">
+            {heroProducts.map((product, i) => {
+              const name = pick(product, "name", locale) ?? product.nameEn;
+              const alt = (product.image && pick(product.image, "alt", locale)) || name;
+              return (
+                <div
+                  key={product.id}
+                  className={`aspect-square overflow-hidden rounded-xl border border-border-strong bg-surface-raised shadow-sm ${i % 3 === 1 ? "translate-y-6" : ""}`}
+                >
+                  {product.image ? (
+                    <Image
+                      src={product.image.url}
+                      alt={alt}
+                      width={320}
+                      height={320}
+                      priority={i === 0}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div
+                      role="img"
+                      aria-label={name}
+                      className="flex h-full w-full items-center justify-center text-muted"
+                    >
+                      <VialGlyph className="size-12" />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <DisclaimerBanner />
@@ -110,7 +161,7 @@ export default async function HomePage({
               <li key={brand.slug}>
                 <Link
                   href={`/brands/${brand.slug}`}
-                  className="inline-flex min-h-11 items-center rounded-full border-2 border-border-strong bg-surface-raised px-4 py-1 font-mono text-xs font-semibold uppercase tracking-wide text-navy hover:border-navy"
+                  className="inline-flex min-h-11 items-center rounded-full border-2 border-border-strong bg-surface-raised px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-wide text-navy hover:border-navy"
                 >
                   {pick(brand, "name", locale) ?? brand.nameEn}
                 </Link>

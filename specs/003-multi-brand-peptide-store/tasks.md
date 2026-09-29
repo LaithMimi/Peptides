@@ -203,15 +203,15 @@ description: "Task list for the Multi-Brand Peptide Store"
 
 ### Tests for User Story 6
 
-- [ ] T077 [P] [US6] Update `tests/unit/messages-parity.test.ts` for the new namespaces and add a test that no `errors.*` code used by schemas is missing in either language
-- [ ] T078 [P] [US6] Playwright test `tests/e2e/responsive-store.spec.ts`: 375 px viewport in `/en` and `/ar` across home, shop, product, cart, checkout, confirmation: no horizontal overflow, tap targets at least 44 px, `dir="rtl"` in Arabic; and `tests/e2e/language-switch.spec.ts`: switching language keeps cart and typed checkout fields
+- [X] T077 [P] [US6] Update `tests/unit/messages-parity.test.ts` for the new namespaces and add a test that no `errors.*` code used by schemas is missing in either language
+- [X] T078 [P] [US6] Playwright test `tests/e2e/responsive-store.spec.ts`: 375 px viewport in `/en` and `/ar` across home, shop, product, cart, checkout, confirmation: no horizontal overflow, tap targets at least 44 px, `dir="rtl"` in Arabic; and `tests/e2e/language-switch.spec.ts`: switching language keeps cart and typed checkout fields
 
 ### Implementation for User Story 6
 
-- [ ] T079 [US6] Create `lib/checkout-draft.ts` persisting typed checkout fields (never the acknowledgment or notes per project convention) in `sessionStorage` (try/catch guarded) and restore them in `components/store/checkout-form.tsx`
-- [ ] T080 [US6] Update `components/locale-switcher.tsx` to keep the equivalent page (including query string) and product/brand/category slugs when switching
-- [ ] T081 [P] [US6] Complete Arabic translations and RTL review of all storefront components in `messages/ar.json` and `components/store/*` (logical CSS properties, `components/ltr-value.tsx` around vial sizes, prices, phone numbers, order numbers)
-- [ ] T082 [P] [US6] Fix any overflow or tap-target issues found by T078 across `app/globals.css` and storefront components; follow `DESIGN.md` and load the `/impeccable` craft floor before UI changes
+- [X] T079 [US6] Create `lib/checkout-draft.ts` persisting typed checkout fields (never the acknowledgment or notes per project convention) in `sessionStorage` (try/catch guarded) and restore them in `components/store/checkout-form.tsx`
+- [X] T080 [US6] Update `components/locale-switcher.tsx` to keep the equivalent page (including query string) and product/brand/category slugs when switching
+- [X] T081 [P] [US6] Complete Arabic translations and RTL review of all storefront components in `messages/ar.json` and `components/store/*` (logical CSS properties, `components/ltr-value.tsx` around vial sizes, prices, phone numbers, order numbers)
+- [X] T082 [P] [US6] Fix any overflow or tap-target issues found by T078 across `app/globals.css` and storefront components; follow `DESIGN.md` and load the `/impeccable` craft floor before UI changes
 
 **Checkpoint**: All six stories work in both languages on mobile
 
@@ -244,14 +244,14 @@ description: "Task list for the Multi-Brand Peptide Store"
 
 **Purpose**: Retire the old flow, security, docs, performance, final validation
 
-- [ ] T090 Remove the retired quote/OTP flow: `app/[locale]/quote/`, `app/[locale]/signin/`, `components/quote-form.tsx`, `components/quote-summary.tsx`, `components/signin-form.tsx`, `components/phone-verification.tsx`, `components/vial-selector.tsx` (if unused), `lib/otp.ts`, `lib/session.ts` phone session usage, `lib/quote-schema.ts`, `lib/quote-storage.ts`, `lib/rate-limit.ts` (if no remaining users), static `lib/products.ts`, and their tests in `tests/unit/` and `tests/e2e/` (`quote-flow`, `signin-prefill`, `responsive-quote`); keep `data-request`, `feedback`, `contact`, cookie consent, and disclaimer components
-- [ ] T091 Update `CLAUDE.md`, `PRODUCT.md` and `README.md` to the new product (multi-brand COD store, database, admin, retired quote flow, new commands and env vars) and refresh `.env.local.example`
-- [ ] T092 [P] Security review of the diff: every admin action and the upload route call `requireAdmin()`, no `NEXT_PUBLIC_` secrets, generic user-facing errors, cookie flags, Server Action origin check still effective, rate limits on checkout and login (run `/security-review`)
-- [ ] T093 [P] Accessibility pass on storefront and checkout in both languages (semantic headings, focus order, labels, contrast, alt text) and fix findings
-- [ ] T094 [P] Performance check against SC-005: measure shop and category pages with 10 and 500 seeded products, confirm indexes are used and images lazy-load; add caching only if the target is missed
-- [ ] T095 [P] Verify SEO output on product, category and brand pages (title, description, Open Graph, hreflang alternates, sitemap entries) for both locales
-- [ ] T096 Document Vercel setup in `README.md`: provision Neon and Blob through the Marketplace, set env vars, run `db:migrate` and `admin:create` for production
-- [ ] T097 Run `npx tsc --noEmit -p tsconfig.json`, `npm run lint`, `npm run test`, `npm run test:e2e`, then execute every scenario in `quickstart.md` and record results
+- [X] T090 Remove the retired quote/OTP flow: `app/[locale]/quote/`, `app/[locale]/signin/`, `components/quote-form.tsx`, `components/quote-summary.tsx`, `components/signin-form.tsx`, `components/phone-verification.tsx`, `components/vial-selector.tsx` (if unused), `lib/otp.ts`, `lib/session.ts` phone session usage, `lib/quote-schema.ts`, `lib/quote-storage.ts`, `lib/rate-limit.ts` (if no remaining users), static `lib/products.ts`, and their tests in `tests/unit/` and `tests/e2e/` (`quote-flow`, `signin-prefill`, `responsive-quote`); keep `data-request`, `feedback`, `contact`, cookie consent, and disclaimer components
+- [X] T091 Update `CLAUDE.md`, `PRODUCT.md` and `README.md` to the new product (multi-brand COD store, database, admin, retired quote flow, new commands and env vars) and refresh `.env.local.example`
+- [X] T092 [P] Security review of the diff: every admin action and the upload route call `requireAdmin()`, no `NEXT_PUBLIC_` secrets, generic user-facing errors, cookie flags, Server Action origin check still effective, rate limits on checkout and login (run `/security-review`)
+- [X] T093 [P] Accessibility pass on storefront and checkout in both languages (semantic headings, focus order, labels, contrast, alt text) and fix findings
+- [X] T094 [P] Performance check against SC-005: measure shop and category pages with 10 and 500 seeded products, confirm indexes are used and images lazy-load; add caching only if the target is missed
+- [X] T095 [P] Verify SEO output on product, category and brand pages (title, description, Open Graph, hreflang alternates, sitemap entries) for both locales
+- [X] T096 Document Vercel setup in `README.md`: provision Neon and Blob through the Marketplace, set env vars, run `db:migrate` and `admin:create` for production
+- [X] T097 Run `npx tsc --noEmit -p tsconfig.json`, `npm run lint`, `npm run test`, `npm run test:e2e`, then execute every scenario in `quickstart.md` and record results
 
 ---
 

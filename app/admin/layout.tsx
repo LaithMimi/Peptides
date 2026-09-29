@@ -22,6 +22,7 @@ export default function AdminRootLayout({ children }: { children: React.ReactNod
     <html
       lang="en"
       dir="ltr"
+      data-surface="admin"
       className={`${fraunces.variable} ${dmSans.variable} ${plexMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">{children}</body>

@@ -347,5 +347,11 @@
     "resultsTitle": "Related products",
     "choosePrompt": "Choose one or more research areas above to see the related products.",
     "noAreas": "No research areas are available right now."
+  },
+  "goalPicker": {
+    "title": "What are you researching?",
+    "subtitle": "Pick a research area and we'll show you the matching products.",
+    "skip": "Browse everything instead",
+    "close": "Close"
   }
 }

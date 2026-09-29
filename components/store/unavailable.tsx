@@ -28,7 +28,7 @@ export function Unavailable({
       <p className="text-muted">{body}</p>
       <Link
         href={actionHref}
-        className="inline-flex min-h-11 items-center justify-center rounded-full bg-navy px-6 py-2 font-serif text-sm font-semibold uppercase tracking-wide text-navy-foreground hover:opacity-90"
+        className="btn-glass inline-flex min-h-11 items-center justify-center rounded-full px-6 py-2 font-serif text-sm font-semibold uppercase tracking-wide text-white"
       >
         {actionLabel}
       </Link>

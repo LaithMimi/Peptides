@@ -15,7 +15,7 @@ export function DisclaimerBanner({ variant = "default" }: { variant?: "default" 
   return (
     <div
       role="note"
-      className="flex items-start gap-3 rounded border-2 border-dashed border-border-strong bg-surface px-4 py-3"
+      className="flex items-start gap-3 rounded-xl border border-border-strong bg-surface px-4 py-3"
     >
       <SealIcon className="mt-0.5 size-5 shrink-0 text-accent" />
       <div>

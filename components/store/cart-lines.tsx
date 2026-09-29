@@ -37,8 +37,8 @@ export function CartLines({
         return (
           <li
             key={line.productId}
-            className={`flex flex-col gap-3 rounded-xl border bg-surface p-3 sm:flex-row sm:items-center sm:p-4 ${
-              blocked ? "border-2 border-dashed border-border-strong" : "border-border-strong"
+            className={`flex flex-col gap-3 rounded-xl bg-surface p-3 sm:flex-row sm:items-center sm:p-4 ${
+              blocked ? "border-2 border-dashed border-border-strong" : "border border-border-strong shadow-sm"
             }`}
           >
             <div className="flex min-w-0 flex-1 items-center gap-3">

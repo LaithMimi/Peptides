@@ -21,7 +21,7 @@ export function CategoryChips({
             <Link
               href={`/categories/${c.slug}`}
               aria-current={active ? "page" : undefined}
-              className={`inline-flex min-h-11 items-center rounded-full border-2 px-4 py-1 font-mono text-xs font-semibold uppercase tracking-wide transition-colors ${
+              className={`inline-flex min-h-11 items-center rounded-full border-2 px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-wide transition-colors ${
                 active
                   ? "border-navy bg-navy text-navy-foreground"
                   : "border-border-strong bg-surface-raised text-navy hover:border-navy"

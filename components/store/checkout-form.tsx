@@ -143,7 +143,7 @@ export function CheckoutForm() {
         <p className="text-muted">{t("emptyBody")}</p>
         <Link
           href="/shop"
-          className="inline-flex min-h-11 items-center justify-center rounded-full bg-navy px-6 py-2 font-serif text-sm font-semibold uppercase tracking-wide text-navy-foreground hover:opacity-90"
+          className="btn-glass inline-flex min-h-11 items-center justify-center rounded-full px-6 py-2 font-serif text-sm font-semibold uppercase tracking-wide text-white"
         >
           {tCart("browse")}
         </Link>
@@ -297,7 +297,7 @@ export function CheckoutForm() {
         <button
           type="submit"
           disabled={isSubmitting || !cart.canCheckout}
-          className="inline-flex min-h-12 items-center justify-center rounded-full bg-accent px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide text-accent-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+          className="btn-glass inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide text-white disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isSubmitting ? t("confirming") : t("confirm")}
         </button>
