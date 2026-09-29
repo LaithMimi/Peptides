@@ -1,0 +1,27 @@
+{
+  "title": "Choose Pep Club's redesigned visual world (round 3 — no blue, no glass)",
+  "question": "Degraded roll (no network to the challenger service, no boards) assigned Terracotta Crucible & Mortar-Pestle — my own lowest-resonance guess of the 7 candidates. Keep it, or re-roll.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Terracotta Crucible & Mortar-Pestle",
+      "kicker": "THE ROLL (degraded)",
+      "lineage": "ancient apothecary crucible, ceramic mortar and pestle, hand-ground compounding",
+      "thesis": "The catalog as a compounding bench — warm terracotta and ochre, every brand and vial ground and verified by hand.",
+      "palette": ["#fdf8f2", "#c96f3e", "#8a3d24", "#2b2118", "#d9a441"],
+      "materials": ["unglazed terracotta", "ceramic crucible", "stone mortar"],
+      "viewport": "A warm clay-toned hero: brand mark on a crucible-shaped plinth, research areas as hand-thrown ceramic tabs.",
+      "risk": "Reads herbal/artisanal rather than clinical-precision if the type and structure don't carry real rigor — lowest resonance of my 7 for a research-chemical audience.",
+      "sketch": ".impeccable/sketches/assigned.webp"
+    }
+  ],
+  "reroll": true,
+  "canon": true,
+  "canonCard": {
+    "label": "The category standard",
+    "thesis": "A clean, trustworthy peptide-shop template — restrained navy/white, marketplace product grid, plain nav — done at full craft, no experimental world.",
+    "viewport": "A conventional storefront: header search + cart, hero banner, category tiles, product grid — the arrangement a visitor already expects from any online shop.",
+    "sketch": ".impeccable/sketches/canon.webp"
+  },
+  "steer": true
+}

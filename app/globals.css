@@ -22,7 +22,7 @@
   --surface: #ffffff;
   --surface-raised: #f7f7f8;
   --foreground: #0a1933;
-  --muted: #6b7280;
+  --muted: #5f6673;
   --border: #e5e7eb;
   --border-strong: #d1d5db;
   --input-border: #9ca3af;
@@ -171,68 +171,95 @@ html[dir="rtl"] body {
   }
 }
 
-/* Same trick as the dark-mode .brand-mark above, applied unconditionally:
-   the header sits on a tinted glass surface regardless of site theme, so
-   the navy-ink logo always needs the light-reading treatment, not just
-   under prefers-color-scheme: dark. */
-.brand-mark-on-gradient {
-  mix-blend-mode: screen;
-  filter: invert(1) hue-rotate(180deg);
-}
-
 /*
   The nav bar's one deliberately loud moment, scoped to the header alone —
   the rest of the storefront stays the plain "category standard" system.
-  True glass, not a flat color standing in for one: real backdrop-filter
-  blur, a translucent brand-blue tint (no invented hue), a light 1px edge,
-  and an inset top highlight for the glass rim. Shaped as a floating
-  capsule (see site-header.tsx) rather than a full-width bar.
+  Clear glass, not a tinted pane: real backdrop-filter blur, only a whisper
+  of the brand blue, a blue-tinted 1px edge, and a bright inset rim so it
+  reads as a transparent sheet with a lit edge. Ink on it stays dark
+  (light theme) / light (dark theme) via the normal text-navy token, so
+  legibility never depends on what happens to sit behind the glass.
+  Shaped as a floating capsule (see site-header.tsx).
 */
-.nav-gradient {
-  background: linear-gradient(135deg, rgba(0, 0, 255, 0.38), rgba(10, 25, 51, 0.58));
+.nav-glass {
+  background: linear-gradient(135deg, rgba(0, 0, 255, 0.13), rgba(0, 0, 255, 0.04));
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(0, 0, 255, 0.22);
   box-shadow:
-    0 8px 32px -8px rgba(10, 25, 51, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    0 8px 32px -10px rgba(10, 25, 51, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 
 @media (prefers-color-scheme: dark) {
-  .nav-gradient {
-    background: linear-gradient(135deg, rgba(102, 105, 255, 0.32), rgba(4, 7, 15, 0.62));
-    border-color: rgba(255, 255, 255, 0.16);
+  .nav-glass {
+    background: linear-gradient(135deg, rgba(102, 105, 255, 0.22), rgba(255, 255, 255, 0.05));
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow:
+      0 8px 32px -10px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
   }
 }
 
 /*
-  The same glass material, sized for buttons: real blur + translucent
-  brand-blue tint + a light rim, replacing a flat bg-accent/bg-navy fill.
-  Used on the storefront's solid CTA buttons — never on outline buttons,
-  which are already transparent at rest.
+  The same clear-glass material, sized for buttons: real blur, a light
+  brand-blue tint, a blue rim, and a bright inset highlight, replacing a
+  flat bg-accent fill. Ink is the accent blue on light theme (about 6:1
+  over the tint) and near-white on dark theme (about 12:1) — set here, in
+  unlayered CSS, so it deliberately wins over any leftover text-* utility.
+  Used on the storefront's solid CTA buttons; outline buttons are already
+  transparent at rest and keep their own styling.
 */
 .btn-glass {
-  background: linear-gradient(135deg, rgba(0, 0, 255, 0.4), rgba(10, 25, 51, 0.55));
+  color: var(--accent);
+  background: linear-gradient(135deg, rgba(0, 0, 255, 0.16), rgba(0, 0, 255, 0.07));
   backdrop-filter: blur(10px) saturate(160%);
   -webkit-backdrop-filter: blur(10px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 255, 0.35);
+  box-shadow:
+    0 2px 10px -4px rgba(0, 0, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
   transition:
     background 200ms ease,
     box-shadow 200ms ease;
 }
 
 .btn-glass:hover {
-  background: linear-gradient(135deg, rgba(0, 0, 255, 0.55), rgba(10, 25, 51, 0.7));
+  background: linear-gradient(135deg, rgba(0, 0, 255, 0.26), rgba(0, 0, 255, 0.12));
 }
 
 @media (prefers-color-scheme: dark) {
   .btn-glass {
-    background: linear-gradient(135deg, rgba(102, 105, 255, 0.35), rgba(4, 7, 15, 0.6));
-    border-color: rgba(255, 255, 255, 0.18);
+    color: #f3f4f6;
+    background: linear-gradient(135deg, rgba(102, 105, 255, 0.3), rgba(255, 255, 255, 0.06));
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow:
+      0 2px 10px -4px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
   .btn-glass:hover {
-    background: linear-gradient(135deg, rgba(102, 105, 255, 0.5), rgba(4, 7, 15, 0.72));
+    background: linear-gradient(135deg, rgba(102, 105, 255, 0.45), rgba(255, 255, 255, 0.1));
+  }
+}
+
+/*
+  The mobile menu panel sits inside .nav-glass, and a backdrop-filter element
+  cannot blur through its own backdrop-filtered parent, so page content
+  showed crisply behind the links. The panel is therefore opaque surface
+  with the same faint blue tint and rim instead of real blur.
+*/
+.menu-panel {
+  background: linear-gradient(135deg, rgba(0, 0, 255, 0.08), rgba(0, 0, 255, 0.03)), var(--surface);
+  border: 1px solid rgba(0, 0, 255, 0.22);
+  box-shadow: 0 8px 32px -10px rgba(10, 25, 51, 0.28);
+}
+
+@media (prefers-color-scheme: dark) {
+  .menu-panel {
+    background: linear-gradient(135deg, rgba(102, 105, 255, 0.16), rgba(255, 255, 255, 0.03)), var(--surface);
+    border-color: rgba(255, 255, 255, 0.2);
   }
 }
 

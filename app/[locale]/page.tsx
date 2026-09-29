@@ -54,7 +54,7 @@ export default async function HomePage({
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
               href="/shop"
-              className="btn-glass inline-flex min-h-11 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide text-white"
+              className="btn-glass inline-flex min-h-11 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide"
             >
               {t("heroCta")}
             </Link>
@@ -77,7 +77,7 @@ export default async function HomePage({
           </ul>
         </div>
         {heroProducts.length > 0 && (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-8 pb-6">
             {heroProducts.map((product, i) => {
               const name = pick(product, "name", locale) ?? product.nameEn;
               const alt = (product.image && pick(product.image, "alt", locale)) || name;
@@ -92,6 +92,7 @@ export default async function HomePage({
                       alt={alt}
                       width={320}
                       height={320}
+                      sizes="(min-width: 1024px) 16rem, 42vw"
                       priority={i === 0}
                       className="h-full w-full object-cover"
                     />
@@ -164,7 +165,7 @@ export default async function HomePage({
               <li key={brand.slug}>
                 <Link
                   href={`/brands/${brand.slug}`}
-                  className="inline-flex min-h-11 items-center rounded-full border-2 border-border-strong bg-surface-raised px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-wide text-navy hover:border-navy"
+                  className="inline-flex min-h-11 items-center rounded-full border-2 border-border-strong bg-surface-raised px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-wide text-navy hover:border-accent"
                 >
                   {pick(brand, "name", locale) ?? brand.nameEn}
                 </Link>

@@ -25,7 +25,7 @@ export function ProductCard({
   return (
     <Link
       href={`/products/${product.brand.slug}/${product.slug}`}
-      className="group flex flex-col gap-2 overflow-hidden rounded-xl border border-border-strong bg-surface shadow-sm transition-shadow duration-200 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      className="group flex h-full flex-col gap-2 overflow-hidden rounded-xl border border-border-strong bg-surface shadow-sm transition-shadow duration-200 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
     >
       <div className="aspect-[4/3] w-full overflow-hidden bg-surface-raised">
         {product.image ? (
@@ -62,7 +62,7 @@ export function ProductCard({
           {name}
         </h3>
         {focus && <p className="line-clamp-2 text-xs text-muted">{focus}</p>}
-        <div className="mt-1 flex flex-col gap-0.5 text-sm">
+        <div className="mt-auto flex flex-col gap-0.5 pt-1 text-sm">
           <PriceDisplay priceMinor={product.priceMinor} behavior={behavior} />
           <span className="font-serif text-xs font-medium italic text-navy group-hover:text-accent">
             {t("viewDetails")}

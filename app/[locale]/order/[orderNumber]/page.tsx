@@ -132,7 +132,7 @@ export default async function OrderConfirmationPage({ params, searchParams }: Pr
 
       <Link
         href="/shop"
-        className="btn-glass inline-flex min-h-11 w-fit items-center justify-center self-center rounded-full px-6 py-2 font-serif text-sm font-semibold uppercase tracking-wide text-white"
+        className="btn-glass inline-flex min-h-11 w-fit items-center justify-center self-center rounded-full px-6 py-2 font-serif text-sm font-semibold uppercase tracking-wide"
       >
         {t("continueShopping")}
       </Link>

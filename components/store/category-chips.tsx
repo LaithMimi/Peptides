@@ -23,8 +23,8 @@ export function CategoryChips({
               aria-current={active ? "page" : undefined}
               className={`inline-flex min-h-11 items-center rounded-full border-2 px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-wide transition-colors ${
                 active
-                  ? "border-navy bg-navy text-navy-foreground"
-                  : "border-border-strong bg-surface-raised text-navy hover:border-navy"
+                  ? "btn-glass border-2!"
+                  : "border-border-strong bg-surface-raised text-navy hover:border-accent"
               }`}
             >
               {pick(c, "name", locale) ?? c.nameEn}
