@@ -46,7 +46,7 @@ export default async function HomePage({
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12">
+      <div className="band grid grid-cols-1 items-center gap-8 rounded-[2rem] px-6 py-10 sm:px-10 lg:grid-cols-2 lg:gap-12 lg:px-14 lg:py-14">
         <div>
           <h1 className="font-serif text-4xl font-semibold uppercase tracking-wide text-navy sm:text-5xl">
             {t("heroTitle")}
@@ -55,7 +55,7 @@ export default async function HomePage({
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
               href="/shop"
-              className="btn-glass inline-flex min-h-11 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide"
+              className="btn-primary inline-flex min-h-11 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide"
             >
               {t("heroCta")}
             </Link>
@@ -170,7 +170,7 @@ export default async function HomePage({
               <li key={brand.slug}>
                 <Link
                   href={`/brands/${brand.slug}`}
-                  className="inline-flex min-h-11 items-center rounded-full border-2 border-border-strong bg-surface-raised px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-wide text-navy transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:shadow-sm"
+                  className="inline-flex min-h-11 items-center rounded-full border-2 border-border-strong bg-surface-raised px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-wide text-navy transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:shadow-lg active:translate-y-0 active:shadow-sm"
                 >
                   {pick(brand, "name", locale) ?? brand.nameEn}
                 </Link>

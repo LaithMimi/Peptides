@@ -42,12 +42,12 @@ export default async function ContactPage({
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
-      <div>
+      <header className="band page-band">
         <h1 className="font-serif text-3xl font-semibold uppercase tracking-wide text-navy">
           {t("title")}
         </h1>
         <p className="mt-2 text-muted">{t("intro")}</p>
-      </div>
+      </header>
 
       <dl className="flex flex-col gap-5 rounded-xl border border-border-strong bg-surface p-5">
         <div>

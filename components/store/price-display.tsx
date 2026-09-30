@@ -23,7 +23,7 @@ export function PriceDisplay({
   if (priceMinor !== null) {
     return (
       <span className={className}>
-        <bdi dir="ltr" className="font-mono font-medium text-navy">
+        <bdi dir="ltr" className="font-mono font-semibold text-accent">
           {formatMoney(priceMinor, locale)}
         </bdi>
       </span>

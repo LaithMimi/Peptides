@@ -9,7 +9,10 @@ export async function HowToUse() {
   const t = await getTranslations("howToUse");
 
   return (
-    <section aria-labelledby="home-how-to-use" className="flex flex-col gap-4">
+    <section
+      aria-labelledby="home-how-to-use"
+      className="band flex flex-col gap-5 rounded-[2rem] px-6 py-8 sm:px-10 sm:py-10"
+    >
       <div>
         <h2
           id="home-how-to-use"
@@ -17,14 +20,14 @@ export async function HowToUse() {
         >
           {t("title")}
         </h2>
-        <p className="mt-1 max-w-2xl text-sm text-muted">{t("intro")}</p>
+        <p className="mt-2 max-w-2xl text-sm text-muted">{t("intro")}</p>
       </div>
 
       <ol className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4">
         {STEPS.map((n) => (
           <li
             key={n}
-            className="flex items-center gap-4 rounded-xl border border-border-strong bg-surface-raised p-4 shadow-sm"
+            className="band-card flex items-center gap-4 rounded-xl border border-border-strong p-4 shadow-sm"
           >
             <span
               aria-hidden="true"

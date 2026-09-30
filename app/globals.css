@@ -22,12 +22,12 @@
 :root {
   --background: #fafafa;
   --surface: #ffffff;
-  --surface-raised: #f2f2f4;
+  --surface-raised: #eff1fb;
   --foreground: #0d0d0d;
-  --muted: #5c5f6b;
-  --border: #e6e6ea;
-  --border-strong: #d2d2d8;
-  --input-border: #9a9aa4;
+  --muted: #585c70;
+  --border: #e3e5f0;
+  --border-strong: #cfd3e6;
+  --input-border: #9396ab;
 
   --navy: #1b22a7;
   --navy-foreground: #fafafa;
@@ -36,6 +36,13 @@
 
   --danger: #a23b2e;
   --danger-bg: #fbeae7;
+
+  /* The Bold Blue band: the one color region the palette owns (home hero,
+     how-to-use, page headers, order confirmation, footer). Same in both
+     themes; .band below re-points the ink tokens for everything inside. */
+  --band: #1b22a7;
+  --band-foreground: #fafafa;
+  --band-muted: #c9cbea;
 
   --font-serif: var(--font-geist-sans);
   --font-sans: var(--font-geist-sans);
@@ -68,12 +75,12 @@
   :root {
     --background: #0d0d0d;
     --surface: #151517;
-    --surface-raised: #1c1c21;
+    --surface-raised: #181b2a;
     --foreground: #fafafa;
-    --muted: #a1a1ab;
-    --border: #26262c;
-    --border-strong: #34343c;
-    --input-border: #56565f;
+    --muted: #a3a6b8;
+    --border: #262a3a;
+    --border-strong: #343950;
+    --input-border: #5a5f78;
 
     /* Bold Blue is too dark to read on Jet Black, so headings go Soft
        White and the accent is Light Blue lifted to 5.9:1 (the exact
@@ -134,27 +141,6 @@ html[dir="rtl"] body {
     mix-blend-mode: screen;
     filter: invert(1) hue-rotate(180deg);
   }
-}
-
-/*
-  The nav bar's one deliberately loud moment, scoped to the header alone —
-  the rest of the storefront stays the plain "category standard" system.
-  Clear glass, not a tinted pane: real backdrop-filter blur, only a whisper
-  of the brand blue, a blue-tinted 1px edge, and a bright inset rim so it
-  reads as a transparent sheet with a lit edge. Ink on it stays dark
-  (light theme) / light (dark theme) via the normal text-navy token, so
-  legibility never depends on what happens to sit behind the glass.
-  Shaped as a floating capsule (see site-header.tsx).
-*/
-.site-glass {
-  background: rgba(255, 255, 255, 0.1);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow:
-    0 8px 32px -12px rgba(13, 13, 13, 0.25),
-    0 0 0 1px color-mix(in srgb, var(--navy) 10%, transparent);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /*
@@ -235,10 +221,12 @@ html[dir="rtl"] body {
   }
 
   .site-nav[data-scrolled="true"] {
-    background: rgba(255, 255, 255, 0.1);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    border-color: rgba(255, 255, 255, 0.15);
+    /* Mostly the page ground, not a 10% white wash: the nav now scrolls
+       over Bold Blue bands, and its navy ink must stay legible there. */
+    background: color-mix(in srgb, var(--background) 84%, transparent);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    backdrop-filter: blur(16px) saturate(160%);
+    border-color: color-mix(in srgb, var(--border-strong) 70%, transparent);
     box-shadow: 0 8px 32px -12px rgba(13, 13, 13, 0.25);
   }
 
@@ -343,5 +331,101 @@ html[dir="rtl"] body {
 @media (prefers-reduced-motion: reduce) {
   .dialog-in {
     animation: none;
+  }
+}
+
+/*
+  Colorize pass — the palette owns a few deliberate regions.
+  .band is a Bold Blue panel. Instead of restyling every child, it re-points
+  the theme tokens, so headings, muted text, chips, glass buttons, borders
+  and the focus ring inside it all switch to their on-blue values. Light
+  Blue is too close to Bold Blue to read on it (2.2:1), so inside a band the
+  accent becomes Soft White and the primary button inverts to Soft White
+  with Bold Blue ink.
+*/
+.band {
+  --navy: var(--band-foreground);
+  --foreground: var(--band-foreground);
+  --muted: var(--band-muted);
+  --accent: var(--band-foreground);
+  --accent-foreground: var(--band);
+  --surface: #242bac;
+  --surface-raised: #2a31b0;
+  --border: #3c42b5;
+  --border-strong: #5358bc;
+  --input-border: #8a8ed2;
+  background: var(--band);
+  color: var(--foreground);
+}
+
+/* A Soft White card floating on a band (the how-to-use steps, whose blue
+   illustrations would vanish on Bold Blue): restores light-theme ink. */
+.band .band-card {
+  --navy: #1b22a7;
+  --foreground: #0d0d0d;
+  --muted: #585c70;
+  --accent: #4260e6;
+  --accent-foreground: #ffffff;
+  --surface: #ffffff;
+  --border-strong: #cfd3e6;
+  background: var(--surface);
+  color: var(--foreground);
+}
+
+/* Page title band: every storefront page opens on the same Bold Blue slab,
+   so the palette is the wayfinding, not decoration. */
+.page-band {
+  border-radius: 2rem;
+  padding: 2rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .page-band {
+    padding: 2.5rem 2.5rem;
+  }
+}
+
+/* Logos are supplied on white; on a band they sit on their own Soft White
+   tile instead of being recolored. */
+.logo-tile {
+  background: #fafafa;
+  border-radius: 0.75rem;
+  padding: 0.375rem;
+}
+
+/*
+  The one solid button per page (Shop now, Add to cart, Checkout, Place
+  order, Continue shopping): a Light Blue fill with white ink, the same pill,
+  lift and press as .btn-glass. Unlayered so it beats leftover text-*
+  utilities. Inside a band it inverts via the re-pointed tokens.
+*/
+.btn-primary {
+  color: var(--accent-foreground);
+  background: var(--accent);
+  border: 1px solid transparent;
+  box-shadow:
+    0 1px 2px rgba(13, 13, 13, 0.16),
+    0 6px 16px -6px color-mix(in srgb, var(--accent) 60%, transparent);
+  transition: all var(--glass-time) var(--glass-ease);
+}
+
+.btn-primary:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: color-mix(in srgb, var(--accent) 86%, #0d0d0d);
+  box-shadow:
+    0 2px 4px rgba(13, 13, 13, 0.16),
+    0 14px 28px -10px color-mix(in srgb, var(--accent) 70%, transparent);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.btn-primary:active:not(:disabled):not([aria-disabled="true"]) {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: inset 0 2px 4px rgba(13, 13, 13, 0.22);
+  transition-duration: 0.08s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary:hover:not(:disabled):not([aria-disabled="true"]),
+  .btn-primary:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: none;
   }
 }

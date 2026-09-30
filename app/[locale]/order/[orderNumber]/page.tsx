@@ -47,7 +47,7 @@ export default async function OrderConfirmationPage({ params, searchParams }: Pr
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-6">
       <ClearCartOnMount />
-      <div className="flex flex-col items-center gap-3 rounded-xl border border-border-strong bg-surface-raised p-6 text-center">
+      <div className="band flex flex-col items-center gap-3 rounded-[2rem] px-6 py-10 text-center">
         <span className="inline-flex size-16 items-center justify-center rounded-full bg-surface p-3 text-accent">
           <VialGlyph className="size-10" />
         </span>
@@ -132,7 +132,7 @@ export default async function OrderConfirmationPage({ params, searchParams }: Pr
 
       <Link
         href="/shop"
-        className="btn-glass inline-flex min-h-11 w-fit items-center justify-center self-center rounded-full px-6 py-2 font-serif text-sm font-semibold uppercase tracking-wide"
+        className="btn-primary inline-flex min-h-11 w-fit items-center justify-center self-center rounded-full px-6 py-2 font-serif text-sm font-semibold uppercase tracking-wide"
       >
         {t("continueShopping")}
       </Link>

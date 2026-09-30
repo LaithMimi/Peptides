@@ -68,7 +68,7 @@ export function CartView() {
         {cart.canCheckout ? (
           <Link
             href="/checkout"
-            className="btn-glass inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide"
+            className="btn-primary inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide"
           >
             {t("checkout")}
           </Link>
@@ -76,7 +76,7 @@ export function CartView() {
           <button
             type="button"
             disabled
-            className="btn-glass inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide opacity-60"
+            className="btn-primary inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide opacity-60"
           >
             {cart.status === "loading" ? t("updating") : t("checkout")}
           </button>

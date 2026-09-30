@@ -49,14 +49,14 @@ export default async function BrandPage({
 
   return (
     <div className="flex flex-col gap-8">
-      <header className="flex items-center gap-4">
+      <header className="band page-band flex items-center gap-5">
         {brand.logoUrl && (
           <Image
             src={brand.logoUrl}
             alt=""
             width={96}
             height={96}
-            className="h-16 w-16 object-contain"
+            className="logo-tile h-16 w-16 shrink-0 object-contain"
           />
         )}
         <div>

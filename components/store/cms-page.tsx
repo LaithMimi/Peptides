@@ -20,9 +20,11 @@ export async function CmsPage({
 
   return (
     <article className="mx-auto flex w-full max-w-3xl flex-col gap-4">
-      <h1 className="font-serif text-3xl font-semibold uppercase tracking-wide text-navy">
-        {title}
-      </h1>
+      <header className="band page-band">
+        <h1 className="font-serif text-3xl font-semibold uppercase tracking-wide text-navy">
+          {title}
+        </h1>
+      </header>
       <Markdown>{body}</Markdown>
       {children}
     </article>
