@@ -2,27 +2,31 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { getSettings } from "@/lib/db/queries/settings";
 import { HeaderNav } from "@/components/header-nav";
+import { HeaderShell } from "@/components/header-shell";
 
-/** Logo plate plus the navigation. The logo and name come from store settings. */
+/** Fixed capsule: logo left, links centered, cart CTA right. Name and logo come from store settings. */
 export async function SiteHeader() {
   const settings = await getSettings();
   const logo = settings.logoUrl ?? "/brand/pep-club-logo.png";
 
   return (
-    <header className="px-4 pt-4 sm:px-6 lg:px-8">
-      <div className="nav-glass relative mx-auto flex w-full max-w-6xl items-center justify-between gap-x-2 rounded-full px-3 py-2 sm:flex-wrap sm:gap-x-4 sm:gap-y-2 shadow-lg sm:px-6">
-        <Link href="/" className="flex items-center" aria-label={`${settings.storeName}`}>
-          <Image
-            src={logo}
-            alt={settings.storeName}
-            width={168}
-            height={168}
-            priority
-            className="brand-mark h-12 w-12 object-contain sm:h-16 sm:w-16"
-          />
-        </Link>
-        <HeaderNav locales={settings.supportedLocales} />
-      </div>
-    </header>
+    <HeaderShell>
+      <Link
+        href="/"
+        className="flex items-center gap-2 justify-self-start"
+        aria-label={settings.storeName}
+      >
+        <Image
+          src={logo}
+          alt=""
+          width={96}
+          height={96}
+          priority
+          className="brand-mark h-10 w-10 object-contain"
+        />
+        <span className="hidden text-base font-bold text-navy sm:inline">{settings.storeName}</span>
+      </Link>
+      <HeaderNav locales={settings.supportedLocales} />
+    </HeaderShell>
   );
 }

@@ -202,45 +202,129 @@ html[dir="rtl"] body {
 }
 
 /*
-  The same clear-glass material, sized for buttons: real blur, a light
-  brand-blue tint, a blue rim, and a bright inset highlight, replacing a
-  flat bg-accent fill. Ink is the accent blue on light theme (about 6:1
-  over the tint) and near-white on dark theme (about 12:1) — set here, in
-  unlayered CSS, so it deliberately wins over any leftover text-* utility.
-  Used on the storefront's solid CTA buttons; outline buttons are already
-  transparent at rest and keep their own styling.
+  Every button on the storefront: the interactive glass from the requested
+  spec (see the Fixed-capsule notes below) — translucent white, 12px blur,
+  orange (255,94,0) hover glow with scale(1.05). Ink is the theme's navy
+  token, set here in unlayered CSS so it deliberately wins over any leftover
+  text-* utility. Size and padding stay with the utilities on each element.
+  .glass-badge is the same material without hover, for non-interactive
+  numbered badges.
 */
-.btn-glass {
-  color: var(--accent);
-  background: linear-gradient(135deg, rgba(0, 0, 255, 0.16), rgba(0, 0, 255, 0.07));
-  backdrop-filter: blur(10px) saturate(160%);
-  -webkit-backdrop-filter: blur(10px) saturate(160%);
+.btn-glass,
+.glass-badge {
+  color: var(--navy);
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   border-width: 1px;
   border-style: solid;
-  border-color: rgba(0, 0, 255, 0.35);
-  box-shadow:
-    0 2px 10px -4px rgba(0, 0, 255, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.75);
-  transition:
-    background 200ms ease,
-    box-shadow 200ms ease;
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--navy) 12%, transparent);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.btn-glass:hover {
-  background: linear-gradient(135deg, rgba(0, 0, 255, 0.26), rgba(0, 0, 255, 0.12));
+.btn-glass:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: rgba(255, 94, 0, 0.2);
+  border-color: rgba(255, 94, 0, 0.4);
+  box-shadow: 0 8px 32px rgba(255, 94, 0, 0.1);
+  transform: scale(1.05);
 }
 
-@media (prefers-color-scheme: dark) {
-  .btn-glass {
-    color: #f3f4f6;
-    background: linear-gradient(135deg, rgba(102, 105, 255, 0.3), rgba(255, 255, 255, 0.06));
-    border-color: rgba(255, 255, 255, 0.25);
-    box-shadow:
-      0 2px 10px -4px rgba(0, 0, 0, 0.5),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+@media (prefers-reduced-motion: reduce) {
+  .btn-glass:hover:not(:disabled):not([aria-disabled="true"]) {
+    transform: none;
   }
-  .btn-glass:hover {
-    background: linear-gradient(135deg, rgba(102, 105, 255, 0.45), rgba(255, 255, 255, 0.1));
+}
+
+/*
+  Fixed-capsule header + interactive glass (requested spec). Shared glass
+  values: rgba(255,255,255,.1) fill, 12px blur, rgba(255,255,255,.15) rim,
+  one 0.3s cubic-bezier(0.4,0,0.2,1) transition. On this white storefront a
+  white-alpha pane is invisible, so ink stays the theme's navy token (never
+  white), and the resting capsule gets a soft shadow rather than a border.
+  The orange (255,94,0) is the hover glow of the glass button only.
+  Both classes live in @layer components so Tailwind utilities (padding,
+  min-height) can still size them per use.
+*/
+:root {
+  --glass-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --glass-time: 0.3s;
+}
+
+@layer components {
+  .site-nav {
+    background: transparent;
+    border: 1px solid transparent;
+    box-shadow: none;
+    transition: all var(--glass-time) var(--glass-ease);
+  }
+
+  .site-nav[data-scrolled="true"] {
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px -12px rgba(10, 25, 51, 0.25);
+  }
+
+  .glass-button {
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 9999px;
+    padding: 10px 24px;
+    font-weight: 600;
+    color: var(--navy);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--navy) 12%, transparent);
+    transition: all var(--glass-time) var(--glass-ease);
+  }
+
+  .glass-button:hover {
+    background: rgba(255, 94, 0, 0.2);
+    border-color: rgba(255, 94, 0, 0.4);
+    box-shadow: 0 8px 32px rgba(255, 94, 0, 0.1);
+    transform: scale(1.05);
+  }
+}
+
+.scroll-indicator {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--navy) 20%, transparent);
+  color: var(--navy);
+  transition: all var(--glass-time) var(--glass-ease);
+}
+
+.scroll-indicator:hover {
+  background: rgba(255, 94, 0, 0.2);
+  border-color: rgba(255, 94, 0, 0.4);
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.scroll-indicator-icon {
+  animation: float 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-indicator-icon {
+    animation: none;
+  }
+  .glass-button:hover {
+    transform: none;
   }
 }
 

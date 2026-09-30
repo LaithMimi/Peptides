@@ -59,7 +59,7 @@ export function PurposePicker({
                     {name}
                   </span>
                   {isSelected && (
-                    <span className="shrink-0 btn-glass rounded-full px-2 py-0.5 font-mono text-xs uppercase tracking-wide">
+                    <span className="shrink-0 glass-badge rounded-full px-2 py-0.5 font-mono text-xs uppercase tracking-wide">
                       {t("selected")}
                     </span>
                   )}
