@@ -2,21 +2,20 @@
 name: Pep Club
 description: The category-standard e-commerce storefront, executed at real craft — a clean, familiar shopping pattern with real product photography, not an experimental visual world.
 colors:
-  background: "#ffffff"
+  background: "#fafafa"
   surface: "#ffffff"
-  surface-raised: "#f7f7f8"
-  ink-navy: "#0a1933"
-  muted-ink: "#5f6673"
-  hairline: "#e5e7eb"
-  hairline-strong: "#d1d5db"
-  accent-blue: "#0000ff"
-  input-border: "#9ca3af"
+  surface-raised: "#eff1fb"
+  ink: "#0d0d0d"
+  ink-bold-blue: "#1b22a7"
+  muted-ink: "#585c70"
+  hairline: "#e3e5f0"
+  hairline-strong: "#cfd3e6"
+  accent-blue: "#4260e6"
+  input-border: "#9396ab"
   danger: "#a23b2e"
   danger-bg: "#fbeae7"
-  accent-blue-dark: "#6669ff"
-  glass-dark-tint: "rgba(102, 105, 255, 0.22)"
-  glass-dark-button: "rgba(102, 105, 255, 0.3)"
-  glass-dark-button-hover: "rgba(102, 105, 255, 0.45)"
+  background-dark: "#0d0d0d"
+  accent-blue-dark: "#6f86ee"
 typography:
   display:
     fontFamily: "Geist Sans, ui-sans-serif, system-ui, sans-serif"
@@ -35,6 +34,7 @@ typography:
 rounded:
   chip: "9999px"
   card: "0.75rem"
+  capsule: "2rem"
 spacing:
   cardPadding: "1.25rem"
   sectionGap: "2.5rem"
@@ -61,34 +61,42 @@ components:
 
 **Creative North Star: "The Category Standard, at Craft"**
 
-Pep Club's storefront went through two visual-world experiments — the "Vial-Label System" (flat, bordered, die-cut paper labels) and "The Glass Case" (a backlit glass display case) — before the client asked directly for the plain, familiar e-commerce pattern instead, executed with real craft rather than a signature "world." This is the resulting system: white and light neutral gray carry almost every surface; deep navy ink and the logo's cornflower blue are the only two brand colors, with blue spent rarely (one CTA, links, focus rings); cards are ordinary bordered rectangles with a conventional shadow on hover; and the storefront leans on real seeded product photography — not an invented signature device — to carry visual interest, per the client's explicit "no AI-generated images" instruction.
+Pep Club's storefront went through two visual-world experiments — the "Vial-Label System" (flat, bordered, die-cut paper labels) and "The Glass Case" (a backlit glass display case) — before the client asked directly for the plain, familiar e-commerce pattern instead, executed with real craft rather than a signature "world." This is the resulting system: white and light neutral gray carry almost every surface; the client's four-color palette (Soft White, Jet Black, Bold Blue, Light Blue) supplies all color, used strictly by role (Bold Blue headings, Light Blue action and value) on a Soft White page with no colored regions; cards are ordinary bordered rectangles with a conventional shadow on hover; and the storefront leans on real seeded product photography — not an invented signature device — to carry visual interest, per the client's explicit "no AI-generated images" instruction.
 
 The named craft bar is **Apple.com** (restrained, high-contrast typography, minimal color, confident spacing) and **Sephora/Glossier-style beauty retail** (clean grid, real product photography, understated chrome). This is a standing brand commitment recorded in PRODUCT.md — future storefront work should hold to this quality bar rather than reopening a new visual-world roll unless the client explicitly asks for one again.
 
 **Key Characteristics:**
 - Plain bordered cards (`rounded-xl border border-border-strong shadow-sm`, `shadow-md` on hover) — no signature glow, glass, or backlight device
-- White and light neutral gray (`#f7f7f8`) dominate; navy ink stays for headings/body text, while cornflower blue carries every action surface — buttons (clear glass with blue ink) and the glass footer card — per the client's explicit "blue, not navy blue" direction
+- A four-color client palette — Soft White `#FAFAFA`, Jet Black `#0D0D0D`, Bold Blue `#1B22A7`, Light Blue `#4260E6` — carries the whole site: Soft White ground, Jet Black body ink, Bold Blue headings and button ink, and Light Blue for the one primary button per page, prices, selected chips, links, and focus. **Restrained roles, no colored regions** (client decision, see Colors)
 - Real seeded product photography carries visual weight — the homepage hero features four real product photos in a Sephora-style collage instead of an abstract motif or generated imagery
 - No customer account/sign-in affordance anywhere (hard product constraint) and no fabricated discount or "deal" badges (no discount field exists in the schema; the No Fabricated Data Rule)
 - Bilingual EN/AR with true RTL mirroring; Geist Mono bidi-isolates Latin/numeric values (vial size, purity) inside Arabic text via `components/ltr-value.tsx`
 
 ## Colors
 
-Plain and restrained — white, light gray, navy ink, and one disciplined blue accent. No invented tertiary colors, no signature glow palette.
+A four-color palette supplied by the client (a "Clustr studio" palette card): **Soft White `#FAFAFA`, Jet Black `#0D0D0D`, Bold Blue, Light Blue.** The card's printed hex labels for the two blues (`#1E466B`, `#67BAF4`) do not match its own swatches. The values below were sampled from the swatches the client actually sees (`#1B22A7`, `#4260E6`). No other hues: the former orange hover glow was retired so the palette covers the whole site. The neutral grays are derived steps between Jet Black and Soft White, tinted very slightly toward the brand blue (surface-raised `#EFF1FB`, hairlines `#E3E5F0`/`#CFD3E6`) so inputs, chips, image wells and the disclaimer panel read as part of one blue family. They are not new hues.
+
+The token names in `app/globals.css` are kept for compatibility (`--navy` now holds Bold Blue). The admin dashboard shares these tokens and only overrides its fonts.
 
 ### Primary
-- **Ink Navy** (`#0a1933`): headings and body-adjacent text, text only; it is never a fill, border, or selected state. From the logo's "PEP" wordmark and icon outline. No longer used as a button or footer fill — see Named Rules.
+- **Bold Blue** (`#1B22A7`, token `--navy`): headings, brand ink, and the ink of every glass button (≈11:1 on Soft White). On the storefront it is never a fill or border; the admin dashboard uses it as a solid fill for its primary buttons and active filter (with Soft White text). In dark mode, `--navy` becomes Soft White, because Bold Blue on Jet Black is illegible.
+- **Jet Black** (`#0D0D0D`, token `--foreground`): body text in light mode and the page ground in dark mode.
 
 ### Secondary
-- **Accent Blue** (`#0000ff` light mode, `#6669ff` dark mode): a pure, saturated blue per the client's explicit hex instruction — no longer matched to the logo's softer cornflower tone. Carries every action surface: all primary and secondary buttons (solid and outline), links, and the focus ring. The dark-mode value is lightened from the exact hex (`#0000ff` fails WCAG AA as text/fill against the dark background); `#6669ff` holds 4.59:1 contrast both directions. Revised in two steps: first from a "rare accent" reserved for one CTA to carrying every button + the footer, then from the logo-matched cornflower blue to this pure blue.
+- **Light Blue** (`#4260E6` light mode, `#6F86EE` dark mode, token `--accent`): links, focus ring, cart badge, and the faint menu-panel tint. `#4260E6` is 5.2:1 on white. On Jet Black it drops to 3.7:1, so dark mode lifts it to `#6F86EE` (5.9:1, with Jet Black text when used as a fill).
+
+### Color Strategy: Restrained Roles (client decision)
+Color is applied by role only, never as a region. The client briefly tried a "committed bands" pass: solid Bold Blue panels for the hero, how-to-use, every page title, the order confirmation, and the footer. They then asked for a more modern look and picked **restrained roles on a Soft White page** instead. Don't reintroduce solid Bold Blue slabs, full-width color bands, or blue section backgrounds unless the client asks again. Modernity comes from the faintly blue-tinted neutrals, the Light Blue primary pill with its soft colored shadow, and confident type, not from color volume.
+- The scrolled nav is `color-mix(background 84%)` + blur (not a 10% white wash), so its navy ink stays legible over photography.
 
 ### Neutral
-- **Background / Surface** (`#ffffff`): page and card background.
-- **Surface Raised** (`#f7f7f8`): a barely-tinted neutral gray for image placeholders, elevated panels, and input fields.
-- **Muted Ink** (`#5f6673`): secondary text, a plain neutral gray.
-- **Hairline** (`#e5e7eb`) / **Hairline Strong** (`#d1d5db`): ordinary neutral card borders and dividers.
+- **Background** (`#FAFAFA` Soft White) / **Surface** (`#FFFFFF`): the page ground and the card surface. Dark mode: `#0D0D0D` / `#151517`.
+- **Surface Raised** (`#EFF1FB`): image placeholders, elevated panels, input fields, chips, and the disclaimer panel.
+- **Muted Ink** (`#585C70`, 6.3:1 on Soft White): secondary text.
+- **Hairline** (`#E3E5F0`) / **Hairline Strong** (`#CFD3E6`): card borders and dividers.
+- **Shadows**: Jet Black at low alpha (`rgba(13,13,13,…)`), never tinted.
 - **Danger** (`#a23b2e`) / **Danger Background** (`#fbeae7`): validation and submission errors only.
-- **Dark glass tint** (`rgba(102,105,255,.22–.45)` over a faint white wash): the dark-theme fill for `.nav-glass` and `.btn-glass`, the accent-dark `#6669ff` at low alpha. Never used as a solid.
+- **Dark glass tint** (`rgba(111,134,238,…)` over a faint white wash): the dark-theme menu-panel tint, the dark accent at low alpha. Never used as a solid.
 
 ### Named Rules
 **The No Fabricated Data Rule.** Nothing in the UI states as fact what isn't real product data. No invented discount percentages, "Super Deals" badges, lot numbers, or certifications; only `lib/db` fields (vial size, purity, price) ever appear as data.
@@ -130,18 +138,19 @@ Conventional, unremarkable depth — exactly what the category standard expects.
 
 ## Shapes
 
-Two families: **pills** (`rounded-full`) for every button, chip, and toggle, and **soft rectangles** (`rounded-xl`, 0.75rem) for cards and panels — a conventional, moderate radius, not the rounder `rounded-2xl` of the retired Glass Case system. No independent card rotation/tilt, no experimental card shape.
+Two families: **pills** (`rounded-full`) for every button, chip, and toggle, and **soft rectangles** (`rounded-xl`, 0.75rem) for cards and panels — a conventional, moderate radius, not the rounder `rounded-2xl` of the retired Glass Case system. The footer capsule matches the header capsule at `2rem`. No independent card rotation/tilt, no experimental card shape.
 
 ## Components
 
 ### Buttons
 - **Shape:** full pill (`rounded-full`).
+- **Primary (`.btn-primary`):** the one solid button per page. It is a Light Blue fill with white ink (5.2:1), the same lift/press as `.btn-glass`, and a soft Light Blue drop shadow. In dark mode it is `#6F86EE` with Jet Black ink. It is used on Shop now, Add to cart, Checkout, Place order, Continue shopping, and the solid WhatsApp button (the only action on an unpriced product and on the contact page). Every other button stays `.btn-glass`.
 - **Solid CTA buttons (glass):** `.btn-glass` in `app/globals.css` — the same clear-glass material as the nav, sized for buttons: `backdrop-filter: blur(10px)`, a light brand-blue tint (`rgba(0,0,255,.16→.07)`), a blue rim (`rgba(0,0,255,.35)`), a bright inset highlight. Ink is accent blue on light theme (≥6:1 over the tint, 4.8:1 on hover) and near-white on dark theme. The class sets its own `color` in unlayered CSS so it wins over any leftover `text-*` utility. Used on every filled action: Shop now, Apply filters, Add to cart, checkout/browse/continue buttons, form submits, the solid WhatsApp button.
 - **Outline buttons:** `border-2 border-accent text-accent`, transparent at rest, solid accent fill on hover (Choose a research area, cookie choices, erase-local-data). They were left as-is: already transparent, so "glass" adds nothing at rest.
 - **Hover/Focus:** glass tint deepens on hover; a 2px accent focus-visible ring, offset, never removed.
 
 ### Chips
-- **Research-area / locale toggle:** pill, neutral border, navy fill when selected, `surface-raised` + `border-strong` otherwise. Mono uppercase label.
+- **Research-area chips:** pill, `surface-raised` + `border-strong` at rest, `border-accent` on hover, and a **solid Light Blue fill with white ink when selected**. Mono uppercase label.
 
 ### Cards / Containers
 - **Corner Style:** `rounded-xl` throughout (product cards, panels, the disclaimer note).
@@ -157,8 +166,8 @@ Two families: **pills** (`rounded-full`) for every button, chip, and toggle, and
 ### Navigation (deliberate exception to the rest of the system)
 - The header is a **floating capsule of clear glass**, not a full-width bar and not a colored fill: `app/[locale]/layout.tsx`'s `<header>` adds page-edge padding and a top gap, then the bar (`.nav-glass` in `app/globals.css`, `rounded-full`) sits inset from the viewport edges at `max-w-6xl`. The material is real `backdrop-filter: blur(20px) saturate(180%)` under only a whisper of brand blue (`rgba(0,0,255,.13→.04)` gradient), a blue-tinted 1px edge (`rgba(0,0,255,.22)`), and a bright inset top rim (`inset 0 1px 0 rgba(255,255,255,.85)`). Dark mode swaps the tint for `rgba(102,105,255,.22)` over a faint white wash with a white-alpha edge. History, so it isn't retried: a solid navy→blue gradient, then a dot-chain overlay, then a *dark tinted* glass were each tried; the dark tinted pane put white ink over a pale pane (≈2.7:1, failing AA), so the glass is deliberately **light and clear with dark ink**. This was an explicit, scoped client request layered on top of the otherwise-plain "category standard" system — the one loud moment on the page, not a signal to extend glass or the capsule shape to cards or content.
 - Ink stays normal: nav links `text-navy` (hover `text-accent`), the logo uses the ordinary `.brand-mark`, the cart badge is the usual accent dot, and the mobile-menu button is an accent outline. Because ink is set by the theme tokens (dark ink on light theme, light ink on dark), legibility never depends on what sits behind the glass. Measured: navy ink over the glass ≥13:1, accent ink ≥6:1. The locale switcher is unchanged.
-- **Fixed capsule update (`site-header.tsx`, `header-shell.tsx`, `.site-nav` / `.glass-button` in `app/globals.css`):** the header is now `position: fixed`, `max-w-[1400px]`, a 3-column grid — 16px bold logo/name left, 14px medium links centered, glass Cart CTA (plus the locale switcher) right. It is fully transparent with no border at scroll 0; past 8px `data-scrolled` turns on the glass (`rgba(255,255,255,.1)`, `blur(12px)`, `rgba(255,255,255,.15)` rim) plus a soft shadow, since a white-alpha rim is invisible on this white ground. All glass transitions use `0.3s cubic-bezier(0.4,0,0.2,1)`. `.glass-button` hovers to `scale(1.05)` with an orange `rgba(255,94,0,.2)` fill/glow — the **one orange moment in the system**, requested explicitly and scoped to the glass button and scroll indicator. Ink is always the navy token (never white) so contrast never depends on the backdrop. `<main>` carries `pt-28` to clear the fixed bar. The home hero ends in a 40px `ScrollIndicator` ring whose arrow floats 10px over 3s (`float` keyframes; disabled under `prefers-reduced-motion`).
-- **All buttons share this glass:** `.btn-glass` is now the one button material (white-alpha glass, navy ink, orange hover glow, `scale(1.05)`), used on every filled and former outline button — hero CTAs, Add to cart, cart/checkout, filters, forms, cookie choices, WhatsApp, locale switcher, quantity stepper, mobile menu. Disabled buttons don't react to hover. `.glass-badge` is the same material with no hover, for the numbered badges in How-to-use and the purpose picker. The older "blue-tinted glass" and "outline buttons stay as-is" notes under Components → Buttons are superseded.
+- **Fixed capsule update (`site-header.tsx`, `header-shell.tsx`, `.site-nav` / `.glass-button` in `app/globals.css`):** the header is now `position: fixed`, `max-w-[1400px]`, a 3-column grid — 16px bold logo/name left, 14px medium links centered, glass Cart CTA (plus the locale switcher) right. It is fully transparent with no border at scroll 0; past 8px `data-scrolled` turns on the glass (`rgba(255,255,255,.1)`, `blur(12px)`, `rgba(255,255,255,.15)` rim) plus a soft shadow, since a white-alpha rim is invisible on this white ground. All glass transitions use `0.3s cubic-bezier(0.4,0,0.2,1)`. `.glass-button` hovers to `scale(1.05)` with a deeper shadow and no colored tint (the original orange glow was removed). Ink is always the navy token (never white) so contrast never depends on the backdrop. `<main>` carries `pt-28` to clear the fixed bar. The home hero ends in a 40px `ScrollIndicator` ring whose arrow floats 10px over 3s (`float` keyframes; disabled under `prefers-reduced-motion`).
+- **All buttons share this glass:** `.btn-glass` is now the one button material (white-alpha glass, Bold Blue ink, a raised hover with a deeper shadow and `scale(1.05)`, no colored hover tint), used on every filled and former outline button — hero CTAs, Add to cart, cart/checkout, filters, forms, cookie choices, WhatsApp, locale switcher, quantity stepper, mobile menu. Disabled buttons don't react to hover. `.glass-badge` is the same material with no hover, for the numbered badges in How-to-use and the purpose picker. The older "blue-tinted glass" and "outline buttons stay as-is" notes under Components → Buttons are superseded.
 - The mobile disclosure menu floats as its own `absolute`-positioned card below the capsule (same `.nav-glass` + `rounded-2xl`), not nested inside the pill — opening it never stretches the capsule into a tall stadium shape.
 - No account/sign-in control — this product has none, by hard constraint.
 
@@ -189,4 +198,4 @@ The homepage hero's right column (`app/[locale]/page.tsx`) shows four real featu
 - **Don't** show a price or payment field anywhere — no online payment gateway exists in this product, ever (constitutional constraint, not a visual preference).
 
 ### Color Consistency Rule
-Navy is ink only (text). Every interactive surface — borders, hover borders, focus, selected chips/toggles/badges, steppers, the cookie banner rule — uses accent blue; selected states use `.btn-glass`. No navy fills or borders on the storefront.
+Bold Blue is ink only: headings and button text, never a fill or section background on the storefront (see Color Strategy). Light Blue marks action and value: the primary button, prices (`PriceDisplay`, mono semibold), selected chips, hover borders, links, and focus. The footer is a plain white capsule with a hairline border.

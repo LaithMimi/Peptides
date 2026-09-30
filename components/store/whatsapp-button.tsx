@@ -15,10 +15,9 @@ export function WhatsAppButton({
   const href = whatsappLink(number, message);
   if (!href) return null;
 
-  const style =
-    variant === "solid"
-      ? "btn-glass"
-      : "btn-glass";
+  // "solid" is the page's one primary action (the unpriced product, the
+  // contact page); "outline" sits beside another primary.
+  const style = variant === "solid" ? "btn-primary" : "btn-glass";
 
   return (
     <a

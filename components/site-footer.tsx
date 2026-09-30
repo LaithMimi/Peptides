@@ -8,7 +8,7 @@ import { CookieSettingsButton } from "@/components/cookie-settings-button";
 const linkClass =
   "inline-flex min-h-11 items-center rounded px-1 text-sm font-medium text-navy transition-colors duration-300 hover:text-accent";
 
-/** Same capsule language as the header: 1400px, clear glass, bold logo, 14px medium links. */
+/** A plain surface capsule at the header's 1400px width: bold logo, 14px medium links. */
 export async function SiteFooter() {
   const t = await getTranslations("footer");
   const tl = await getTranslations("legal.footer");
@@ -20,7 +20,7 @@ export async function SiteFooter() {
 
   return (
     <footer className="px-4 pb-4 pt-8 sm:px-6 lg:px-8">
-      <div className="site-glass mx-auto flex w-full max-w-[1400px] flex-col gap-4 rounded-[2rem] px-5 py-6 text-sm text-navy sm:px-8">
+      <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-4 rounded-[2rem] border border-border bg-surface px-5 py-8 text-sm text-navy shadow-sm sm:px-10">
         <Link href="/" className="flex w-fit items-center gap-2" aria-label={settings.storeName}>
           <Image
             src={logo}

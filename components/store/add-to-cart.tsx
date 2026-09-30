@@ -43,7 +43,7 @@ export function AddToCart({
           addItem(productId, quantity);
           setAdded(true);
         }}
-        className="btn-glass inline-flex min-h-12 w-full items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide sm:w-fit"
+        className="btn-primary inline-flex min-h-12 w-full items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide sm:w-fit"
       >
         {t("addToCart")}
       </button>

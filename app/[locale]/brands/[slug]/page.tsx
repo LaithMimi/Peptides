@@ -56,7 +56,7 @@ export default async function BrandPage({
             alt=""
             width={96}
             height={96}
-            className="h-16 w-16 object-contain"
+            className="h-16 w-16 shrink-0 object-contain"
           />
         )}
         <div>

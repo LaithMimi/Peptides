@@ -24,12 +24,12 @@ export default async function DataRequestPage({
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
-      <div>
+      <header>
         <h1 className="font-serif text-3xl font-semibold uppercase tracking-wide text-navy">
           {t("title")}
         </h1>
         <p className="mt-2 text-muted">{t("intro")}</p>
-      </div>
+      </header>
       <DataRequestForm />
       <EraseLocalData />
     </div>

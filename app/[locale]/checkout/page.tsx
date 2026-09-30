@@ -24,9 +24,11 @@ export default async function CheckoutPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-serif text-3xl font-semibold uppercase tracking-wide text-navy sm:text-4xl">
-        {t("title")}
-      </h1>
+      <header>
+        <h1 className="font-serif text-3xl font-semibold uppercase tracking-wide text-navy sm:text-4xl">
+          {t("title")}
+        </h1>
+      </header>
       <CheckoutForm />
     </div>
   );
