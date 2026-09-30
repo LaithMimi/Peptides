@@ -9,7 +9,6 @@ import {
   products,
   storeSettings,
 } from "./schema";
-import { CONTACT } from "@/lib/contact";
 import seedProducts from "./seed-data/products.json";
 
 /**
@@ -107,16 +106,7 @@ const PAGE_SEED = [
 ] as const;
 
 export async function seedDatabase(db: Db): Promise<void> {
-  // The business phone already published on the Contact page doubles as the
-  // WhatsApp number until the owner sets their own in admin Settings.
-  await db
-    .insert(storeSettings)
-    .values({
-      id: 1,
-      phone: CONTACT.phoneDisplay,
-      whatsappNumber: CONTACT.phone.replace(/\D/g, ""),
-    })
-    .onConflictDoNothing();
+  await db.insert(storeSettings).values({ id: 1 }).onConflictDoNothing();
 
   await db
     .insert(pages)

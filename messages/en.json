@@ -224,12 +224,10 @@
   },
   "contact": {
     "title": "Contact us",
-    "intro": "Questions about a product or your order? Reach us by phone or WhatsApp.",
+    "intro": "Questions about a product or your order? Reach us through the details below.",
     "location": "Location",
     "locationValue": "Jerusalem",
-    "phone": "Phone",
     "email": "Email",
-    "call": "Call us",
     "note": "We arrange delivery and answer product questions directly. Please do not send medical questions: our products are for laboratory research use only."
   },
   "home": {
@@ -277,9 +275,7 @@
   "price": {
     "unavailable": "Price unavailable",
     "askAbout": "Ask about price",
-    "contactStore": "Contact the store",
-    "whatsappLabel": "Chat on WhatsApp",
-    "whatsappInquiry": "Hi, I would like to know the price of {product}."
+    "contactStore": "Contact the store"
   },
   "cart": {
     "title": "Your cart",

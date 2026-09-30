@@ -1,7 +1,5 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { getSettings } from "@/lib/db/queries/settings";
-import { whatsappLink } from "@/lib/whatsapp";
 import { CookieSettingsButton } from "@/components/cookie-settings-button";
 
 const linkClass =
@@ -11,9 +9,6 @@ export async function SiteFooter() {
   const t = await getTranslations("footer");
   const tl = await getTranslations("legal.footer");
   const site = await getTranslations("site");
-  const tp = await getTranslations("price");
-  const settings = await getSettings();
-  const whatsapp = whatsappLink(settings.whatsappNumber);
 
   return (
     <footer className="border-t border-border-strong bg-navy text-navy-foreground">
@@ -57,13 +52,6 @@ export async function SiteFooter() {
                 {tl("contact")}
               </Link>
             </li>
-            {whatsapp && (
-              <li>
-                <a href={whatsapp} target="_blank" rel="noopener noreferrer" className={linkClass}>
-                  {tp("whatsappLabel")}
-                </a>
-              </li>
-            )}
             <li>
               <Link href="/data-request" className={linkClass}>
                 {tl("dataRequest")}

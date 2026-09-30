@@ -217,8 +217,6 @@ export const storeSettings = pgTable(
     id: integer("id").primaryKey().default(1),
     storeName: text("store_name").notNull().default("Pep Club"),
     logoUrl: text("logo_url"),
-    phone: text("phone"),
-    whatsappNumber: text("whatsapp_number"),
     email: text("email"),
     address: text("address"),
     deliveryEnabled: boolean("delivery_enabled").notNull().default(true),

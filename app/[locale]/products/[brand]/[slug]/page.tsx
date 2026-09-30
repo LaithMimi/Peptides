@@ -157,7 +157,6 @@ export default async function ProductPage({ params }: { params: Promise<Params> 
           <ProductActions
             product={{ id: product.id, name, priceMinor: product.priceMinor }}
             behavior={settings.unpricedBehavior}
-            whatsappNumber={settings.whatsappNumber}
             maxQuantity={settings.maxLineQuantity}
           />
 

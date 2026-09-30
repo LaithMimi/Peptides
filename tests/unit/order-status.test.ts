@@ -148,7 +148,6 @@ describe("admin order, settings and page actions", () => {
     fd.append("supportedLocales", "en");
     fd.append("supportedLocales", "ar");
     fd.set("maxLineQuantity", "5");
-    fd.set("whatsappNumber", "+972 50 123 4567");
     expect((await saveSettings({ ok: false }, fd)).ok).toBe(true);
 
     const settings = await getSettings();
@@ -157,7 +156,6 @@ describe("admin order, settings and page actions", () => {
       unpricedBehavior: "hide_price",
       defaultLocale: "ar",
       maxLineQuantity: 5,
-      whatsappNumber: "972501234567",
     });
     expect(computeTotals([{ status: "ok", lineTotalMinor: 10000 }], settings).totalMinor).toBe(12500);
     const [old] = await db.select().from(orders).where(eq(orders.id, orderId));

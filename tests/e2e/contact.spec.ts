@@ -1,19 +1,20 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("contact page", () => {
-  test("shows Jerusalem and a tap-to-call phone link (English)", async ({ page }) => {
+  test("shows Jerusalem and no phone number (English)", async ({ page }) => {
     await page.goto("/en");
     await page.getByRole("link", { name: "Contact us" }).first().click();
     await expect(page.getByRole("heading", { name: "Contact us" })).toBeVisible();
     await expect(page.getByText("Jerusalem")).toBeVisible();
-    await expect(page.locator('a[href="tel:+972587114119"]')).toBeVisible();
+    await expect(page.locator('a[href^="tel:"]')).toHaveCount(0);
+    await expect(page.locator('a[href^="https://wa.me/"]')).toHaveCount(0);
   });
 
-  test("renders in Arabic with the phone number isolated left-to-right", async ({ page }) => {
+  test("renders in Arabic with no phone number", async ({ page }) => {
     await page.goto("/ar/contact");
     await expect(page.getByRole("heading", { name: "اتصل بنا" })).toBeVisible();
     await expect(page.getByText("القدس")).toBeVisible();
-    await expect(page.locator('a[href="tel:+972587114119"] bdi[dir="ltr"]')).toBeVisible();
+    await expect(page.locator('a[href^="tel:"]')).toHaveCount(0);
   });
 
   test("footer no longer shows placeholder business details", async ({ page }) => {

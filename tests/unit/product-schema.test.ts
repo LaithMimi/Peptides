@@ -133,23 +133,21 @@ describe("settingsSchema", () => {
     maxLineQuantity: "10",
   };
 
-  it("defaults the delivery fee to free and normalizes the WhatsApp number", () => {
-    const result = settingsSchema.safeParse({ ...settings, whatsappNumber: "+972 50-123 4567" });
+  it("defaults the delivery fee to free", () => {
+    const result = settingsSchema.safeParse({ ...settings });
     expect(result.success).toBe(true);
     if (result.success) {
       expect(result.data.deliveryFee).toBe(0);
-      expect(result.data.whatsappNumber).toBe("972501234567");
     }
   });
 
-  it("validates fee, whatsapp, email, locales and quantity", () => {
+  it("validates fee, email, locales and quantity", () => {
     const err = (o: Record<string, unknown>) => {
       const r = settingsSchema.safeParse({ ...settings, ...o });
       return r.success ? null : fieldErrors(r.error);
     };
     expect(err({ deliveryFee: "-1" })).toMatchObject({ deliveryFee: "invalidPrice" });
     expect(err({ deliveryFee: "25" })).toBeNull();
-    expect(err({ whatsappNumber: "abc" })).toMatchObject({ whatsappNumber: "invalidWhatsapp" });
     expect(err({ email: "nope" })).toMatchObject({ email: "invalidEmail" });
     expect(err({ supportedLocales: [] })).toMatchObject({ supportedLocales: "required" });
     expect(err({ supportedLocales: ["ar"], defaultLocale: "en" })).toMatchObject({
