@@ -28,7 +28,7 @@ export async function HowToUse() {
           >
             <span
               aria-hidden="true"
-              className="flex size-9 shrink-0 items-center justify-center self-start rounded-full bg-navy font-mono text-sm font-semibold text-white"
+              className="flex size-9 shrink-0 items-center justify-center self-start rounded-full btn-glass font-mono text-sm font-semibold"
             >
               {n}
             </span>
