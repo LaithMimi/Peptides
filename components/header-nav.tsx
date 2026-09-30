@@ -7,7 +7,7 @@ import { useCart } from "@/lib/cart-store";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 
 const linkClass =
-  "inline-flex min-h-11 items-center rounded px-1.5 font-serif sm:px-2 text-sm font-semibold uppercase tracking-wide text-navy transition-colors hover:text-accent";
+  "nav-link inline-flex min-h-11 items-center rounded px-1.5 font-serif sm:px-2 text-sm font-semibold uppercase tracking-wide text-navy transition-colors hover:text-accent";
 
 /**
  * Primary navigation. Wide screens show the links inline; on phones they sit
@@ -46,35 +46,37 @@ export function HeaderNav({ locales }: { locales?: string[] }) {
     <nav aria-label={t("mainNav")} className="flex min-w-0 flex-1 items-center justify-end gap-x-1 sm:flex-wrap sm:gap-x-4 sm:gap-y-1">
       <div className="hidden flex-wrap items-center gap-x-2 md:flex lg:gap-x-4">{links}</div>
 
-      <Link
-        href="/cart"
-        className={`${linkClass} relative`}
-        aria-label={`${t("cart")} — ${t("cartCount", { count })}`}
-      >
-        {t("cart")}
-        {count > 0 && (
-          <span
-            aria-hidden="true"
-            className="ms-1 inline-flex min-w-5 items-center justify-center rounded-full bg-accent px-1.5 py-0.5 font-sans text-xs font-semibold text-accent-foreground"
-          >
-            {count}
-          </span>
-        )}
-      </Link>
+      <div className="nav-actions flex items-center gap-x-1 sm:gap-x-4">
+        <Link
+          href="/cart"
+          className={`${linkClass} nav-cta relative`}
+          aria-label={`${t("cart")} — ${t("cartCount", { count })}`}
+        >
+          {t("cart")}
+          {count > 0 && (
+            <span
+              aria-hidden="true"
+              className="ms-1 inline-flex min-w-5 items-center justify-center rounded-full bg-accent px-1.5 py-0.5 font-sans text-xs font-semibold text-accent-foreground"
+            >
+              {count}
+            </span>
+          )}
+        </Link>
 
-      <Suspense fallback={null}>
-        <LocaleSwitcher locales={locales} />
-      </Suspense>
+        <Suspense fallback={null}>
+          <LocaleSwitcher locales={locales} />
+        </Suspense>
 
-      <button
-        type="button"
-        aria-expanded={open}
-        aria-controls="mobile-menu"
-        onClick={() => setOpen((v) => !v)}
-        className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 border-accent px-3 font-mono text-xs font-semibold uppercase tracking-wide text-accent transition-colors hover:bg-accent hover:text-accent-foreground md:hidden"
-      >
-        {open ? t("closeMenu") : t("menu")}
-      </button>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls="mobile-menu"
+          onClick={() => setOpen((v) => !v)}
+          className="nav-menu-btn inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 border-accent px-3 font-mono text-xs font-semibold uppercase tracking-wide text-accent transition-colors hover:bg-accent hover:text-accent-foreground md:hidden"
+        >
+          {open ? t("closeMenu") : t("menu")}
+        </button>
+      </div>
 
       {open && (
         <div

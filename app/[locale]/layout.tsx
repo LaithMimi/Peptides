@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Noto_Kufi_Arabic } from "next/font/google";
+import { Inter, Noto_Kufi_Arabic } from "next/font/google";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { routing } from "@/i18n/routing";
@@ -14,10 +14,17 @@ import { SiteFooter } from "@/components/site-footer";
 import { CookieConsent } from "@/components/cookie-consent";
 import { GoalPickerModal } from "@/components/store/goal-picker-modal";
 import "../globals.css";
+import "../home.css";
 
 const notoKufiArabic = Noto_Kufi_Arabic({
   variable: "--font-noto-kufi",
   subsets: ["arabic"],
+});
+
+// Homepage-only display/body face (the dark editorial hero); see .home-scope.
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
 });
 
 export function generateStaticParams() {
@@ -60,7 +67,7 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       dir={dir}
-      className={`${GeistSans.variable} ${GeistMono.variable} ${notoKufiArabic.variable} h-full antialiased`}
+      className={`${GeistSans.variable} ${GeistMono.variable} ${notoKufiArabic.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
         {/*

@@ -241,7 +241,12 @@
     "brandsTitle": "Brands",
     "viewAll": "View all products",
     "productCount": "{count, plural, one {# product} other {# products}}",
-    "pickerCta": "Choose a research area"
+    "pickerCta": "Choose a research area",
+    "heroTag": "Pep Club — Premium Peptides",
+    "areasBody": "Every product is listed for laboratory research only. Pick a research area to see what each brand offers.",
+    "areasCount": "{count, plural, one {# research area} other {# research areas}}",
+    "scrollDown": "Scroll to content",
+    "brandsBody": "Browse the catalog brand by brand, each with its own research-use products."
   },
   "howToUse": {
     "title": "How to prepare a vial",

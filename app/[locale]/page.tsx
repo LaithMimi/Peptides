@@ -7,9 +7,57 @@ import { ProductCard } from "@/components/product-card";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 import { HowToUse } from "@/components/how-to-use";
 import { FeedbackSection } from "@/components/feedback-section";
-import { CategoryChips } from "@/components/store/category-chips";
-import { VialGlyph } from "@/components/vial-glyph";
-import Image from "next/image";
+import { HeroVideo } from "@/components/home/hero-video";
+import { HomeScrollState } from "@/components/home/scroll-state";
+
+const gutter = "mx-auto w-full max-w-[1400px] px-6 md:px-12";
+
+/** Left: orange rule + title. Right: whatever the section delivers. */
+function TwoColumn({
+  id,
+  title,
+  children,
+}: {
+  id: string;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section
+      aria-labelledby={id}
+      className={`${gutter} grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-24`}
+    >
+      <div className="flex flex-col gap-6">
+        <span className="home-rule" aria-hidden="true" />
+        <h2
+          id={id}
+          className="text-balance text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.1] tracking-[-0.03em] text-navy"
+        >
+          {title}
+        </h2>
+      </div>
+      <div className="flex flex-col gap-8">{children}</div>
+    </section>
+  );
+}
+
+/** Numbered horizontal tags: "01 / Name". */
+function NumberedTags({ items }: { items: { key: string; href: string; label: string }[] }) {
+  return (
+    <ul className="flex flex-wrap gap-x-8 gap-y-1">
+      {items.map((item, i) => (
+        <li key={item.key}>
+          <Link href={item.href} className="home-tag">
+            <span className="tabular-nums" dir="ltr">
+              {String(i + 1).padStart(2, "0")} /
+            </span>
+            <span>{item.label}</span>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export default async function HomePage({
   params,
@@ -20,7 +68,8 @@ export default async function HomePage({
   setRequestLocale(locale);
   const t = await getTranslations("home");
   const tTrust = await getTranslations("trust");
-  const [categories, featuredAll, brands, settings] = await Promise.all([
+  const tDisc = await getTranslations("disclaimer");
+  const [categories, featured, brands, settings] = await Promise.all([
     listCategories(),
     listFeatured(8),
     listActiveBrands(),
@@ -36,146 +85,153 @@ export default async function HomePage({
     tTrust("bilingual"),
   ];
 
-  // Hero shows the first 4 as a photo collage; the Featured section below shows
-  // the full fetched set. These can overlap on a small catalog — that's fine,
-  // an empty "Featured products" section (from slicing one small result into
-  // two disjoint ranges) is worse than a little repetition.
-  const heroProducts = featuredAll.slice(0, 4);
-  const featured = featuredAll;
-
   return (
-    <div className="flex flex-col gap-10">
-      <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12">
-        <div>
-          <h1 className="font-serif text-4xl font-semibold uppercase tracking-wide text-navy sm:text-5xl">
-            {t("heroTitle")}
-          </h1>
-          <p className="mt-4 max-w-lg text-lg text-muted">{t("heroBody")}</p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link
-              href="/shop"
-              className="btn-glass inline-flex min-h-11 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide"
-            >
-              {t("heroCta")}
-            </Link>
-            <Link
-              href="/start"
-              className="inline-flex min-h-11 items-center justify-center rounded-full border-2 border-accent px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide text-accent hover:bg-accent hover:text-accent-foreground"
-            >
-              {t("pickerCta")}
-            </Link>
-          </div>
-          <ul className="mt-8 flex flex-wrap gap-2">
-            {trustMarkers.map((marker) => (
-              <li
-                key={marker}
-                className="rounded-full border border-border-strong bg-surface-raised px-3 py-1 font-mono text-xs uppercase tracking-widest text-navy"
+    <div className="flex flex-col">
+      {/*
+THESIS: A cinematic full-bleed hero and editorial numbered sections replace
+the catalog-first shelf on the homepage only; the storefront system holds
+everywhere else.
+OWN-WORLD: #030303 ground, white type, one #ff5e00 accent (rules, hovers),
+Inter at extremes (72px/-0.05em vs 10px/0.4em), 12px-blur glass pills.
+STORY: Visitor sees research peptides, brands and cash on delivery at once,
+then shops or picks a research area.
+FIRST VIEWPORT: Fixed glass nav; center-left headline + two glass CTAs over
+looping video; corner metadata bottom-left/right with floating scroll cue.
+FORM: Brief-pinned (client), no roll.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the
+finish review, the verdict, and DESIGN.md.
+      */}
+      <HomeScrollState />
+
+      <section className="home-hero-backdrop relative flex min-h-[640px] h-svh flex-col overflow-hidden">
+        <HeroVideo />
+        <div className="home-hero-scrim absolute inset-0" aria-hidden="true" />
+        <div
+          className="home-hero-fade absolute inset-x-0 bottom-0 h-40"
+          aria-hidden="true"
+        />
+
+        <div className={`${gutter} relative z-10 flex flex-1 flex-col justify-center pt-28 pb-32`}>
+          <div className="max-w-4xl">
+            <h1 className="text-balance text-[clamp(2.5rem,7vw,4.5rem)] font-bold leading-[1.1] tracking-[-0.05em] text-white lg:leading-[1.333]">
+              {t("heroTitle")}
+            </h1>
+            <p className="mt-6 max-w-xl text-lg leading-[1.6] text-white/60">{t("heroBody")}</p>
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <Link
+                href="/shop"
+                className="btn-glass inline-flex min-h-11 items-center justify-center rounded-full px-6 py-3 text-sm"
               >
-                {marker}
-              </li>
-            ))}
-          </ul>
+                {t("heroCta")}
+              </Link>
+              <Link
+                href="/start"
+                className="btn-glass inline-flex min-h-11 items-center justify-center rounded-full px-6 py-3 text-sm"
+              >
+                {t("pickerCta")}
+              </Link>
+            </div>
+            <p className="home-label mt-12">{t("heroTag")}</p>
+          </div>
         </div>
-        {heroProducts.length > 0 && (
-          <div className="grid grid-cols-2 gap-x-4 gap-y-8 pb-6">
-            {heroProducts.map((product, i) => {
-              const name = pick(product, "name", locale) ?? product.nameEn;
-              const alt = (product.image && pick(product.image, "alt", locale)) || name;
-              return (
-                <div
-                  key={product.id}
-                  className={`aspect-square overflow-hidden rounded-xl border border-border-strong bg-surface-raised shadow-sm ${i % 3 === 1 ? "translate-y-6" : ""}`}
+
+        <div className="absolute inset-x-0 bottom-0 z-10 pb-8">
+          <div className={`${gutter} flex items-end justify-between gap-6`}>
+            <p className="home-meta max-w-[16rem]">{tDisc("short")}</p>
+            <div className="flex items-center gap-4">
+              <p className="home-meta">
+                {new Date().getFullYear()} · {t("areasCount", { count: categories.length })}
+              </p>
+              <a href="#content" className="home-scroll-cue" aria-label={t("scrollDown")}>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="home-float size-4"
+                  aria-hidden="true"
                 >
-                  {product.image ? (
-                    <Image
-                      src={product.image.url}
-                      alt={alt}
-                      width={320}
-                      height={320}
-                      sizes="(min-width: 1024px) 16rem, 42vw"
-                      priority={i === 0}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <div
-                      role="img"
-                      aria-label={name}
-                      className="flex h-full w-full items-center justify-center text-muted"
-                    >
-                      <VialGlyph className="size-12" />
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                  <path d="M12 5v14" />
+                  <path d="m19 12-7 7-7-7" />
+                </svg>
+              </a>
+            </div>
           </div>
+        </div>
+      </section>
+
+      <div id="content" className="flex scroll-mt-0 flex-col gap-32 py-32">
+        {categories.length > 0 && (
+          <TwoColumn id="home-areas" title={t("researchAreasTitle")}>
+            <NumberedTags
+              items={categories.map((c) => ({
+                key: c.slug,
+                href: `/categories/${c.slug}`,
+                label: pick(c, "name", locale) ?? c.nameEn,
+              }))}
+            />
+            <p className="max-w-xl text-lg leading-[1.6] text-white/60">{t("areasBody")}</p>
+            <ul className="flex flex-wrap gap-x-6 gap-y-1">
+              {trustMarkers.map((marker) => (
+                <li key={marker} className="home-label">
+                  {marker}
+                </li>
+              ))}
+            </ul>
+          </TwoColumn>
         )}
-      </div>
 
-      <DisclaimerBanner />
-
-      {categories.length > 0 && (
-        <section aria-labelledby="home-areas" className="flex flex-col gap-3">
-          <h2
-            id="home-areas"
-            className="font-serif text-xl font-semibold uppercase tracking-wide text-navy"
-          >
-            {t("researchAreasTitle")}
-          </h2>
-          <CategoryChips categories={categories} />
-        </section>
-      )}
-
-      {featured.length > 0 && (
-        <section aria-labelledby="home-featured" className="flex flex-col gap-4">
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h2
-              id="home-featured"
-              className="font-serif text-xl font-semibold uppercase tracking-wide text-navy"
-            >
-              {t("featuredTitle")}
-            </h2>
-            <Link
-              href="/shop"
-              className="inline-flex min-h-11 items-center font-serif text-sm font-semibold uppercase tracking-wide text-navy hover:text-accent hover:underline"
-            >
-              {t("viewAll")}
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 sm:gap-x-4 lg:grid-cols-4">
-            {featured.map((product) => (
-              <ProductCard key={product.id} product={product} behavior={settings.unpricedBehavior} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      <HowToUse />
-
-      {brands.length > 0 && (
-        <section aria-labelledby="home-brands" className="flex flex-col gap-3">
-          <h2
-            id="home-brands"
-            className="font-serif text-xl font-semibold uppercase tracking-wide text-navy"
-          >
-            {t("brandsTitle")}
-          </h2>
-          <ul className="flex flex-wrap gap-2">
-            {brands.map((brand) => (
-              <li key={brand.slug}>
-                <Link
-                  href={`/brands/${brand.slug}`}
-                  className="inline-flex min-h-11 items-center rounded-full border-2 border-border-strong bg-surface-raised px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-wide text-navy hover:border-accent"
+        {featured.length > 0 && (
+          <section aria-labelledby="home-featured" className={`${gutter} flex flex-col gap-10`}>
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div className="flex flex-col gap-6">
+                <span className="home-rule" aria-hidden="true" />
+                <h2
+                  id="home-featured"
+                  className="text-balance text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.1] tracking-[-0.03em] text-navy"
                 >
-                  {pick(brand, "name", locale) ?? brand.nameEn}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+                  {t("featuredTitle")}
+                </h2>
+              </div>
+              <Link href="/shop" className="btn-glass inline-flex min-h-11 items-center rounded-full px-6 py-3 text-sm">
+                {t("viewAll")}
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 sm:gap-x-4 lg:grid-cols-4">
+              {featured.map((product) => (
+                <ProductCard key={product.id} product={product} behavior={settings.unpricedBehavior} />
+              ))}
+            </div>
+          </section>
+        )}
 
-      <FeedbackSection />
+        <div className={gutter}>
+          <DisclaimerBanner />
+        </div>
+
+        <div className={gutter}>
+          <HowToUse />
+        </div>
+
+        {brands.length > 0 && (
+          <TwoColumn id="home-brands" title={t("brandsTitle")}>
+            <NumberedTags
+              items={brands.map((b) => ({
+                key: b.slug,
+                href: `/brands/${b.slug}`,
+                label: pick(b, "name", locale) ?? b.nameEn,
+              }))}
+            />
+            <p className="max-w-xl text-lg leading-[1.6] text-white/60">{t("brandsBody")}</p>
+          </TwoColumn>
+        )}
+
+        <div className={gutter}>
+          <FeedbackSection />
+        </div>
+      </div>
     </div>
   );
 }
