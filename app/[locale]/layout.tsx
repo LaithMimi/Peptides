@@ -8,7 +8,7 @@ import { GeistMono } from "geist/font/mono";
 import { routing } from "@/i18n/routing";
 import { CartProvider } from "@/lib/cart-store";
 import { siteUrl } from "@/lib/seo";
-import { listPurposeTiles } from "@/lib/db/queries/catalog";
+import { getChromeCategories } from "@/lib/db/queries/chrome";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CookieConsent } from "@/components/cookie-consent";
@@ -53,7 +53,7 @@ export default async function LocaleLayout({
   const dir = locale === "ar" ? "rtl" : "ltr";
   const [tLegal, purposeTiles] = await Promise.all([
     getTranslations({ locale, namespace: "legal" }),
-    listPurposeTiles(),
+    getChromeCategories(),
   ]);
 
   return (

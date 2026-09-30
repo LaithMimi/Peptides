@@ -139,7 +139,7 @@ html[dir="rtl"] body {
 /*
   Every button on the storefront: the interactive glass from the requested
   spec (see the Fixed-capsule notes below) — translucent white, 12px blur,
-  Light Blue (66,96,230) hover glow with scale(1.05). Ink is the theme's navy
+  raised hover (deeper shadow, scale(1.05)). Ink is the theme's navy
   token, set here in unlayered CSS so it deliberately wins over any leftover
   text-* utility. Size and padding stay with the utilities on each element.
   .glass-badge is the same material without hover, for non-interactive
@@ -165,7 +165,6 @@ html[dir="rtl"] body {
 /* A real button: hover lifts it on a deeper drop shadow (the border stays
    put — no colored border on hover); pressing it pushes it back down. */
 .btn-glass:hover:not(:disabled):not([aria-disabled="true"]) {
-  background: rgba(66, 96, 230, 0.16);
   box-shadow:
     0 10px 24px -8px rgba(13, 13, 13, 0.35),
     0 0 0 1px color-mix(in srgb, var(--navy) 12%, transparent),
@@ -195,8 +194,6 @@ html[dir="rtl"] body {
   one 0.3s cubic-bezier(0.4,0,0.2,1) transition. On this white storefront a
   white-alpha pane is invisible, so ink stays the theme's navy token (never
   white), and the resting capsule gets a soft shadow rather than a border.
-  The Light Blue (66,96,230) wash is the hover glow of the glass button
-  and scroll indicator.
   Both classes live in @layer components so Tailwind utilities (padding,
   min-height) can still size them per use.
 */
@@ -238,7 +235,6 @@ html[dir="rtl"] body {
 }
 
 .scroll-indicator:hover {
-  background: rgba(66, 96, 230, 0.16);
   box-shadow: 0 8px 20px -6px rgba(13, 13, 13, 0.3);
 }
 

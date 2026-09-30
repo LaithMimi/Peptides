@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { getSettings } from "@/lib/db/queries/settings";
+import { getChromeSettings } from "@/lib/db/queries/chrome";
 import { HeaderNav } from "@/components/header-nav";
 import { HeaderShell } from "@/components/header-shell";
 
 /** Fixed capsule: logo left, links centered, cart CTA right. Name and logo come from store settings. */
 export async function SiteHeader() {
-  const settings = await getSettings();
+  const settings = await getChromeSettings();
   const logo = settings.logoUrl ?? "/brand/pep-club-logo.png";
 
   return (
