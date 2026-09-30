@@ -11,25 +11,27 @@
   Sephora/Glossier-style beauty retail (clean grid, real product
   photography, understated chrome).
 
-  White and light neutral gray carry the page. Deep navy ink and the
-  logo's cornflower blue are the only two brand colors, and blue is spent
-  rarely and deliberately (one CTA, links, focus rings) — never a wash.
-  See PRODUCT.md / DESIGN.md.
+  Palette (client-supplied, four colors): Soft White #FAFAFA, Jet Black
+  #0D0D0D, Bold Blue #1B22A7, Light Blue #4260E6. Soft White carries the
+  page; Jet Black is body ink; Bold Blue is heading/brand ink (the "navy"
+  token keeps its name for compatibility); Light Blue is the accent —
+  links, focus rings, action surfaces. Neutral grays in between are
+  derived from Jet Black on Soft White. See PRODUCT.md / DESIGN.md.
 */
 
 :root {
-  --background: #ffffff;
+  --background: #fafafa;
   --surface: #ffffff;
-  --surface-raised: #f7f7f8;
-  --foreground: #0a1933;
-  --muted: #5f6673;
-  --border: #e5e7eb;
-  --border-strong: #d1d5db;
-  --input-border: #9ca3af;
+  --surface-raised: #f2f2f4;
+  --foreground: #0d0d0d;
+  --muted: #5c5f6b;
+  --border: #e6e6ea;
+  --border-strong: #d2d2d8;
+  --input-border: #9a9aa4;
 
-  --navy: #0a1933;
-  --navy-foreground: #ffffff;
-  --accent: #0000ff;
+  --navy: #1b22a7;
+  --navy-foreground: #fafafa;
+  --accent: #4260e6;
   --accent-foreground: #ffffff;
 
   --danger: #a23b2e;
@@ -64,19 +66,22 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0f1a;
-    --surface: #111726;
-    --surface-raised: #171f33;
-    --foreground: #f3f4f6;
-    --muted: #9ca3af;
-    --border: #232b3e;
-    --border-strong: #313b52;
-    --input-border: #4b5568;
+    --background: #0d0d0d;
+    --surface: #151517;
+    --surface-raised: #1c1c21;
+    --foreground: #fafafa;
+    --muted: #a1a1ab;
+    --border: #26262c;
+    --border-strong: #34343c;
+    --input-border: #56565f;
 
-    --navy: #f3f4f6;
-    --navy-foreground: #0a0f1a;
-    --accent: #6669ff;
-    --accent-foreground: #0a0f1a;
+    /* Bold Blue is too dark to read on Jet Black, so headings go Soft
+       White and the accent is Light Blue lifted to 5.9:1 (the exact
+       #4260e6 is only 3.7:1 on #0d0d0d). */
+    --navy: #fafafa;
+    --navy-foreground: #0d0d0d;
+    --accent: #6f86ee;
+    --accent-foreground: #0d0d0d;
 
     --danger: #e69485;
     --danger-bg: #2c1712;
@@ -85,54 +90,14 @@
 
 /*
   The admin dashboard (app admin routes) is an internal, English-only
-  Operate surface outside this storefront redesign's scope — it keeps its
-  own pre-existing palette and fonts rather than inheriting the storefront
-  tokens above. admin/layout.tsx tags its own html element to select this
-  block; it defines its own font variables via next/font, so this block
-  only repoints the shared font and color tokens back at them.
+  Operate surface. It shares the storefront palette above but keeps its
+  own fonts: admin/layout.tsx tags its own html element to select this
+  block and defines these font variables via next/font.
 */
 html[data-surface="admin"] {
-  --background: #ffffff;
-  --surface: #ffffff;
-  --surface-raised: #f5f5f5;
-  --foreground: #0a1933;
-  --muted: #5c6b85;
-  --border: #f5f5f5;
-  --border-strong: #e2e2e2;
-  --input-border: #7f8ca6;
-
-  --navy: #0a1933;
-  --navy-foreground: #ffffff;
-  --accent: #3671b8;
-  --accent-foreground: #ffffff;
-
-  --danger: #a23b2e;
-  --danger-bg: #fbeae7;
-
   --font-serif: var(--font-fraunces);
   --font-sans: var(--font-dm-sans);
   --font-mono: var(--font-plex-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  html[data-surface="admin"] {
-    --background: #061630;
-    --surface: #0d2140;
-    --surface-raised: #122a4d;
-    --foreground: #f5f5f5;
-    --muted: #a9b4c6;
-    --border: #1b3050;
-    --border-strong: #2a4570;
-    --input-border: #6b83a8;
-
-    --navy: #f5f5f5;
-    --navy-foreground: #061630;
-    --accent: #6fa3de;
-    --accent-foreground: #071427;
-
-    --danger: #e69485;
-    --danger-bg: #2c1712;
-  }
 }
 
 body {
@@ -187,7 +152,7 @@ html[dir="rtl"] body {
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow:
-    0 8px 32px -12px rgba(10, 25, 51, 0.25),
+    0 8px 32px -12px rgba(13, 13, 13, 0.25),
     0 0 0 1px color-mix(in srgb, var(--navy) 10%, transparent);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -195,7 +160,7 @@ html[dir="rtl"] body {
 /*
   Every button on the storefront: the interactive glass from the requested
   spec (see the Fixed-capsule notes below) — translucent white, 12px blur,
-  orange (255,94,0) hover glow with scale(1.05). Ink is the theme's navy
+  Light Blue (66,96,230) hover glow with scale(1.05). Ink is the theme's navy
   token, set here in unlayered CSS so it deliberately wins over any leftover
   text-* utility. Size and padding stay with the utilities on each element.
   .glass-badge is the same material without hover, for non-interactive
@@ -211,8 +176,8 @@ html[dir="rtl"] body {
   border-style: solid;
   border-color: rgba(255, 255, 255, 0.15);
   box-shadow:
-    0 1px 2px rgba(10, 25, 51, 0.14),
-    0 2px 6px -2px rgba(10, 25, 51, 0.12),
+    0 1px 2px rgba(13, 13, 13, 0.14),
+    0 2px 6px -2px rgba(13, 13, 13, 0.12),
     0 0 0 1px color-mix(in srgb, var(--navy) 12%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.7);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -221,9 +186,9 @@ html[dir="rtl"] body {
 /* A real button: hover lifts it on a deeper drop shadow (the border stays
    put — no colored border on hover); pressing it pushes it back down. */
 .btn-glass:hover:not(:disabled):not([aria-disabled="true"]) {
-  background: rgba(255, 94, 0, 0.2);
+  background: rgba(66, 96, 230, 0.16);
   box-shadow:
-    0 10px 24px -8px rgba(10, 25, 51, 0.35),
+    0 10px 24px -8px rgba(13, 13, 13, 0.35),
     0 0 0 1px color-mix(in srgb, var(--navy) 12%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.7);
   transform: translateY(-2px) scale(1.05);
@@ -232,9 +197,9 @@ html[dir="rtl"] body {
 .btn-glass:active:not(:disabled):not([aria-disabled="true"]) {
   transform: translateY(1px) scale(0.98);
   box-shadow:
-    0 1px 1px rgba(10, 25, 51, 0.12),
+    0 1px 1px rgba(13, 13, 13, 0.12),
     0 0 0 1px color-mix(in srgb, var(--navy) 12%, transparent),
-    inset 0 2px 4px rgba(10, 25, 51, 0.2);
+    inset 0 2px 4px rgba(13, 13, 13, 0.2);
   transition-duration: 0.08s;
 }
 
@@ -251,7 +216,8 @@ html[dir="rtl"] body {
   one 0.3s cubic-bezier(0.4,0,0.2,1) transition. On this white storefront a
   white-alpha pane is invisible, so ink stays the theme's navy token (never
   white), and the resting capsule gets a soft shadow rather than a border.
-  The orange (255,94,0) is the hover glow of the glass button only.
+  The Light Blue (66,96,230) wash is the hover glow of the glass button
+  and scroll indicator.
   Both classes live in @layer components so Tailwind utilities (padding,
   min-height) can still size them per use.
 */
@@ -273,7 +239,7 @@ html[dir="rtl"] body {
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px -12px rgba(10, 25, 51, 0.25);
+    box-shadow: 0 8px 32px -12px rgba(13, 13, 13, 0.25);
   }
 
 }
@@ -291,8 +257,8 @@ html[dir="rtl"] body {
 }
 
 .scroll-indicator:hover {
-  background: rgba(255, 94, 0, 0.2);
-  box-shadow: 0 8px 20px -6px rgba(10, 25, 51, 0.3);
+  background: rgba(66, 96, 230, 0.16);
+  box-shadow: 0 8px 20px -6px rgba(13, 13, 13, 0.3);
 }
 
 @keyframes float {
@@ -322,14 +288,14 @@ html[dir="rtl"] body {
   with the same faint blue tint and rim instead of real blur.
 */
 .menu-panel {
-  background: linear-gradient(135deg, rgba(0, 0, 255, 0.08), rgba(0, 0, 255, 0.03)), var(--surface);
-  border: 1px solid rgba(0, 0, 255, 0.22);
-  box-shadow: 0 8px 32px -10px rgba(10, 25, 51, 0.28);
+  background: linear-gradient(135deg, rgba(66, 96, 230, 0.08), rgba(66, 96, 230, 0.03)), var(--surface);
+  border: 1px solid rgba(66, 96, 230, 0.22);
+  box-shadow: 0 8px 32px -10px rgba(13, 13, 13, 0.28);
 }
 
 @media (prefers-color-scheme: dark) {
   .menu-panel {
-    background: linear-gradient(135deg, rgba(102, 105, 255, 0.16), rgba(255, 255, 255, 0.03)), var(--surface);
+    background: linear-gradient(135deg, rgba(111, 134, 238, 0.16), rgba(255, 255, 255, 0.03)), var(--surface);
     border-color: rgba(255, 255, 255, 0.2);
   }
 }
@@ -371,7 +337,7 @@ html[dir="rtl"] body {
 }
 
 .goal-picker-dialog::backdrop {
-  background: rgba(10, 25, 51, 0.55);
+  background: rgba(13, 13, 13, 0.55);
 }
 
 @media (prefers-reduced-motion: reduce) {
