@@ -93,7 +93,7 @@ export function GoalPickerModal({ categories }: { categories: CategoryWithCount[
               <button
                 type="button"
                 onClick={() => choose(category.slug)}
-                className="min-h-11 w-full rounded-xl border-2 border-border-strong bg-surface-raised px-4 py-3 text-start font-serif text-sm font-semibold uppercase tracking-wide text-navy transition-colors hover:border-accent"
+                className="min-h-11 w-full rounded-xl border-2 border-border-strong bg-surface-raised px-4 py-3 text-start font-serif text-sm font-semibold uppercase tracking-wide text-navy transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:shadow-sm"
               >
                 {name}
               </button>

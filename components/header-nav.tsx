@@ -59,7 +59,7 @@ export function HeaderNav({ locales }: { locales?: string[] }) {
 
         <Link
           href="/cart"
-          className="glass-button inline-flex min-h-11 items-center px-4 text-sm sm:px-6"
+          className="btn-glass inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold sm:px-6"
           aria-label={`${t("cart")} — ${t("cartCount", { count })}`}
         >
           {t("cart")}
