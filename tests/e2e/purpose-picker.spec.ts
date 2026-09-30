@@ -50,7 +50,8 @@ test.describe("research purpose picker (US7)", () => {
 
   test("the selection survives a language switch and works in Arabic (RTL)", async ({ page }) => {
     await page.goto("/en/start?purpose=cognitive");
-    await page.getByRole("button", { name: "AR" }).click();
+    await page.getByRole("button", { name: /^Language:/ }).click();
+    await page.getByRole("button", { name: "العربية", exact: true }).click();
     await expect(page).toHaveURL(/\/ar\/start\?purpose=cognitive$/);
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
     await expect(page.getByRole("heading", { level: 1, name: "اعثر على المنتجات حسب الغرض البحثي" })).toBeVisible();
