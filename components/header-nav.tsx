@@ -78,7 +78,7 @@ export function HeaderNav({ locales }: { locales?: string[] }) {
           aria-expanded={open}
           aria-controls="mobile-menu"
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 border-accent px-3 font-mono text-xs font-semibold uppercase tracking-wide text-accent transition-colors duration-300 hover:bg-accent hover:text-accent-foreground md:hidden"
+          className="inline-flex min-h-11 min-w-11 items-center justify-center btn-glass rounded-full px-3 font-mono text-xs font-semibold uppercase tracking-wide md:hidden"
         >
           {open ? t("closeMenu") : t("menu")}
         </button>

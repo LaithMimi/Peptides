@@ -27,7 +27,7 @@ const getServerSnapshot = () => "unknown";
 // Both buttons share one style on purpose: declining must be exactly as easy
 // and as visible as accepting.
 const choiceClass =
-  "inline-flex min-h-11 items-center justify-center rounded-full border-2 border-accent bg-surface px-4 py-2 font-serif text-xs font-semibold uppercase tracking-wide text-accent transition-colors hover:bg-accent hover:text-accent-foreground";
+  "inline-flex min-h-11 items-center justify-center btn-glass rounded-full px-4 py-2 font-serif text-xs font-semibold uppercase tracking-wide";
 
 export function CookieConsent() {
   const t = useTranslations("legal.banner");

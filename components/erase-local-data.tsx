@@ -31,7 +31,7 @@ export function EraseLocalData() {
         type="button"
         onClick={erase}
         disabled={busy}
-        className="mt-3 inline-flex items-center justify-center rounded-full border-2 border-accent bg-surface px-5 py-2 font-serif text-xs font-semibold uppercase tracking-wide text-accent hover:bg-accent hover:text-accent-foreground disabled:opacity-60"
+        className="mt-3 inline-flex items-center justify-center btn-glass rounded-full px-5 py-2 font-serif text-xs font-semibold uppercase tracking-wide disabled:opacity-60"
       >
         {t("button")}
       </button>

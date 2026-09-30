@@ -21,7 +21,7 @@ export function QuantityStepper({
 }) {
   const t = useTranslations("cart");
   const buttonClass =
-    "inline-flex size-11 items-center justify-center rounded-full border-2 border-accent font-mono text-lg font-semibold text-accent transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-40";
+    "inline-flex size-11 items-center justify-center btn-glass rounded-full font-mono text-lg font-semibold disabled:cursor-not-allowed disabled:opacity-40";
 
   return (
     <div className="inline-flex items-center gap-2" role="group" aria-label={t("quantityFor", { name })}>

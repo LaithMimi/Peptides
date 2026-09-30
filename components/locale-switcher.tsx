@@ -65,7 +65,7 @@ export function LocaleSwitcher({ locales }: { locales?: string[] }) {
         aria-label={`${t("language")}: ${LOCALE_NAMES[locale] ?? locale}`}
         disabled={isPending}
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 border-accent text-accent transition-colors hover:bg-accent hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground"
+        className="inline-flex min-h-11 min-w-11 items-center justify-center btn-glass rounded-full"
       >
         <svg
           aria-hidden="true"

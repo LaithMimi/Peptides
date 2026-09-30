@@ -61,7 +61,7 @@ export default async function HomePage({
             </Link>
             <Link
               href="/start"
-              className="inline-flex min-h-11 items-center justify-center rounded-full border-2 border-accent px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide text-accent hover:bg-accent hover:text-accent-foreground"
+              className="inline-flex min-h-11 items-center justify-center btn-glass rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide"
             >
               {t("pickerCta")}
             </Link>
