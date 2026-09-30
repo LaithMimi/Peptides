@@ -170,7 +170,7 @@ export default async function HomePage({
               <li key={brand.slug}>
                 <Link
                   href={`/brands/${brand.slug}`}
-                  className="inline-flex min-h-11 items-center rounded-full border-2 border-border-strong bg-surface-raised px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-wide text-navy hover:border-accent"
+                  className="inline-flex min-h-11 items-center rounded-full border-2 border-border-strong bg-surface-raised px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-wide text-navy transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:shadow-sm"
                 >
                   {pick(brand, "name", locale) ?? brand.nameEn}
                 </Link>

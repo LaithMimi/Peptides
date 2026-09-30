@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getSettings } from "@/lib/db/queries/settings";
@@ -5,8 +6,9 @@ import { whatsappLink } from "@/lib/whatsapp";
 import { CookieSettingsButton } from "@/components/cookie-settings-button";
 
 const linkClass =
-  "underline underline-offset-2 hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current";
+  "inline-flex min-h-11 items-center rounded px-1 text-sm font-medium text-navy transition-colors duration-300 hover:text-accent";
 
+/** Same capsule language as the header: 1400px, clear glass, bold logo, 14px medium links. */
 export async function SiteFooter() {
   const t = await getTranslations("footer");
   const tl = await getTranslations("legal.footer");
@@ -14,14 +16,26 @@ export async function SiteFooter() {
   const tp = await getTranslations("price");
   const settings = await getSettings();
   const whatsapp = whatsappLink(settings.whatsappNumber);
+  const logo = settings.logoUrl ?? "/brand/pep-club-logo.png";
 
   return (
     <footer className="px-4 pb-4 pt-8 sm:px-6 lg:px-8">
-      <div className="nav-glass mx-auto flex w-full max-w-6xl flex-col gap-4 rounded-3xl px-5 py-6 text-sm text-navy sm:px-8">
-        <p className="max-w-3xl opacity-90">{t("disclaimer")}</p>
+      <div className="site-glass mx-auto flex w-full max-w-[1400px] flex-col gap-4 rounded-[2rem] px-5 py-6 text-sm text-navy sm:px-8">
+        <Link href="/" className="flex w-fit items-center gap-2" aria-label={settings.storeName}>
+          <Image
+            src={logo}
+            alt=""
+            width={96}
+            height={96}
+            className="brand-mark h-10 w-10 object-contain"
+          />
+          <span className="text-base font-bold text-navy">{settings.storeName}</span>
+        </Link>
+
+        <p className="max-w-3xl text-muted">{t("disclaimer")}</p>
 
         <nav aria-label={tl("navLabel")}>
-          <ul className="flex flex-wrap gap-x-5 gap-y-2 opacity-90">
+          <ul className="flex flex-wrap gap-x-5 gap-y-1">
             <li>
               <Link href="/legal/privacy" className={linkClass}>
                 {tl("privacy")}
@@ -75,7 +89,7 @@ export async function SiteFooter() {
           </ul>
         </nav>
 
-        <p className="opacity-90">
+        <p className="text-muted">
           &copy; {new Date().getFullYear()} {site("name")} — {t("rights")}
         </p>
       </div>

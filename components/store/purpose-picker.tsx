@@ -51,7 +51,7 @@ export function PurposePicker({
                 className={`flex h-full min-h-28 flex-col gap-2 rounded-xl border-2 p-4 transition-colors ${
                   isSelected
                     ? "border-accent bg-surface-raised"
-                    : "border-border-strong bg-surface hover:border-accent"
+                    : "border-border-strong bg-surface transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:shadow-sm"
                 }`}
               >
                 <span className="flex items-start justify-between gap-2">
