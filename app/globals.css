@@ -245,6 +245,98 @@ html[dir="rtl"] body {
 }
 
 /*
+  Fixed-capsule header + interactive glass (requested spec). Shared glass
+  values: rgba(255,255,255,.1) fill, 12px blur, rgba(255,255,255,.15) rim,
+  one 0.3s cubic-bezier(0.4,0,0.2,1) transition. On this white storefront a
+  white-alpha pane is invisible, so ink stays the theme's navy token (never
+  white), and the resting capsule gets a soft shadow rather than a border.
+  The orange (255,94,0) is the hover glow of the glass button only.
+  Both classes live in @layer components so Tailwind utilities (padding,
+  min-height) can still size them per use.
+*/
+:root {
+  --glass-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --glass-time: 0.3s;
+}
+
+@layer components {
+  .site-nav {
+    background: transparent;
+    border: 1px solid transparent;
+    box-shadow: none;
+    transition: all var(--glass-time) var(--glass-ease);
+  }
+
+  .site-nav[data-scrolled="true"] {
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px -12px rgba(10, 25, 51, 0.25);
+  }
+
+  .glass-button {
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 9999px;
+    padding: 10px 24px;
+    font-weight: 600;
+    color: var(--navy);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--navy) 12%, transparent);
+    transition: all var(--glass-time) var(--glass-ease);
+  }
+
+  .glass-button:hover {
+    background: rgba(255, 94, 0, 0.2);
+    border-color: rgba(255, 94, 0, 0.4);
+    box-shadow: 0 8px 32px rgba(255, 94, 0, 0.1);
+    transform: scale(1.05);
+  }
+}
+
+.scroll-indicator {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--navy) 20%, transparent);
+  color: var(--navy);
+  transition: all var(--glass-time) var(--glass-ease);
+}
+
+.scroll-indicator:hover {
+  background: rgba(255, 94, 0, 0.2);
+  border-color: rgba(255, 94, 0, 0.4);
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.scroll-indicator-icon {
+  animation: float 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-indicator-icon {
+    animation: none;
+  }
+  .glass-button:hover {
+    transform: none;
+  }
+}
+
+/*
   The mobile menu panel sits inside .nav-glass, and a backdrop-filter element
   cannot blur through its own backdrop-filtered parent, so page content
   showed crisply behind the links. The panel is therefore opaque surface
