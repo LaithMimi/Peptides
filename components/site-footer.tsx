@@ -6,9 +6,9 @@ import { whatsappLink } from "@/lib/whatsapp";
 import { CookieSettingsButton } from "@/components/cookie-settings-button";
 
 const linkClass =
-  "inline-flex min-h-11 items-center rounded px-1 text-sm font-medium text-navy underline-offset-4 transition-colors duration-300 hover:underline";
+  "inline-flex min-h-11 items-center rounded px-1 text-sm font-medium text-navy transition-colors duration-300 hover:text-accent";
 
-/** A Bold Blue capsule (.band) at the header's 1400px width: bold logo, 14px medium links. */
+/** A plain surface capsule at the header's 1400px width: bold logo, 14px medium links. */
 export async function SiteFooter() {
   const t = await getTranslations("footer");
   const tl = await getTranslations("legal.footer");
@@ -20,14 +20,14 @@ export async function SiteFooter() {
 
   return (
     <footer className="px-4 pb-4 pt-8 sm:px-6 lg:px-8">
-      <div className="band mx-auto flex w-full max-w-[1400px] flex-col gap-4 rounded-[2rem] px-5 py-8 text-sm sm:px-10">
+      <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-4 rounded-[2rem] border border-border bg-surface px-5 py-8 text-sm text-navy shadow-sm sm:px-10">
         <Link href="/" className="flex w-fit items-center gap-2" aria-label={settings.storeName}>
           <Image
             src={logo}
             alt=""
             width={96}
             height={96}
-            className="logo-tile h-11 w-11 object-contain"
+            className="brand-mark h-10 w-10 object-contain"
           />
           <span className="text-base font-bold text-navy">{settings.storeName}</span>
         </Link>

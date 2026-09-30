@@ -52,7 +52,7 @@ export default async function ShopPage({
 
   return (
     <div className="flex flex-col gap-8">
-      <header className="band page-band">
+      <header>
         <h1 className="font-serif text-3xl font-semibold uppercase tracking-wide text-navy sm:text-4xl">
           {t("title")}
         </h1>

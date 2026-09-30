@@ -68,10 +68,10 @@ THESIS: Pep Club as the category-standard storefront, executed at real
 craft rather than another experimental "world" — chosen directly by the
 client after two visual-world rolls (Vial-Label, then Glass Case) were
 tried and retired.
-OWN-WORLD: The client's four-color palette — Soft White ground, Jet Black
-body ink, Bold Blue headings plus a few deliberate Bold Blue bands (hero,
-how-to-use, page titles, order confirmation, footer), Light Blue for the
-one primary button per page, prices, selections and focus; plain bordered cards with a conventional shadow on
+OWN-WORLD: The client's four-color palette, used by role only — Soft White
+ground, Jet Black body ink, Bold Blue headings, Light Blue for the one
+primary button per page, prices, selections and focus; no colored regions;
+plain bordered cards with a conventional shadow on
 hover, real seeded product photography carrying visual weight instead of
 a signature glow device; Geist throughout, mono for data.
 STORY: A visitor recognizes an ordinary, trustworthy, premium-feeling

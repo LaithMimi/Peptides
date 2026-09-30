@@ -46,7 +46,7 @@ export default async function HomePage({
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="band grid grid-cols-1 items-center gap-8 rounded-[2rem] px-6 py-10 sm:px-10 lg:grid-cols-2 lg:gap-12 lg:px-14 lg:py-14">
+      <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12">
         <div>
           <h1 className="font-serif text-4xl font-semibold uppercase tracking-wide text-navy sm:text-5xl">
             {t("heroTitle")}
