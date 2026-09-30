@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { getSettings } from "@/lib/db/queries/settings";
+import { getChromeSettings } from "@/lib/db/queries/chrome";
 import { whatsappLink } from "@/lib/whatsapp";
 import { CookieSettingsButton } from "@/components/cookie-settings-button";
 
@@ -14,7 +14,7 @@ export async function SiteFooter() {
   const tl = await getTranslations("legal.footer");
   const site = await getTranslations("site");
   const tp = await getTranslations("price");
-  const settings = await getSettings();
+  const settings = await getChromeSettings();
   const whatsapp = whatsappLink(settings.whatsappNumber);
   const logo = settings.logoUrl ?? "/brand/pep-club-logo.png";
 

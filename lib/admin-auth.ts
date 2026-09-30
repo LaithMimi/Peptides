@@ -7,7 +7,9 @@ import {
 } from "node:crypto";
 import { promisify } from "node:util";
 import { cookies } from "next/headers";
+import { updateTag } from "next/cache";
 import { eq } from "drizzle-orm";
+import { STOREFRONT_TAG } from "@/lib/db/queries/chrome";
 import { getDb } from "@/lib/db/client";
 import { adminUsers } from "@/lib/db/schema";
 import { checkLimit, limits } from "@/lib/rate-limit-db";
@@ -202,6 +204,16 @@ export async function withAdmin<T>(
 ): Promise<T | Unauthorized> {
   const admin = await getCurrentAdmin();
   if (!admin) return { ok: false, code: "UNAUTHORIZED" };
-  return fn(admin);
+  try {
+    return await fn(admin);
+  } finally {
+    // Any admin change may alter the cached storefront chrome (settings, categories).
+    // `finally` so a create-then-redirect action still invalidates.
+    try {
+      updateTag(STOREFRONT_TAG);
+    } catch {
+      // Not inside a Server Action (e.g. unit tests): nothing cached to refresh.
+    }
+  }
 }
 
