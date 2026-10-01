@@ -142,7 +142,7 @@ export default async function ProductPage({ params }: { params: Promise<Params> 
                 {brandName}
               </Link>
             </p>
-            <h1 className="mt-1 font-serif text-2xl font-semibold uppercase tracking-wide text-navy sm:text-3xl">
+            <h1 className="mt-2 text-balance font-serif text-4xl font-semibold uppercase leading-[1.02] tracking-tight text-navy sm:text-5xl">
               {name}
             </h1>
             {focus && <p className="mt-1 text-muted">{focus}</p>}
@@ -151,7 +151,7 @@ export default async function ProductPage({ params }: { params: Promise<Params> 
           <PriceDisplay
             priceMinor={product.priceMinor}
             behavior={settings.unpricedBehavior}
-            className="text-2xl"
+            className="text-3xl sm:text-4xl"
           />
 
           <ProductActions

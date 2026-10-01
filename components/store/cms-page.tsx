@@ -21,7 +21,7 @@ export async function CmsPage({
   return (
     <article className="mx-auto flex w-full max-w-3xl flex-col gap-4">
       <header>
-        <h1 className="font-serif text-3xl font-semibold uppercase tracking-wide text-navy">
+        <h1 className="text-balance font-serif text-4xl font-semibold uppercase leading-[1.02] tracking-tight text-navy sm:text-5xl lg:text-6xl">
           {title}
         </h1>
       </header>

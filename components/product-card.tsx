@@ -58,12 +58,12 @@ export function ProductCard({
             </>
           )}
         </span>
-        <h3 className="font-serif text-base font-semibold uppercase tracking-wide text-navy">
+        <h3 className="font-serif text-lg font-semibold uppercase leading-tight tracking-tight text-navy">
           {name}
         </h3>
         {focus && <p className="line-clamp-2 text-xs text-muted">{focus}</p>}
         <div className="mt-auto flex flex-col gap-0.5 pt-1 text-sm">
-          <PriceDisplay priceMinor={product.priceMinor} behavior={behavior} />
+          <PriceDisplay priceMinor={product.priceMinor} behavior={behavior} className="text-lg" />
           <span className="font-serif text-xs font-medium italic text-navy group-hover:text-accent">
             {t("viewDetails")}
             <span aria-hidden="true" className="ms-1 inline-block rtl:rotate-180">

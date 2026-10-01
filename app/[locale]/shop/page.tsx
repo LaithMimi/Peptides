@@ -53,10 +53,10 @@ export default async function ShopPage({
   return (
     <div className="flex flex-col gap-8">
       <header>
-        <h1 className="font-serif text-3xl font-semibold uppercase tracking-wide text-navy sm:text-4xl">
+        <h1 className="text-balance font-serif text-4xl font-semibold uppercase leading-[1.02] tracking-tight text-navy sm:text-5xl lg:text-6xl">
           {t("title")}
         </h1>
-        <p className="mt-2 max-w-2xl text-muted">{t("subtitle")}</p>
+        <p className="mt-4 max-w-2xl text-lg text-muted">{t("subtitle")}</p>
       </header>
 
       <DisclaimerBanner variant="compact" />
