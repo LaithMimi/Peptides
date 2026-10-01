@@ -7,6 +7,7 @@ import { adminGhostButton } from "@/components/admin/admin-form";
 const NAV = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/orders", label: "Orders" },
+  { href: "/admin/messages", label: "Messages" },
   { href: "/admin/products", label: "Products" },
   { href: "/admin/brands", label: "Brands" },
   { href: "/admin/categories", label: "Research areas" },

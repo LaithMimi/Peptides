@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { dataRequestSchema } from "@/lib/data-request-schema";
 import { sendDataRequestEmail } from "@/lib/email";
+import { saveInboundMessage } from "@/lib/db/queries/messages";
 import { checkRateLimit, submitLimit } from "@/lib/rate-limit";
 
 export type DataRequestResult =
@@ -43,12 +44,24 @@ export async function submitDataRequest(input: unknown): Promise<DataRequestResu
     return { ok: true };
   }
 
+  try {
+    await saveInboundMessage({
+      kind: "data_request",
+      email: parsed.data.email,
+      orderPhone: parsed.data.phone || null,
+      body: parsed.data.details || null,
+      requestType: parsed.data.type,
+      locale: parsed.data.locale,
+    });
+  } catch (err) {
+    console.error("Failed to store data request", err);
+    return { ok: false, message: t("dataRequestFailed") };
+  }
+
   const result = await sendDataRequestEmail({
     ...parsed.data,
     submittedAt: new Date().toISOString(),
   });
-  if (!result.ok) {
-    return { ok: false, message: t("dataRequestFailed") };
-  }
+  if (!result.ok) console.error("Data request saved but notification email failed");
   return { ok: true };
 }

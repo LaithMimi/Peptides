@@ -27,7 +27,6 @@ export const ADMIN_ERRORS: Record<string, string> = {
   invalidPrice: "Enter a price from 0.01 to 100,000.00, or leave it empty for no price.",
   invalidImageUrl: "Use an uploaded image or a file in /public (for example /products/name.jpeg).",
   tooManyImages: "A product can have at most 10 images.",
-  invalidWhatsapp: "Enter digits with the country code, for example 972501234567.",
   invalidEmail: "Enter a valid email address.",
   defaultNotSupported: "The default language must be one of the supported languages.",
 };

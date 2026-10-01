@@ -3,6 +3,7 @@
 import { getTranslations } from "next-intl/server";
 import { feedbackSchema } from "@/lib/feedback-schema";
 import { sendFeedbackEmail } from "@/lib/email";
+import { saveInboundMessage } from "@/lib/db/queries/messages";
 
 export type FeedbackResult =
   | { ok: true }
@@ -30,13 +31,24 @@ export async function submitFeedback(input: unknown): Promise<FeedbackResult> {
     return { ok: false, fieldErrors, message: t("genericSubmit") };
   }
 
+  // The admin Messages inbox is the primary record; the email is a notification.
+  try {
+    await saveInboundMessage({
+      kind: "feedback",
+      email: parsed.data.email,
+      name: parsed.data.name || null,
+      body: parsed.data.message,
+      locale: parsed.data.locale,
+    });
+  } catch (err) {
+    console.error("Failed to store feedback message", err);
+    return { ok: false, message: t("feedbackFailed") };
+  }
+
   const result = await sendFeedbackEmail({
     ...parsed.data,
     submittedAt: new Date().toISOString(),
   });
-
-  if (!result.ok) {
-    return { ok: false, message: t("feedbackFailed") };
-  }
+  if (!result.ok) console.error("Feedback saved but notification email failed");
   return { ok: true };
 }

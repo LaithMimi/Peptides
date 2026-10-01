@@ -8,6 +8,7 @@ export default async function AdminDashboardPage() {
   const cards = [
     { label: "New orders", value: counts.newOrders, href: "/admin/orders?status=new" },
     { label: "Orders to process", value: counts.processingOrders, href: "/admin/orders?status=processing" },
+    { label: "Unread messages", value: counts.unreadMessages, href: "/admin/messages" },
     { label: "Products", value: counts.products, href: "/admin/products" },
     { label: "Brands", value: counts.brands, href: "/admin/brands" },
   ];

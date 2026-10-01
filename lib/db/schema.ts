@@ -217,8 +217,6 @@ export const storeSettings = pgTable(
     id: integer("id").primaryKey().default(1),
     storeName: text("store_name").notNull().default("Pep Club"),
     logoUrl: text("logo_url"),
-    phone: text("phone"),
-    whatsappNumber: text("whatsapp_number"),
     email: text("email"),
     address: text("address"),
     deliveryEnabled: boolean("delivery_enabled").notNull().default(true),
@@ -269,6 +267,31 @@ export const pages = pgTable(
     ),
   ]
 );
+
+export const messageKind = pgEnum("message_kind", ["feedback", "data_request"]);
+
+/** Customer feedback and privacy requests, shown in the admin Messages inbox. */
+export const inboundMessages = pgTable(
+  "inbound_messages",
+  {
+    id: id(),
+    kind: messageKind("kind").notNull(),
+    email: text("email").notNull(),
+    name: text("name"),
+    /** Phone number used on orders (data requests only). */
+    orderPhone: text("order_phone"),
+    /** Feedback text, or the data-request details. */
+    body: text("body"),
+    /** Data requests: delete | access | correct. */
+    requestType: text("request_type"),
+    locale: text("locale").notNull().default("en"),
+    isRead: boolean("is_read").notNull().default(false),
+    createdAt: createdAt(),
+  },
+  (t) => [index("inbound_messages_created_idx").on(t.createdAt)]
+);
+
+export type InboundMessage = typeof inboundMessages.$inferSelect;
 
 export const adminUsers = pgTable("admin_users", {
   id: id(),

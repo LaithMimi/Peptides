@@ -137,14 +137,6 @@ export const settingsSchema = z
   .object({
     storeName: requiredText(80),
     logoUrl: optionalUrl,
-    phone: optionalText(40),
-    whatsappNumber: z
-      .string()
-      .trim()
-      .optional()
-      .nullable()
-      .transform((v) => (v ? v.replace(/[\s()+-]/g, "") : null))
-      .refine((v) => v === null || /^\d{8,15}$/.test(v), { message: "invalidWhatsapp" }),
     email: z
       .string()
       .trim()

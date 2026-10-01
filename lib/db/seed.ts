@@ -107,15 +107,9 @@ const PAGE_SEED = [
 ] as const;
 
 export async function seedDatabase(db: Db): Promise<void> {
-  // The business phone already published on the Contact page doubles as the
-  // WhatsApp number until the owner sets their own in admin Settings.
   await db
     .insert(storeSettings)
-    .values({
-      id: 1,
-      phone: CONTACT.phoneDisplay,
-      whatsappNumber: CONTACT.phone.replace(/\D/g, ""),
-    })
+    .values({ id: 1, email: CONTACT.email })
     .onConflictDoNothing();
 
   await db

@@ -6,7 +6,7 @@ import { storeSettings } from "@/lib/db/schema";
 import { fieldErrors, formDataToObject, settingsSchema } from "@/lib/schemas/admin";
 import type { ActionState } from "./shared";
 
-/** Saves the single store-settings row. Validated on the server (fee, locales, WhatsApp digits, email). */
+/** Saves the single store-settings row. Validated on the server (fee, locales, email). */
 export async function saveSettings(
   _previous: ActionState,
   formData: FormData

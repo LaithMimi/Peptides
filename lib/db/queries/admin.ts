@@ -3,6 +3,7 @@ import { getDb } from "../client";
 import {
   brands,
   categories,
+  inboundMessages,
   orders,
   productCategories,
   productImages,
@@ -18,17 +19,19 @@ import {
 
 export async function dashboardCounts() {
   const db = await getDb();
-  const [[newOrders], [processing], [productCount], [brandCount]] = await Promise.all([
+  const [[newOrders], [processing], [productCount], [brandCount], [unread]] = await Promise.all([
     db.select({ n: count() }).from(orders).where(eq(orders.status, "new")),
     db.select({ n: count() }).from(orders).where(eq(orders.status, "processing")),
     db.select({ n: count() }).from(products),
     db.select({ n: count() }).from(brands),
+    db.select({ n: count() }).from(inboundMessages).where(eq(inboundMessages.isRead, false)),
   ]);
   return {
     newOrders: newOrders.n,
     processingOrders: processing.n,
     products: productCount.n,
     brands: brandCount.n,
+    unreadMessages: unread.n,
   };
 }
 
