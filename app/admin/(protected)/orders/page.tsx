@@ -21,8 +21,10 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
         key={label}
         href={value ? `/admin/orders?status=${value}` : "/admin/orders"}
         aria-current={active ? "page" : undefined}
-        className={`inline-flex min-h-11 items-center rounded-full border-2 px-4 font-mono text-xs font-semibold uppercase tracking-wide ${
-          active ? "border-navy bg-navy text-navy-foreground" : "border-border-strong text-navy hover:border-navy"
+        className={`inline-flex min-h-11 items-center rounded-full border px-4 font-mono text-xs font-semibold uppercase tracking-wide ${
+          active
+            ? "border-accent bg-accent text-accent-foreground shadow-sm"
+            : "border-border-strong bg-surface text-navy hover:border-accent"
         }`}
       >
         {label}

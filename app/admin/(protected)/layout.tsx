@@ -1,8 +1,11 @@
 import { redirect } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { getCurrentAdmin } from "@/lib/admin-auth";
+import { getChromeSettings } from "@/lib/db/queries/chrome";
 import { adminLogout } from "@/app/admin/actions/auth";
 import { adminGhostButton } from "@/components/admin/admin-form";
+import { AdminNav } from "@/components/admin/admin-nav";
 
 const NAV = [
   { href: "/admin", label: "Dashboard" },
@@ -20,21 +23,20 @@ export default async function ProtectedAdminLayout({ children }: { children: Rea
   const admin = await getCurrentAdmin();
   if (!admin) redirect("/admin/login");
 
+  const settings = await getChromeSettings();
+  const logo = settings.logoUrl ?? "/brand/pep-club-logo.png";
+
   return (
     <>
-      <header className="border-b-4 border-double border-navy bg-surface">
+      <header className="border-b border-border-strong bg-background">
         <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
-          <nav aria-label="Admin" className="flex flex-wrap items-center gap-x-1 gap-y-1">
-            {NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="inline-flex min-h-11 items-center rounded px-2 font-serif text-sm font-semibold uppercase tracking-wide text-navy hover:text-accent"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <Link href="/admin" className="flex items-center gap-2" aria-label="Admin dashboard">
+              <Image src={logo} alt="" width={96} height={96} className="brand-mark h-10 w-10 object-contain" />
+              <span className="hidden text-base font-bold text-navy sm:inline">{settings.storeName}</span>
+            </Link>
+            <AdminNav items={NAV} />
+          </div>
           <div className="flex items-center gap-3">
             <span className="hidden text-sm text-muted sm:inline">{admin.email}</span>
             <form action={adminLogout}>
