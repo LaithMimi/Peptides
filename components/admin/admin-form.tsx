@@ -14,9 +14,9 @@ const FormStateContext = createContext<ActionState>(INITIAL_STATE);
 export const adminInput =
   "min-h-11 w-full rounded-md border border-input-border bg-surface-raised px-3 py-2 text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent";
 export const adminButton =
-  "inline-flex min-h-11 items-center justify-center rounded-full bg-navy px-6 py-2 font-serif text-xs font-semibold uppercase tracking-wide text-navy-foreground transition-opacity hover:opacity-90 disabled:opacity-50";
+  "inline-flex min-h-11 items-center justify-center btn-primary rounded-full px-6 py-2 font-serif text-xs font-semibold uppercase tracking-wide disabled:cursor-not-allowed disabled:opacity-50";
 export const adminGhostButton =
-  "inline-flex min-h-11 items-center justify-center rounded-full border border-border-strong px-5 py-2 font-serif text-xs font-semibold uppercase tracking-wide text-navy transition-opacity hover:border-navy disabled:opacity-50";
+  "inline-flex min-h-11 items-center justify-center btn-glass rounded-full px-5 py-2 font-serif text-xs font-semibold uppercase tracking-wide disabled:cursor-not-allowed disabled:opacity-50";
 
 /** Plain-English text for the short error codes actions return. */
 export const ADMIN_ERRORS: Record<string, string> = {

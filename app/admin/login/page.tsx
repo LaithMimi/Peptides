@@ -9,7 +9,8 @@ export default async function AdminLoginPage() {
   if (await getCurrentAdmin()) redirect("/admin");
 
   return (
-    <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-6 px-4 py-12">
+    <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center px-4 py-12">
+     <div className="flex flex-col gap-6 rounded-xl border border-border-strong bg-surface p-6 shadow-sm">
       <h1 className="font-serif text-2xl font-semibold uppercase tracking-wide text-navy">
         Admin sign in
       </h1>
@@ -28,6 +29,7 @@ export default async function AdminLoginPage() {
           />
         </AdminField>
       </AdminForm>
+     </div>
     </main>
   );
 }
