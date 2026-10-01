@@ -31,7 +31,7 @@ export function BrandGroup({
           {brandName}
         </Link>
       </h2>
-      <div className="grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 sm:gap-x-4 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-8">
+      <div className="grid grid-cols-1 gap-x-3 gap-y-5 min-[20rem]:grid-cols-2 sm:grid-cols-3 sm:gap-x-4 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-8">
         {group.products.map((product) => (
           <ProductCard key={product.id} product={product} behavior={behavior} />
         ))}

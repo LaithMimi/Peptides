@@ -55,7 +55,7 @@ export function PurposePicker({
                 }`}
               >
                 <span className="flex items-start justify-between gap-2">
-                  <span className="font-serif text-base font-semibold uppercase tracking-wide text-navy">
+                  <span className="min-w-0 font-serif text-base font-semibold uppercase tracking-wide text-navy">
                     {name}
                   </span>
                   {isSelected && (

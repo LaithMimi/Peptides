@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale, useTranslations } from "next-intl";
 import type { z } from "zod";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useCart } from "@/lib/cart-store";
+import { prefersReducedMotion } from "@/lib/motion";
 import { customerFormSchema } from "@/lib/schemas/order";
 import { clearDraft, readDraft, writeDraft } from "@/lib/checkout-draft";
 import { placeOrderAction } from "@/app/[locale]/checkout/actions";
@@ -40,6 +41,7 @@ export function CheckoutForm() {
   const [idempotencyKey] = useState(() => crypto.randomUUID());
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [priceChanged, setPriceChanged] = useState(false);
+  const priceChangedRef = useRef<HTMLDivElement>(null);
 
   const errorText = (code?: string) =>
     !code ? undefined : tErrors.has(code) ? tErrors(code) : tErrors("genericSubmit");
@@ -71,6 +73,14 @@ export function CheckoutForm() {
     const subscription = watch((values) => writeDraft(values));
     return () => subscription.unsubscribe();
   }, [watch]);
+
+  // A price change happens at the bottom of the form (on submit) but is
+  // reported beside the order lines: bring the notice into view and focus.
+  useEffect(() => {
+    if (!priceChanged) return;
+    priceChangedRef.current?.focus();
+    priceChangedRef.current?.scrollIntoView({ block: "center", behavior: prefersReducedMotion() ? "auto" : "smooth" });
+  }, [priceChanged]);
 
   async function onSubmit(values: FormOutput) {
     setSubmitError(null);
@@ -107,7 +117,7 @@ export function CheckoutForm() {
         for (const field of FORM_FIELDS) {
           const code = result.fieldErrors?.[field];
           if (code) {
-            setError(field, { message: code });
+            setError(field, { message: code }, { shouldFocus: !shown });
             shown = true;
           }
         }
@@ -233,7 +243,7 @@ export function CheckoutForm() {
         </section>
       </div>
 
-      <div className="flex flex-col gap-4 lg:sticky lg:top-6">
+      <div className="flex flex-col gap-4">
         <h2 className="font-serif text-lg font-semibold uppercase tracking-wide text-navy">
           {t("reviewTitle")}
         </h2>
@@ -260,7 +270,12 @@ export function CheckoutForm() {
         )}
 
         {priceChanged && (
-          <div role="alert" className="rounded-lg border-2 border-accent p-4">
+          <div
+            ref={priceChangedRef}
+            tabIndex={-1}
+            role="alert"
+            className="rounded-lg border-2 border-accent p-4 outline-none"
+          >
             <p className="font-serif text-sm font-semibold uppercase tracking-wide text-navy">
               {t("priceChangedTitle")}
             </p>
@@ -268,8 +283,13 @@ export function CheckoutForm() {
           </div>
         )}
 
-        <CartLines lines={cart.lines} maxQuantity={cart.maxLineQuantity} editable={false} />
-        <OrderSummary totals={cart.totals} />
+        <CartLines
+          lines={cart.lines}
+          maxQuantity={cart.maxLineQuantity}
+          editable={false}
+          failed={cart.status === "error"}
+        />
+        <OrderSummary totals={cart.totals} state={cart.summaryState} />
         <p className="text-sm text-muted">{tCart("cashOnDelivery")}</p>
 
         <DisclaimerBanner />
@@ -278,12 +298,14 @@ export function CheckoutForm() {
           <input
             type="checkbox"
             {...register("acknowledged")}
+            aria-invalid={errors.acknowledged ? true : undefined}
+            aria-describedby={errors.acknowledged ? "acknowledged-error" : undefined}
             className="mt-1 size-5 shrink-0 rounded border-input-border text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
           />
           <span>{t("ackLabel")}</span>
         </label>
         {errors.acknowledged && (
-          <p role="alert" className="-mt-2 text-sm text-danger">
+          <p id="acknowledged-error" className="status-in -mt-2 text-sm text-danger">
             {errorText(errors.acknowledged.message)}
           </p>
         )}

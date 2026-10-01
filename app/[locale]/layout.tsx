@@ -101,7 +101,7 @@ finish review, the verdict, and DESIGN.md.
             <main
               id="main"
               tabIndex={-1}
-              className="mx-auto w-full max-w-6xl flex-1 px-4 pb-8 pt-28 outline-none sm:px-6 lg:px-8"
+              className="mx-auto w-full max-w-6xl flex-1 px-4 pb-8 pt-(--header-clearance) outline-none sm:px-6 lg:px-8"
             >
               {children}
             </main>

@@ -45,7 +45,7 @@ export async function HowToUse() {
                 </p>
               )}
             </div>
-            <div className="relative h-24 w-20 shrink-0 sm:h-28 sm:w-24">
+            <div className="relative h-[min(6rem,28.8vw)] w-[min(5rem,24vw)] shrink-0 sm:h-28 sm:w-24">
               <Image
                 src={`/howToUse/image_${n}.png`}
                 alt=""
@@ -57,8 +57,6 @@ export async function HowToUse() {
           </li>
         ))}
       </ol>
-
-      <p className="text-xs text-muted">{t("researchNote")}</p>
     </section>
   );
 }

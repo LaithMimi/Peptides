@@ -92,7 +92,7 @@ export default async function ProductPage({ params }: { params: Promise<Params> 
       </Link>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
-        <div className="flex flex-col gap-3 md:sticky md:top-6 md:self-start">
+        <div className="flex flex-col gap-3 md:sticky md:top-(--header-clearance) md:self-start">
           <div className="aspect-square w-full max-w-sm overflow-hidden rounded-xl border border-border-strong bg-surface-raised max-md:mx-auto">
             {main ? (
               <Image

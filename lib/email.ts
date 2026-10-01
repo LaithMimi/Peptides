@@ -36,7 +36,7 @@ export async function sendFeedbackEmail({
   try {
     const resend = new Resend(apiKey);
     const { error } = await resend.emails.send({
-      from: "Feedback <onboarding@resend.dev>",
+      from: process.env.FEEDBACK_EMAIL_FROM ?? process.env.ORDER_EMAIL_FROM ?? "Feedback <onboarding@resend.dev>",
       to: notificationEmail,
       replyTo: email,
       subject: `New feedback from ${senderName}`,
@@ -97,7 +97,7 @@ export async function sendDataRequestEmail({
   try {
     const resend = new Resend(apiKey);
     const { error } = await resend.emails.send({
-      from: "Data Requests <onboarding@resend.dev>",
+      from: process.env.DATA_REQUEST_EMAIL_FROM ?? process.env.ORDER_EMAIL_FROM ?? "Data Requests <onboarding@resend.dev>",
       to: notificationEmail,
       replyTo: email,
       subject: `Data request (${type}) from ${email}`,

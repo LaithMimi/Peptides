@@ -30,10 +30,38 @@ export function HeaderNav({ locales }: { locales?: string[] }) {
   const t = useTranslations("nav");
   const { items } = useCart();
   const count = items.reduce((sum, i) => sum + i.quantity, 0);
-  const [open, setOpen] = useState(false);
-  const close = () => setOpen(false);
-  const active = sectionOf(usePathname());
+  const pathname = usePathname();
+  // The menu remembers the page it was opened on, so any navigation (a link,
+  // the back button) closes it without an effect.
+  const [openedOn, setOpenedOn] = useState<string | null>(null);
+  const open = openedOn === pathname;
+  const close = () => setOpenedOn(null);
+  const active = sectionOf(pathname);
   const cartRef = useRef<HTMLAnchorElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
+
+  // A disclosure dismisses like the language menu: Escape closes it and puts
+  // focus back on the toggle; a press anywhere outside closes it too.
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setOpenedOn(null);
+      menuButtonRef.current?.focus();
+    };
+    const onPointerDown = (e: PointerEvent) => {
+      const target = e.target as Node;
+      if (panelRef.current?.contains(target) || menuButtonRef.current?.contains(target)) return;
+      setOpenedOn(null);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
+  }, [open]);
 
   // Acknowledge an add-to-cart where the cart lives: the CTA nudges and its
   // count pops. Driven by an explicit event (not by watching the count) so
@@ -105,15 +133,20 @@ export function HeaderNav({ locales }: { locales?: string[] }) {
         {links(true)}
       </nav>
 
-      <div className="flex items-center justify-end gap-x-2 sm:gap-x-3">
-        <Suspense fallback={null}>
-          <LocaleSwitcher locales={locales} />
-        </Suspense>
+      {/* Compact bar (`@max-[18.5rem]:`, see HeaderShell): the globe moves into
+          the menu panel, the menu label becomes an icon, and padding stops
+          scaling with the text, so the cart and menu always stay on-screen. */}
+      <div className="flex items-center justify-end gap-x-2 sm:gap-x-3 @max-[18.5rem]:gap-x-[6px]">
+        <div className="@max-[18.5rem]:hidden">
+          <Suspense fallback={null}>
+            <LocaleSwitcher locales={locales} />
+          </Suspense>
+        </div>
 
         <Link
           ref={cartRef}
           href="/cart"
-          className="btn-glass inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold sm:px-6"
+          className="btn-glass inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold sm:px-6 @max-[18.5rem]:min-h-[44px] @max-[18.5rem]:px-[12px]"
           aria-label={`${t("cart")} — ${t("cartCount", { count })}`}
         >
           {t("cart")}
@@ -128,25 +161,50 @@ export function HeaderNav({ locales }: { locales?: string[] }) {
         </Link>
 
         <button
+          ref={menuButtonRef}
           type="button"
           aria-expanded={open}
           aria-controls="mobile-menu"
-          onClick={() => setOpen((v) => !v)}
-          className="inline-flex min-h-11 min-w-11 items-center justify-center btn-glass rounded-full px-3 font-mono text-xs font-semibold uppercase tracking-wide md:hidden"
+          onClick={() => setOpenedOn(open ? null : pathname)}
+          className="inline-flex min-h-11 min-w-11 items-center justify-center btn-glass rounded-full px-3 font-mono text-xs font-semibold uppercase tracking-wide md:hidden @max-[18.5rem]:size-[44px] @max-[18.5rem]:min-h-0 @max-[18.5rem]:min-w-0 @max-[18.5rem]:px-0"
         >
-          {open ? t("closeMenu") : t("menu")}
+          <span className="@max-[18.5rem]:sr-only">{open ? t("closeMenu") : t("menu")}</span>
+          <MenuIcon open={open} className="hidden size-[22px] @max-[18.5rem]:block" />
         </button>
       </div>
 
       {open && (
         <nav
+          ref={panelRef}
           id="mobile-menu"
           aria-label={t("mainNav")}
           className="menu-panel menu-in absolute inset-x-0 top-full mt-2 flex flex-col items-stretch gap-1 rounded-2xl p-3 shadow-lg md:hidden"
         >
           {links(false)}
+          <div className="mt-1 hidden border-t border-border pt-3 @max-[18.5rem]:block">
+            <Suspense fallback={null}>
+              <LocaleSwitcher locales={locales} variant="inline" />
+            </Suspense>
+          </div>
         </nav>
       )}
     </>
+  );
+}
+
+/** Three bars that cross into a close mark; drawn at a fixed size for the compact bar. */
+function MenuIcon({ open, className }: { open: boolean; className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      className={className}
+      aria-hidden="true"
+    >
+      {open ? <path d="M6 6l12 12M18 6 6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+    </svg>
   );
 }

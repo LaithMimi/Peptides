@@ -20,13 +20,18 @@ export function HeaderShell({ children }: { children: React.ReactNode }) {
 
   return (
     // Named so page transitions leave it anchored in place (see globals.css).
+    // The header is a size container queried in rem, so the compact layout
+    // (`@max-[18.5rem]:` below and in HeaderNav/SiteHeader) follows the
+    // visitor's text size as well as the screen width: a phone with large
+    // text gets the compact bar instead of pushing the cart and menu
+    // off-screen. Gutters cap at 4vw for the same reason.
     <header
-      className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 lg:px-8"
+      className="@container fixed inset-x-0 top-0 z-50 px-[min(1rem,4vw)] pt-[min(1rem,4vw)] sm:px-6 sm:pt-4 lg:px-8"
       style={{ viewTransitionName: "site-header" }}
     >
       <div
         data-scrolled={scrolled}
-        className="site-nav relative mx-auto grid w-full max-w-[1400px] grid-cols-[1fr_auto] items-center gap-x-4 rounded-full px-3 py-2 sm:px-6 md:grid-cols-[1fr_auto_1fr]"
+        className="site-nav relative mx-auto grid w-full max-w-[1400px] grid-cols-[1fr_auto] items-center gap-x-4 rounded-full px-3 py-2 sm:px-6 md:grid-cols-[1fr_auto_1fr] @max-[18.5rem]:gap-x-[8px] @max-[18.5rem]:px-[8px] @max-[18.5rem]:py-[6px]"
       >
         {children}
       </div>

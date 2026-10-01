@@ -1,15 +1,18 @@
 "use server";
 
+import { createHash } from "node:crypto";
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { dataRequestSchema } from "@/lib/data-request-schema";
 import { sendDataRequestEmail } from "@/lib/email";
 import { saveInboundMessage } from "@/lib/db/queries/messages";
-import { checkRateLimit, submitLimit } from "@/lib/rate-limit";
+import { checkLimit, limits } from "@/lib/rate-limit-db";
 
 export type DataRequestResult =
   | { ok: true }
   | { ok: false; fieldErrors?: Record<string, string>; message: string };
+
+const hashIp = (ip: string) => createHash("sha256").update(ip).digest("hex").slice(0, 32);
 
 export async function submitDataRequest(input: unknown): Promise<DataRequestResult> {
   const locale =
@@ -23,7 +26,7 @@ export async function submitDataRequest(input: unknown): Promise<DataRequestResu
 
   const forwardedFor = (await headers()).get("x-forwarded-for");
   const ip = forwardedFor?.split(",")[0]?.trim() || "unknown";
-  if (!checkRateLimit(`data-request:${ip}`, submitLimit())) {
+  if (!(await checkLimit(`data-request:ip:${hashIp(ip)}`, limits.submitPerIp()))) {
     return { ok: false, message: t("rateLimited") };
   }
 

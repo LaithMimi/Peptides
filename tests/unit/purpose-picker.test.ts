@@ -76,7 +76,7 @@ describe("listProductsByPurposes", () => {
   it("carries the research focus line and paginates", async () => {
     const result = await listProductsByPurposes(["cognitive"]);
     const semax = result.groups[0].products.find((p) => p.nameEn === "Semax");
-    expect(semax?.researchFocusEn).toBe("Focus & cognitive research");
+    expect(semax?.researchFocusEn).toBe("Focus & cognitive");
     expect(semax?.researchFocusAr).toBeTruthy();
     expect((await listProductsByPurposes(["cognitive"], 2)).groups).toHaveLength(0);
   });

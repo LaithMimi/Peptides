@@ -14,6 +14,8 @@ export interface UsePricedCart {
   totals: Totals;
   empty: boolean;
   status: "idle" | "loading" | "error";
+  /** What the order summary can honestly show: real figures, or none yet. */
+  summaryState: "ready" | "loading" | "failed";
   canCheckout: boolean;
   maxLineQuantity: number;
   /** Server-recomputed cart from the last response (used to detect price changes). */
@@ -121,6 +123,7 @@ export function usePricedCart(): UsePricedCart {
     totals,
     empty: items.length === 0,
     status,
+    summaryState: server ? "ready" : status === "error" ? "failed" : "loading",
     canCheckout,
     maxLineQuantity: max,
     server,

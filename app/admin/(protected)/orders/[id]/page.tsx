@@ -36,6 +36,32 @@ export default async function AdminOrderPage({ params }: { params: Promise<{ id:
         </span>
       </div>
 
+      {order.status === "new" ? (
+        <section aria-labelledby="confirm" className="flex flex-col gap-3 rounded-xl border border-accent bg-surface-raised p-5">
+          <h2 id="confirm" className="font-serif text-lg font-semibold uppercase tracking-wide text-navy">
+            Confirm by phone
+          </h2>
+          <ol className="list-decimal space-y-1 ps-5 text-sm text-foreground">
+            <li>Check the items, total and delivery address below.</li>
+            <li>
+              Call {order.customerName} at{" "}
+              <a href={`tel:${order.customerPhone.replace(/[^\d+]/g, "")}`} className="font-mono font-semibold text-navy underline hover:text-accent">
+                {order.customerPhone}
+              </a>{" "}
+              to confirm they placed this order.
+            </li>
+            <li>Approve the order if they confirm. Cancel it if they deny it or can&apos;t be reached.</li>
+          </ol>
+          <div className="flex flex-wrap gap-2">
+            <ActionButton action={updateOrderStatus.bind(null, order.id, "processing")} className={adminButton}>
+              Approve order
+            </ActionButton>
+            <ActionButton action={updateOrderStatus.bind(null, order.id, "cancelled")} confirm="Cancel this order?">
+              Cancel order
+            </ActionButton>
+          </div>
+        </section>
+      ) : (
       <section aria-labelledby="status" className="flex flex-col gap-3">
         <h2 id="status" className="font-serif text-lg font-semibold uppercase tracking-wide text-navy">
           Change status
@@ -57,6 +83,7 @@ export default async function AdminOrderPage({ params }: { params: Promise<{ id:
           </div>
         )}
       </section>
+      )}
 
       <dl className="grid gap-5 rounded-xl border border-border-strong bg-surface p-5 sm:grid-cols-2">
         <div>

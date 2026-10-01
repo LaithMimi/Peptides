@@ -13,7 +13,7 @@ test.describe("browse the store (US1)", () => {
 
   test("research-area filter shows only matching products", async ({ page }) => {
     await page.goto("/en/shop");
-    await page.getByLabel("Research area").selectOption({ label: "Focus & cognitive research" });
+    await page.getByLabel("Category").selectOption({ label: "Focus & cognitive" });
     await page.getByRole("button", { name: "Apply filters" }).click();
     await expect(page).toHaveURL(/area=cognitive/);
     await expect(page.getByRole("status").first()).toContainText("2 products");
@@ -32,9 +32,9 @@ test.describe("browse the store (US1)", () => {
   test("category page lists the brands that have products in the area", async ({ page }) => {
     await page.goto("/en/categories/cognitive");
     await expect(
-      page.getByRole("heading", { level: 1, name: "Focus & cognitive research" })
+      page.getByRole("heading", { level: 1, name: "Focus & cognitive" })
     ).toBeVisible();
-    await expect(page.getByText("Brands with products in this research area")).toBeVisible();
+    await expect(page.getByText("Brands with products in this category")).toBeVisible();
     await expect(page.getByRole("heading", { level: 2, name: "PEP Lab" })).toBeVisible();
   });
 

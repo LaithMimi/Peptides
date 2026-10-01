@@ -7,16 +7,16 @@ const BANNED = /\b(dosage|dose|treat|treatment|cure|therapy|therapeutic|weight l
 test.describe("research purpose picker (US7)", () => {
   test("shows research areas with descriptions; choosing one lists only related products", async ({ page }) => {
     await page.goto("/en/start");
-    await expect(page.getByRole("heading", { level: 1, name: "Find products by research purpose" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Find products by category" })).toBeVisible();
     await expect(page.getByText("For Research Use Only", { exact: false }).first()).toBeVisible();
-    await expect(page.getByText("Choose one or more research areas above")).toBeVisible();
+    await expect(page.getByText("Choose one or more categories above")).toBeVisible();
 
-    const tile = page.getByRole("link", { name: "Select Focus & cognitive research" });
-    await expect(tile).toContainText("Laboratory research on attention");
+    const tile = page.getByRole("link", { name: "Select Focus & cognitive" });
+    await expect(tile).toContainText("Peptides of interest in attention");
     await tile.click();
 
     await expect(page).toHaveURL(/purpose=cognitive/);
-    await expect(page.getByRole("link", { name: "Remove Focus & cognitive research from your selection" })).toHaveAttribute(
+    await expect(page.getByRole("link", { name: "Remove Focus & cognitive from your selection" })).toHaveAttribute(
       "aria-current",
       "true"
     );
@@ -25,7 +25,7 @@ test.describe("research purpose picker (US7)", () => {
     await expect(page.getByRole("link", { name: /Semax/i }).first()).toBeVisible();
     await expect(page.getByRole("link", { name: /TB-500/i })).toHaveCount(0);
     // The research focus line is on the card.
-    await expect(page.getByText("Focus & cognitive research").nth(1)).toBeVisible();
+    await expect(page.getByText("Focus & cognitive").nth(1)).toBeVisible();
   });
 
   test("choosing several areas shows the union once, and a tile can be removed", async ({ page }) => {
@@ -34,18 +34,18 @@ test.describe("research purpose picker (US7)", () => {
     await expect(page.getByRole("status")).toContainText("4 products");
     await expect(page.getByRole("link", { name: /BPC-157/i })).toHaveCount(1);
 
-    await page.getByRole("link", { name: "Remove Gut & gastrointestinal research from your selection" }).click();
+    await page.getByRole("link", { name: "Remove Gut & gastrointestinal from your selection" }).click();
     await expect(page).toHaveURL(/purpose=recovery-tissue$/);
     await expect(page.getByRole("status")).toContainText("3 products"); // BPC-157, TB-500, Ipamorelin
 
     await page.getByRole("link", { name: "Clear selection" }).click();
     await expect(page).toHaveURL(/\/en\/start$/);
-    await expect(page.getByText("Choose one or more research areas above")).toBeVisible();
+    await expect(page.getByText("Choose one or more categories above")).toBeVisible();
   });
 
   test("unknown areas in the address are ignored", async ({ page }) => {
     await page.goto("/en/start?purpose=nope");
-    await expect(page.getByText("Choose one or more research areas above")).toBeVisible();
+    await expect(page.getByText("Choose one or more categories above")).toBeVisible();
   });
 
   test("the selection survives a language switch and works in Arabic (RTL)", async ({ page }) => {
@@ -54,7 +54,7 @@ test.describe("research purpose picker (US7)", () => {
     await page.getByRole("button", { name: "العربية", exact: true }).click();
     await expect(page).toHaveURL(/\/ar\/start\?purpose=cognitive$/);
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
-    await expect(page.getByRole("heading", { level: 1, name: "اعثر على المنتجات حسب الغرض البحثي" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "اعثر على المنتجات حسب الفئة" })).toBeVisible();
     await expect(page.getByRole("link", { name: /Selank/i }).first()).toBeVisible();
   });
 
@@ -69,7 +69,7 @@ test.describe("research purpose picker (US7)", () => {
   test("the picker is reachable from the home page and the navigation, and fits a phone", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 800 });
     await page.goto("/en");
-    await page.getByRole("link", { name: "Choose a research area" }).click();
+    await page.getByRole("link", { name: "Choose a category" }).click();
     await expect(page).toHaveURL(/\/en\/start$/);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth

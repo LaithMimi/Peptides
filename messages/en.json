@@ -1,7 +1,8 @@
 {
   "site": {
     "name": "Pep Club",
-    "tagline": "Peptides from trusted brands"
+    "tagline": "Peptides from trusted brands",
+    "loading": "Loading…"
   },
   "nav": {
     "catalog": "Catalog",
@@ -11,7 +12,7 @@
     "contact": "Contact us",
     "home": "Home",
     "shop": "Shop",
-    "researchAreas": "Research areas",
+    "researchAreas": "Categories",
     "brands": "Brands",
     "cart": "Cart",
     "menu": "Menu",
@@ -24,14 +25,14 @@
   },
   "catalog": {
     "title": "Peptide Catalog",
-    "subtitle": "Explore compounds currently of interest across recovery, growth-hormone, metabolic, and cognitive research.",
-    "viewDetails": "View research details"
+    "subtitle": "Explore peptides across recovery, growth hormone, metabolic, and cognitive categories.",
+    "viewDetails": "View details"
   },
   "product": {
     "backToCatalog": "Back to catalog",
     "purityLabel": "Purity",
     "vialLabel": "Vial size",
-    "researchAreasTitle": "Research areas",
+    "researchAreasTitle": "Categories",
     "selectVial": "Select a vial size",
     "quantityLabel": "Quantity",
     "addToQuote": "Add to quote request",
@@ -43,13 +44,11 @@
     "backToShop": "Back to shop",
     "brandLabel": "Brand",
     "priceLabel": "Price",
-    "researchFocusLabel": "Research focus",
-    "usageTitle": "Laboratory handling",
+    "researchFocusLabel": "Focus",
+    "usageTitle": "Handling",
     "warningsTitle": "Warnings",
     "noImage": "No image available",
-    "imageGallery": "Product images",
-    "unavailableTitle": "This product is unavailable",
-    "unavailableBody": "It may have been removed or is not currently listed."
+    "imageGallery": "Product images"
   },
   "quoteCart": {
     "title": "Your quote request",
@@ -233,23 +232,23 @@
     "location": "Location",
     "locationValue": "Jerusalem",
     "email": "Email",
-    "note": "We arrange delivery and answer product questions directly. Please do not send medical questions: our products are for laboratory research use only."
+    "note": "We arrange delivery and answer product questions directly. Please do not send medical questions: our products are not for human use."
   },
   "home": {
     "heroTitle": "Peptides from trusted brands, in one place",
-    "heroBody": "Browse peptides by brand and by research area. Order online and pay in cash on delivery.",
+    "heroBody": "Browse peptides by brand and by category. Order online and pay in cash on delivery.",
     "heroCta": "Shop now",
     "scrollDown": "Scroll down",
-    "researchAreasTitle": "Research areas",
+    "researchAreasTitle": "Shop by category",
     "featuredTitle": "Featured products",
     "brandsTitle": "Brands",
     "viewAll": "View all products",
     "productCount": "{count, plural, one {# product} other {# products}}",
-    "pickerCta": "Choose a research area"
+    "pickerCta": "Choose a category"
   },
   "howToUse": {
     "title": "How to prepare a vial",
-    "intro": "A quick laboratory reference for reconstituting a lyophilized peptide.",
+    "intro": "A quick reference for reconstituting a lyophilized peptide.",
     "stepLabel": "Step {n}",
     "step1": "Remove the plastic cap from the peptide vial",
     "step2": "Wipe the stoppers with an alcohol swab",
@@ -259,18 +258,17 @@
     "step5": "Gently swirl until dissolved",
     "step5Note": "Do not shake.",
     "step6": "Store in the fridge",
-    "step6Note": "<v>2–8 °C</v>",
-    "researchNote": "For laboratory research use only — not for human use. Follow your lab's own protocols and safety procedures."
+    "step6Note": "<v>2–8 °C</v>"
   },
   "shop": {
     "title": "Shop",
     "subtitle": "Every peptide in the store, grouped by brand.",
     "filtersTitle": "Filter products",
     "brandFilter": "Brand",
-    "areaFilter": "Research area",
+    "areaFilter": "Category",
     "priceFilter": "Price",
     "allBrands": "All brands",
-    "allAreas": "All research areas",
+    "allAreas": "All categories",
     "priceAny": "Any",
     "priceListed": "Price listed",
     "apply": "Apply filters",
@@ -282,7 +280,7 @@
     "next": "Next",
     "pageOf": "Page {page} of {pages}",
     "paginationLabel": "Pagination",
-    "areaBrands": "Brands with products in this research area",
+    "areaBrands": "Brands with products in this category",
     "brandProductsHeading": "{brand} products"
   },
   "brands": {
@@ -291,7 +289,9 @@
     "empty": "No brands are available right now."
   },
   "unavailable": {
-    "browse": "Browse the shop"
+    "browse": "Browse the shop",
+    "title": "We can’t find that page",
+    "body": "It may have moved or is no longer listed, or the address may be mistyped."
   },
   "price": {
     "unavailable": "Price unavailable",
@@ -333,7 +333,8 @@
     "unpricedLine": "{name} has no listed price yet.",
     "contactStore": "Contact the store",
     "addedShort": "Added",
-    "emptyByArea": "Or start from a research area"
+    "emptyByArea": "Or start from a category",
+    "summaryUnavailable": "Not available until prices load"
   },
   "checkout": {
     "title": "Checkout",
@@ -358,21 +359,30 @@
     "priceChangedBody": "Some prices changed since you added items. Review the updated total below, then confirm again."
   },
   "start": {
-    "title": "Find products by research purpose",
-    "subtitle": "Choose the research areas you are interested in and we will show the related products, grouped by brand.",
-    "pickerTitle": "What are you researching?",
+    "title": "Find products by category",
+    "subtitle": "Choose the categories you are interested in and we will show the related products, grouped by brand.",
+    "pickerTitle": "What are you looking for?",
     "select": "Select {name}",
     "deselect": "Remove {name} from your selection",
     "selected": "Selected",
     "clear": "Clear selection",
     "resultsTitle": "Related products",
-    "choosePrompt": "Choose one or more research areas above to see the related products.",
-    "noAreas": "No research areas are available right now."
+    "choosePrompt": "Choose one or more categories above to see the related products.",
+    "noAreas": "No categories are available right now."
   },
   "goalPicker": {
-    "title": "What are you researching?",
-    "subtitle": "Pick a research area and we'll show you the matching products.",
+    "title": "What are you looking for?",
+    "subtitle": "Pick a category and we'll show you the matching products.",
     "skip": "Browse everything instead",
     "close": "Close"
+  },
+  "errorPage": {
+    "title": "Something went wrong on our side",
+    "body": "This page didn’t load. Your cart is saved on this device, so nothing is lost. Try again in a moment.",
+    "retry": "Try again",
+    "retrying": "Trying again…",
+    "shop": "Browse the shop",
+    "contactLead": "If this keeps happening, email us at",
+    "reference": "Reference"
   }
 }

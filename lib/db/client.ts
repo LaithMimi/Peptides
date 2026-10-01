@@ -36,7 +36,9 @@ async function createDb(): Promise<Db> {
     return drizzle(new Pool({ connectionString: url }), { schema });
   }
   if (process.env.NODE_ENV === "production") {
-    throw new Error("DATABASE_URL is required in production");
+    if (process.env.VERCEL || process.env.CI || process.env.FORCE_PRODUCTION_DB === "1") {
+      throw new Error("DATABASE_URL is required in production");
+    }
   }
   return createEmbeddedDb();
 }

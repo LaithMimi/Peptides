@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { formatMoney } from "@/lib/money";
+import { siteUrl } from "@/lib/seo";
 import type { Order, OrderItem } from "@/lib/db/schema";
 
 export type EmailResult = { ok: true } | { ok: false; error: string };
@@ -16,6 +17,10 @@ function escapeHtml(value: string): string {
 export function buildOrderEmail(order: Order, items: OrderItem[]) {
   const money = (minor: number) => formatMoney(minor, "en");
   const placed = order.createdAt.toISOString();
+  // Links to the dashboard page, which still requires an admin sign-in. Approval
+  // is never a one-click link in the email: mail scanners open links on their own.
+  const adminUrl = `${siteUrl()}/admin/orders/${order.id}`;
+  const tel = `tel:${order.customerPhone.replace(/[^\d+]/g, "")}`;
 
   const lines = items.map(
     (i) =>
@@ -23,7 +28,13 @@ export function buildOrderEmail(order: Order, items: OrderItem[]) {
   );
 
   const text = [
-    `New order ${order.orderNumber}`,
+    `New order ${order.orderNumber}: ${money(order.totalMinor)}, cash on delivery`,
+    "",
+    "Before dispatching:",
+    `1. Check the order details below.`,
+    `2. Call the customer at ${order.customerPhone} to confirm they placed it.`,
+    `3. Approve it (or cancel it) in the dashboard: ${adminUrl}`,
+    "",
     `Placed: ${placed} (customer language: ${order.locale})`,
     "",
     `Customer: ${order.customerName}`,
@@ -47,14 +58,26 @@ export function buildOrderEmail(order: Order, items: OrderItem[]) {
         `<tr><td>${escapeHtml(i.productNameSnapshot)}<br><small>${escapeHtml(i.brandNameSnapshot)}${i.vialSizeSnapshot ? ` · ${escapeHtml(i.vialSizeSnapshot)}` : ""}</small></td><td align="right">${i.quantity}</td><td align="right">${money(i.unitPriceMinor)}</td><td align="right">${money(i.lineTotalMinor)}</td></tr>`
     )
     .join("");
-  const html = `<h2>New order ${escapeHtml(order.orderNumber)}</h2>
+  const html = `<h2>New order ${escapeHtml(order.orderNumber)}: ${money(order.totalMinor)}</h2>
+<div style="border:1px solid #1f2a52;border-radius:8px;padding:12px 16px;margin:0 0 16px">
+<p style="margin:0 0 8px"><strong>Before dispatching:</strong></p>
+<ol style="margin:0;padding-left:20px">
+<li>Check the order details below.</li>
+<li>Call the customer to confirm they placed it: <a href="${escapeHtml(tel)}"><strong>${escapeHtml(order.customerPhone)}</strong></a></li>
+<li>Approve it (or cancel it) in the dashboard: <a href="${escapeHtml(adminUrl)}">Open order ${escapeHtml(order.orderNumber)}</a></li>
+</ol>
+</div>
 <p>Placed ${escapeHtml(placed)}</p>
 <p><strong>${escapeHtml(order.customerName)}</strong><br>${escapeHtml(order.customerPhone)}<br>${escapeHtml(order.deliveryAddress)}</p>
 <p>Notes: ${order.notes && order.notes.trim() ? escapeHtml(order.notes) : "(none)"}</p>
 <table cellpadding="6" cellspacing="0" border="1"><thead><tr><th align="left">Item</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead><tbody>${rows}</tbody></table>
 <p>Subtotal: ${money(order.subtotalMinor)}<br>Delivery fee: ${order.deliveryFeeMinor === 0 ? "Free" : money(order.deliveryFeeMinor)}<br><strong>Total: ${money(order.totalMinor)}</strong><br>Payment: Cash on delivery</p>`;
 
-  return { subject: `New order ${order.orderNumber}`, text, html };
+  return {
+    subject: `New order ${order.orderNumber} (${money(order.totalMinor)}): call to confirm`,
+    text,
+    html,
+  };
 }
 
 /**

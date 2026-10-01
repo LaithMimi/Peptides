@@ -36,7 +36,15 @@ export function DataRequestForm() {
 
   async function onSubmit(values: DataRequestFormValues) {
     setSubmitError(null);
-    const result = await submitDataRequest({ ...values, locale });
+    let result;
+    try {
+      result = await submitDataRequest({ ...values, locale });
+    } catch {
+      // The request never got an answer (offline, dropped connection): keep
+      // what they typed and say so, rather than silently doing nothing.
+      setSubmitError(tErrors("networkError"));
+      return;
+    }
     if (result.ok) {
       setSent(true);
       return;
@@ -64,23 +72,27 @@ export function DataRequestForm() {
       noValidate
       className="flex flex-col gap-5 rounded-xl border border-border-strong bg-surface p-5 sm:p-6"
     >
-      <fieldset className="flex flex-col gap-2">
+      <fieldset
+        className="flex flex-col gap-1"
+        aria-describedby={errors.type ? "request-type-error" : undefined}
+      >
         <legend className="font-mono text-xs font-semibold uppercase tracking-widest text-muted">
           {t("typeLabel")}
         </legend>
         {DATA_REQUEST_TYPES.map((type) => (
-          <label key={type} className="flex items-center gap-3 text-sm text-foreground">
+          <label key={type} className="flex min-h-11 items-center gap-3 text-sm text-foreground">
             <input
               type="radio"
               value={type}
               {...register("type")}
+              aria-describedby={errors.type ? "request-type-error" : undefined}
               className="size-4 shrink-0 accent-[var(--accent)]"
             />
             {t(`types.${type}`)}
           </label>
         ))}
         {errors.type && (
-          <p role="alert" className="text-sm text-danger">
+          <p id="request-type-error" className="status-in text-sm text-danger">
             {translateFieldError(errors.type.message)}
           </p>
         )}

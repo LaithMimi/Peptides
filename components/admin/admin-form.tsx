@@ -7,6 +7,7 @@ import {
   useTransition,
   type ReactNode,
 } from "react";
+import { unstable_rethrow } from "next/navigation";
 import { INITIAL_STATE, type ActionState } from "@/app/admin/actions/shared";
 
 const FormStateContext = createContext<ActionState>(INITIAL_STATE);
@@ -41,7 +42,26 @@ const CODE_MESSAGES: Record<string, string> = {
   INVALID_CREDENTIALS: "The email or password is incorrect.",
   LOCKED: "Too many failed attempts. Try again in 15 minutes.",
   RATE_LIMITED: "Too many attempts. Please wait a few minutes.",
+  NETWORK: "The server couldn’t be reached, so this may not have saved. Check your connection and try again.",
 };
+
+/**
+ * Runs an admin Server Action and turns a thrown failure (connection dropped,
+ * server crashed) into a NETWORK result the form can show, instead of letting
+ * it take down the page. Next's own redirect/notFound signals pass through.
+ */
+export async function runAdminAction<T extends unknown[]>(
+  action: (...args: T) => Promise<ActionState>,
+  ...args: T
+): Promise<ActionState> {
+  try {
+    return await action(...args);
+  } catch (error) {
+    unstable_rethrow(error);
+    console.error(error);
+    return { ok: false, code: "NETWORK" };
+  }
+}
 
 export function errorMessage(code: string | undefined): string | undefined {
   if (!code) return undefined;
@@ -61,7 +81,10 @@ export function AdminForm({
   submitLabel?: string;
   children: ReactNode;
 }) {
-  const [state, formAction, pending] = useActionState(action, INITIAL_STATE);
+  const [state, formAction, pending] = useActionState(
+    (previous: ActionState, formData: FormData) => runAdminAction(action, previous, formData),
+    INITIAL_STATE
+  );
   const [, startTransition] = useTransition();
 
   return (

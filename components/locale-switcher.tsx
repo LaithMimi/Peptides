@@ -18,8 +18,17 @@ const LOCALE_NAMES: Record<string, string> = {
  * the languages enabled in admin Settings; with only one there is nothing to
  * switch. Switching keeps the same page, including its query string (filters,
  * `?purpose=`, order links), so nothing is lost.
+ *
+ * `variant="inline"` lays the languages out as a row of buttons instead, for
+ * the mobile menu panel when the compact header has no room for the globe.
  */
-export function LocaleSwitcher({ locales }: { locales?: string[] }) {
+export function LocaleSwitcher({
+  locales,
+  variant = "menu",
+}: {
+  locales?: string[];
+  variant?: "menu" | "inline";
+}) {
   const t = useTranslations("nav");
   const locale = useLocale();
   const pathname = usePathname();
@@ -54,12 +63,46 @@ export function LocaleSwitcher({ locales }: { locales?: string[] }) {
   );
   if (available.length < 2) return null;
 
+  function switchTo(loc: string) {
+    if (loc === locale) return;
+    const query = Object.fromEntries(searchParams.entries());
+    startTransition(() => {
+      router.replace({ pathname, query }, { locale: loc });
+    });
+  }
+
+  if (variant === "inline") {
+    return (
+      <div role="group" aria-label={t("language")} className="flex flex-wrap gap-2">
+        {available.map((loc) => {
+          const active = loc === locale;
+          return (
+            <button
+              key={loc}
+              type="button"
+              lang={loc}
+              aria-pressed={active}
+              disabled={isPending}
+              onClick={() => switchTo(loc)}
+              className={`flex min-h-11 flex-1 items-center justify-center rounded-xl px-3 text-sm font-semibold transition-colors ${
+                active
+                  ? "bg-accent text-accent-foreground"
+                  : "border border-border-strong text-navy hover:text-accent"
+              }`}
+            >
+              {LOCALE_NAMES[loc] ?? loc}
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
     <div ref={rootRef} className="relative">
       <button
         ref={buttonRef}
         type="button"
-        aria-haspopup="true"
         aria-expanded={open}
         aria-controls="locale-menu"
         aria-label={`${t("language")}: ${LOCALE_NAMES[locale] ?? locale}`}
@@ -99,11 +142,7 @@ export function LocaleSwitcher({ locales }: { locales?: string[] }) {
                   aria-current={active ? "true" : undefined}
                   onClick={() => {
                     setOpen(false);
-                    if (active) return;
-                    const query = Object.fromEntries(searchParams.entries());
-                    startTransition(() => {
-                      router.replace({ pathname, query }, { locale: loc });
-                    });
+                    switchTo(loc);
                   }}
                   className={`flex min-h-11 w-full items-center justify-between gap-3 rounded-xl px-3 text-start text-sm font-semibold transition-colors ${
                     active

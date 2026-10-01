@@ -18,7 +18,7 @@ export function DisclaimerBanner({ variant = "default" }: { variant?: "default" 
       className="flex items-start gap-3 rounded-xl border border-border-strong bg-surface-raised px-4 py-3"
     >
       <SealIcon className="mt-0.5 size-5 shrink-0 text-accent" />
-      <div>
+      <div className="min-w-0">
         <p className="font-mono text-xs font-semibold uppercase tracking-wider text-navy">
           {t("short")}
         </p>

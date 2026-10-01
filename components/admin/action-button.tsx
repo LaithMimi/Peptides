@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { ActionState } from "@/app/admin/actions/shared";
-import { adminGhostButton, errorMessage } from "@/components/admin/admin-form";
+import { adminGhostButton, errorMessage, runAdminAction } from "@/components/admin/admin-form";
 
 /**
  * Runs a bound Server Action (for example `setBrandActive.bind(null, id, false)`)
@@ -29,12 +29,13 @@ export function ActionButton({
       <button
         type="button"
         disabled={pending}
-        className={className ?? adminGhostButton}
+        aria-busy={pending}
+        className={`${className ?? adminGhostButton} disabled:cursor-progress`}
         onClick={() => {
           if (confirm && !window.confirm(confirm)) return;
           setError(null);
           startTransition(async () => {
-            const result = await action();
+            const result = await runAdminAction(action);
             if (result.ok) router.refresh();
             else setError(errorMessage(result.code) ?? "Failed.");
           });

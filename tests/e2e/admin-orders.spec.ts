@@ -43,13 +43,16 @@ test.describe("admin orders, settings and pages (US5)", () => {
     await row.getByRole("link", { name: orderNumber }).click();
 
     await expect(page.getByRole("heading", { name: new RegExp(orderNumber) })).toBeVisible();
-    await expect(page.getByText("+972501234567")).toBeVisible();
+    await expect(page.getByText("+972501234567").first()).toBeVisible();
     await expect(page.getByText("12 Main Street, Jerusalem")).toBeVisible();
     await expect(page.getByText("Cash on delivery")).toBeVisible();
     await expect(page.getByText("BPC-157").first()).toBeVisible();
     await expect(page.getByText("₪250").first()).toBeVisible();
 
-    await page.getByRole("button", { name: "Mark processing" }).click();
+    // A new order is approved (after calling the customer) before it can move on.
+    await expect(page.getByRole("heading", { name: "Confirm by phone" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Mark out for delivery" })).toHaveCount(0);
+    await page.getByRole("button", { name: "Approve order" }).click();
     await expect(page.getByText("Processing").first()).toBeVisible();
     await page.getByRole("button", { name: "Mark out for delivery" }).click();
     await expect(page.getByText("Out for delivery").first()).toBeVisible();

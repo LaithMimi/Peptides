@@ -22,7 +22,7 @@ export async function SiteHeader() {
           width={96}
           height={96}
           priority
-          className="brand-mark h-10 w-10 object-contain"
+          className="brand-mark h-10 w-10 shrink-0 object-contain @max-[18.5rem]:size-[36px]"
         />
         <span className="hidden text-base font-bold text-navy sm:inline">{settings.storeName}</span>
       </Link>

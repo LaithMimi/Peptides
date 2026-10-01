@@ -66,14 +66,15 @@ export function CartView() {
         <CartLines
           lines={cart.lines}
           maxQuantity={cart.maxLineQuantity}
+          failed={cart.status === "error"}
           editable
           onQuantity={setQuantity}
           onRemove={removeItem}
         />
       </div>
 
-      <aside className="flex flex-col gap-4 lg:sticky lg:top-6" aria-label={t("summary")}>
-        <OrderSummary totals={cart.totals} />
+      <aside className="flex flex-col gap-4 lg:sticky lg:top-(--header-clearance)" aria-label={t("summary")}>
+        <OrderSummary totals={cart.totals} state={cart.summaryState} />
         <p className="text-sm text-muted">{t("cashOnDelivery")}</p>
         <DisclaimerBanner variant="compact" />
         {cart.canCheckout ? (
@@ -87,6 +88,7 @@ export function CartView() {
           <button
             type="button"
             disabled
+            aria-busy={cart.status === "loading"}
             className="btn-primary inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide opacity-60"
           >
             {cart.status === "loading" ? t("updating") : t("checkout")}

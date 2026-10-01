@@ -1,13 +1,18 @@
 "use server";
 
+import { createHash } from "node:crypto";
+import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { feedbackSchema } from "@/lib/feedback-schema";
 import { sendFeedbackEmail } from "@/lib/email";
 import { saveInboundMessage } from "@/lib/db/queries/messages";
+import { checkLimit, limits } from "@/lib/rate-limit-db";
 
 export type FeedbackResult =
   | { ok: true }
   | { ok: false; fieldErrors?: Record<string, string>; message: string };
+
+const hashIp = (ip: string) => createHash("sha256").update(ip).digest("hex").slice(0, 32);
 
 export async function submitFeedback(input: unknown): Promise<FeedbackResult> {
   const locale =
@@ -19,6 +24,12 @@ export async function submitFeedback(input: unknown): Promise<FeedbackResult> {
       : "en";
   const t = await getTranslations({ locale, namespace: "errors" });
 
+  const forwardedFor = (await headers()).get("x-forwarded-for");
+  const ip = forwardedFor?.split(",")[0]?.trim() || "unknown";
+  if (!(await checkLimit(`feedback:ip:${hashIp(ip)}`, limits.submitPerIp()))) {
+    return { ok: false, message: t("rateLimited") };
+  }
+
   const parsed = feedbackSchema.safeParse(input);
   if (!parsed.success) {
     const known = ["required", "invalidEmail"];
@@ -29,6 +40,11 @@ export async function submitFeedback(input: unknown): Promise<FeedbackResult> {
       fieldErrors[key] = known.includes(code) ? t(code) : t("genericSubmit");
     }
     return { ok: false, fieldErrors, message: t("genericSubmit") };
+  }
+
+  // Honeypot: answer as if it succeeded so bots get no signal.
+  if (parsed.data.website && parsed.data.website.trim().length > 0) {
+    return { ok: true };
   }
 
   // The admin Messages inbox is the primary record; the email is a notification.

@@ -17,7 +17,7 @@ export async function generateMetadata({
 
 const labelClass =
   "font-mono text-xs font-semibold uppercase tracking-widest text-muted";
-const valueClass = "font-serif text-xl font-semibold text-navy";
+const valueClass = "font-serif text-xl font-semibold text-navy [overflow-wrap:anywhere]";
 const linkFocus =
   "hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
 

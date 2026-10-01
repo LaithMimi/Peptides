@@ -6,27 +6,34 @@ import { useRouter, usePathname } from "@/i18n/navigation";
 import { pick } from "@/lib/i18n-fields";
 import type { CategoryWithCount } from "@/lib/db/queries/catalog";
 import { GOAL_PICKER_EVENT, markGoalPickerSeen, readGoalPickerSeen } from "@/lib/goal-picker";
+import { CONSENT_EVENT, readConsent } from "@/lib/consent";
 import { secondaryButtonClass } from "@/components/form-field";
 
 function subscribe(onChange: () => void) {
   window.addEventListener(GOAL_PICKER_EVENT, onChange);
+  window.addEventListener(CONSENT_EVENT, onChange);
   window.addEventListener("storage", onChange);
   return () => {
     window.removeEventListener(GOAL_PICKER_EVENT, onChange);
+    window.removeEventListener(CONSENT_EVENT, onChange);
     window.removeEventListener("storage", onChange);
   };
 }
 
 // "unknown" on the server and during hydration so the modal never flashes
-// open for a returning visitor who has already made a choice.
-const getSnapshot = () => (readGoalPickerSeen() ? "seen" : "unseen");
+// open for a returning visitor who has already made a choice. "waiting" means
+// the cookie banner is still up: the two first-visit prompts never stack.
+const getSnapshot = () =>
+  readGoalPickerSeen() ? "seen" : readConsent() ? "unseen" : "waiting";
 const getServerSnapshot = () => "unknown";
 
 /**
  * First-visit onboarding: asks a new visitor what they're researching, then
  * routes straight to the matching products on /start. Shown at most once per
- * browser (lib/goal-picker.ts) and never on /start itself, which is this
- * same choice already.
+ * browser (lib/goal-picker.ts), only on the homepage — the one page where the
+ * visitor hasn't picked a direction yet. Anyone who arrives on a product,
+ * cart, checkout, legal or order link already has one, and is never
+ * interrupted. It also waits until the cookie banner has been answered.
  */
 export function GoalPickerModal({ categories }: { categories: CategoryWithCount[] }) {
   const t = useTranslations("goalPicker");
@@ -36,7 +43,7 @@ export function GoalPickerModal({ categories }: { categories: CategoryWithCount[
   const state = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
-  const eligible = state === "unseen" && pathname !== "/start" && categories.length > 0;
+  const eligible = state === "unseen" && pathname === "/" && categories.length > 0;
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -79,7 +86,7 @@ export function GoalPickerModal({ categories }: { categories: CategoryWithCount[
           type="button"
           aria-label={t("close")}
           onClick={() => dialogRef.current?.close()}
-          className="-m-2 shrink-0 rounded-full p-2 text-muted transition-colors hover:bg-surface-raised hover:text-navy"
+          className="-me-2.5 -mt-2.5 inline-flex size-11 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface-raised hover:text-navy"
         >
           <CloseIcon className="size-5" />
         </button>
@@ -93,7 +100,7 @@ export function GoalPickerModal({ categories }: { categories: CategoryWithCount[
               <button
                 type="button"
                 onClick={() => choose(category.slug)}
-                className="min-h-11 w-full rounded-xl border-2 border-border-strong bg-surface-raised px-4 py-3 text-start font-serif text-sm font-semibold uppercase tracking-wide text-navy transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:shadow-sm"
+                className="min-h-11 w-full rounded-xl border-2 border-border-strong bg-surface-raised px-4 py-3 text-start font-serif text-sm font-semibold uppercase tracking-wide text-navy transition-[box-shadow,translate] duration-300 hover:shadow-lg active:shadow-sm motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0"
               >
                 {name}
               </button>

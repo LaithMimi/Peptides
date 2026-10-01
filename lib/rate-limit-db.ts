@@ -24,6 +24,10 @@ export const limits = {
     max: envInt("LOGIN_LIMIT_PER_IP", 10),
     windowMs: 15 * 60 * 1000,
   }),
+  submitPerIp: (): LimitOptions => ({
+    max: envInt("SUBMIT_LIMIT_PER_IP", 5),
+    windowMs: 10 * 60 * 1000,
+  }),
 };
 
 /**

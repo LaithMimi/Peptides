@@ -58,8 +58,11 @@ export function CartLines({
   editable,
   onQuantity,
   onRemove,
+  failed = false,
 }: {
   lines: DisplayLine[];
+  /** The pricing request failed: pending lines stop pulsing (the page explains why). */
+  failed?: boolean;
   maxQuantity: number;
   editable: boolean;
   onQuantity?: (productId: string, quantity: number) => void;
@@ -97,7 +100,11 @@ export function CartLines({
               </div>
               <div className="min-w-0">
                 {line.pending ? (
-                  <p className="text-sm text-muted">{t("loadingLine")}</p>
+                  <div className={`flex flex-col gap-2 ${failed ? "" : "motion-safe:animate-pulse"}`}>
+                    <span className="sr-only">{t("loadingLine")}</span>
+                    <span aria-hidden="true" className="block h-3 w-24 rounded bg-navy/10" />
+                    <span aria-hidden="true" className="block h-4 w-40 max-w-full rounded bg-navy/10" />
+                  </div>
                 ) : line.status === "unavailable" ? (
                   <p className="font-semibold text-navy">{t("unavailableLine")}</p>
                 ) : (

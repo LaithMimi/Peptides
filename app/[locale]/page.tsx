@@ -110,7 +110,7 @@ export default async function HomePage({
 
       <ScrollIndicator href="#after-hero" label={t("scrollDown")} />
 
-      <div id="after-hero" className="scroll-mt-28">
+      <div id="after-hero">
         <DisclaimerBanner />
       </div>
 
@@ -142,7 +142,7 @@ export default async function HomePage({
               {t("viewAll")}
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 sm:gap-x-4 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-8">
+          <div className="grid grid-cols-1 gap-x-3 gap-y-5 min-[20rem]:grid-cols-2 sm:grid-cols-3 sm:gap-x-4 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-8">
             {featured.map((product) => (
               <ProductCard key={product.id} product={product} behavior={settings.unpricedBehavior} />
             ))}

@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq, isNull, or } from "drizzle-orm";
 import type { Db } from "./client";
 import {
   brands,
@@ -24,45 +24,57 @@ const BRAND = { slug: "pep-lab", nameEn: "PEP Lab" };
 const CATEGORY_SEED = [
   {
     slug: "recovery-tissue",
-    nameEn: "Recovery & tissue research",
+    nameEn: "Recovery & tissue",
     nameAr: "التعافي وتجدد الأنسجة",
     descriptionEn:
-      "Laboratory research on recovery and tissue-repair pathways. (Placeholder text: replace with client-approved wording.)",
+      "Peptides of interest in recovery and tissue-repair pathways. (Placeholder text: replace with client-approved wording.)",
+    descriptionAr:
+      "ببتيدات ذات أهمية بحثية في مسارات التعافي وإصلاح الأنسجة. (نص مؤقت: يُستبدل بصياغة معتمدة من العميل.)",
   },
   {
     slug: "growth-hormone",
-    nameEn: "Growth hormone pathway research",
-    nameAr: "أبحاث هرمون النمو",
+    nameEn: "Growth hormone",
+    nameAr: "هرمون النمو",
     descriptionEn:
-      "Laboratory research on growth hormone signalling pathways. (Placeholder text: replace with client-approved wording.)",
+      "Peptides of interest in growth hormone signalling pathways. (Placeholder text: replace with client-approved wording.)",
+    descriptionAr:
+      "ببتيدات ذات أهمية بحثية في مسارات إشارات هرمون النمو. (نص مؤقت: يُستبدل بصياغة معتمدة من العميل.)",
   },
   {
     slug: "metabolic",
-    nameEn: "Metabolic pathway research",
-    nameAr: "أبحاث التمثيل الغذائي",
+    nameEn: "Metabolic",
+    nameAr: "التمثيل الغذائي",
     descriptionEn:
-      "Laboratory research on cellular energy and metabolic pathways. (Placeholder text: replace with client-approved wording.)",
+      "Peptides of interest in cellular energy and metabolic pathways. (Placeholder text: replace with client-approved wording.)",
+    descriptionAr:
+      "ببتيدات ذات أهمية بحثية في مسارات الطاقة الخلوية والتمثيل الغذائي. (نص مؤقت: يُستبدل بصياغة معتمدة من العميل.)",
   },
   {
     slug: "gut",
-    nameEn: "Gut & gastrointestinal research",
-    nameAr: "أبحاث الأمعاء والجهاز الهضمي",
+    nameEn: "Gut & gastrointestinal",
+    nameAr: "الأمعاء والجهاز الهضمي",
     descriptionEn:
-      "Laboratory research on gastrointestinal and gut-related pathways. (Placeholder text: replace with client-approved wording.)",
+      "Peptides of interest in gastrointestinal and gut-related pathways. (Placeholder text: replace with client-approved wording.)",
+    descriptionAr:
+      "ببتيدات ذات أهمية بحثية في مسارات الجهاز الهضمي والأمعاء. (نص مؤقت: يُستبدل بصياغة معتمدة من العميل.)",
   },
   {
     slug: "skin-tissue",
-    nameEn: "Skin, hair & tissue research",
-    nameAr: "أبحاث البشرة والشعر والأنسجة",
+    nameEn: "Skin, hair & tissue",
+    nameAr: "البشرة والشعر والأنسجة",
     descriptionEn:
-      "Laboratory research on skin, hair and connective-tissue biology. (Placeholder text: replace with client-approved wording.)",
+      "Peptides of interest in skin, hair and connective-tissue biology. (Placeholder text: replace with client-approved wording.)",
+    descriptionAr:
+      "ببتيدات ذات أهمية بحثية في بيولوجيا البشرة والشعر والأنسجة الضامة. (نص مؤقت: يُستبدل بصياغة معتمدة من العميل.)",
   },
   {
     slug: "cognitive",
-    nameEn: "Focus & cognitive research",
-    nameAr: "أبحاث التركيز والوظائف المعرفية",
+    nameEn: "Focus & cognitive",
+    nameAr: "التركيز والوظائف المعرفية",
     descriptionEn:
-      "Laboratory research on attention and cognitive-function pathways. (Placeholder text: replace with client-approved wording.)",
+      "Peptides of interest in attention and cognitive-function pathways. (Placeholder text: replace with client-approved wording.)",
+    descriptionAr:
+      "ببتيدات ذات أهمية بحثية في مسارات الانتباه والوظائف المعرفية. (نص مؤقت: يُستبدل بصياغة معتمدة من العميل.)",
   },
 ] as const;
 
@@ -123,6 +135,20 @@ export async function seedDatabase(db: Db): Promise<void> {
       }))
     )
     .onConflictDoNothing();
+
+  // Fill in Arabic category descriptions on databases seeded before they
+  // existed. Only blank values are touched, so admin edits are never overwritten.
+  for (const c of CATEGORY_SEED) {
+    await db
+      .update(categories)
+      .set({ descriptionAr: c.descriptionAr })
+      .where(
+        and(
+          eq(categories.slug, c.slug),
+          or(isNull(categories.descriptionAr), eq(categories.descriptionAr, ""))
+        )
+      );
+  }
 
   const existing = await db
     .select({ id: brands.id })

@@ -32,12 +32,20 @@ export function FeedbackForm() {
     formState: { errors, isSubmitting },
   } = useForm<FeedbackContactFormValues>({
     resolver: zodResolver(feedbackContactFormSchema),
-    defaultValues: { name: "", email: "", message: "" },
+    defaultValues: { name: "", email: "", message: "", website: "" },
   });
 
   async function onSubmit(values: FeedbackContactFormValues) {
     setSubmitError(null);
-    const result = await submitFeedback({ ...values, locale });
+    let result;
+    try {
+      result = await submitFeedback({ ...values, locale });
+    } catch {
+      // The request never got an answer (offline, dropped connection): keep
+      // what they typed and say so, rather than silently doing nothing.
+      setSubmitError(tErrors("networkError"));
+      return;
+    }
     if (result.ok) {
       reset();
       setSent(true);
@@ -109,6 +117,20 @@ export function FeedbackForm() {
       </Field>
 
       <LegalNote purpose="feedback" />
+
+      <div
+        aria-hidden="true"
+        className="absolute -start-[9999px] h-0 w-0 overflow-hidden"
+      >
+        <label htmlFor="feedbackWebsite">Website</label>
+        <input
+          id="feedbackWebsite"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          {...register("website")}
+        />
+      </div>
 
       {submitError && (
         <p role="alert" className="rounded-md bg-danger-bg px-4 py-3 text-sm text-danger">
