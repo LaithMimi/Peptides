@@ -1,14 +1,7 @@
 import type { Metadata } from "next";
-import { Fraunces, DM_Sans, IBM_Plex_Mono } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import "../globals.css";
-
-const fraunces = Fraunces({ variable: "--font-fraunces", subsets: ["latin"] });
-const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"] });
-const plexMono = IBM_Plex_Mono({
-  variable: "--font-plex-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-});
 
 export const metadata: Metadata = {
   title: { default: "Admin", template: "%s | Admin" },
@@ -23,7 +16,7 @@ export default function AdminRootLayout({ children }: { children: React.ReactNod
       lang="en"
       dir="ltr"
       data-surface="admin"
-      className={`${fraunces.variable} ${dmSans.variable} ${plexMono.variable} h-full antialiased`}
+      className={`${GeistSans.variable} ${GeistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">{children}</body>
     </html>

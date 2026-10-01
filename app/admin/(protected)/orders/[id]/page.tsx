@@ -31,7 +31,7 @@ export default async function AdminOrderPage({ params }: { params: Promise<{ id:
         <h1 className="font-serif text-3xl font-semibold uppercase tracking-wide text-navy">
           Order <span className="font-mono">{order.orderNumber}</span>
         </h1>
-        <span className="rounded-full border-2 border-navy px-4 py-1 font-mono text-xs font-semibold uppercase tracking-wide text-navy">
+        <span className="rounded-full border border-accent bg-surface-raised px-4 py-1 font-mono text-xs font-semibold uppercase tracking-wide text-accent">
           {STATUS_LABEL[order.status]}
         </span>
       </div>

@@ -20,7 +20,7 @@ export default async function AdminDashboardPage() {
           <li key={card.label}>
             <Link
               href={card.href}
-              className="flex h-full flex-col gap-1 rounded-xl border border-border-strong bg-surface p-5 hover:border-navy"
+              className="flex h-full flex-col gap-1 rounded-xl border border-border-strong bg-surface p-5 shadow-sm transition-shadow hover:shadow-md"
             >
               <span className="text-3xl font-semibold text-navy">{card.value}</span>
               <span className="font-mono text-xs uppercase tracking-widest text-muted">{card.label}</span>

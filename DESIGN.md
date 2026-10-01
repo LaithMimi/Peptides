@@ -76,10 +76,10 @@ The named craft bar is **Apple.com** (restrained, high-contrast typography, mini
 
 A four-color palette supplied by the client (a "Clustr studio" palette card): **Soft White `#FAFAFA`, Jet Black `#0D0D0D`, Bold Blue, Light Blue.** The card's printed hex labels for the two blues (`#1E466B`, `#67BAF4`) do not match its own swatches. The values below were sampled from the swatches the client actually sees (`#1B22A7`, `#4260E6`). No other hues: the former orange hover glow was retired so the palette covers the whole site. The neutral grays are derived steps between Jet Black and Soft White, tinted very slightly toward the brand blue (surface-raised `#EFF1FB`, hairlines `#E3E5F0`/`#CFD3E6`) so inputs, chips, image wells and the disclaimer panel read as part of one blue family. They are not new hues.
 
-The token names in `app/globals.css` are kept for compatibility (`--navy` now holds Bold Blue). The admin dashboard shares these tokens and only overrides its fonts.
+The token names in `app/globals.css` are kept for compatibility (`--navy` now holds Bold Blue). The admin dashboard shares these tokens, fonts (Geist), buttons (`btn-primary`, `btn-glass`), and logo header with the storefront.
 
 ### Primary
-- **Bold Blue** (`#1B22A7`, token `--navy`): headings, brand ink, and the ink of every glass button (≈11:1 on Soft White). On the storefront it is never a fill or border; the admin dashboard uses it as a solid fill for its primary buttons and active filter (with Soft White text). In dark mode, `--navy` becomes Soft White, because Bold Blue on Jet Black is illegible.
+- **Bold Blue** (`#1B22A7`, token `--navy`): headings, brand ink, and the ink of every glass button (≈11:1 on Soft White). It is never a fill or border, on the storefront or in the admin dashboard. In dark mode, `--navy` becomes Soft White, because Bold Blue on Jet Black is illegible.
 - **Jet Black** (`#0D0D0D`, token `--foreground`): body text in light mode and the page ground in dark mode.
 
 ### Secondary
