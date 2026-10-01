@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as z from "zod";
 import { parseCustomerPhone } from "@/lib/phone";
 
 // Error `message` values are short codes, mapped to translated text by the UI

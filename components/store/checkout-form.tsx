@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale, useTranslations } from "next-intl";
-import type { z } from "zod";
+import type * as z from "zod";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useCart } from "@/lib/cart-store";
 import { prefersReducedMotion } from "@/lib/motion";

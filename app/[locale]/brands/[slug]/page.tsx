@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { getBrand, listShop } from "@/lib/db/queries/catalog";
+import { getBrand as queryBrand, listShop } from "@/lib/db/queries/catalog";
 import { getSettings } from "@/lib/db/queries/settings";
 import { pick } from "@/lib/i18n-fields";
 import { excerpt, pageMetadata } from "@/lib/seo";
 import { BrandGroup } from "@/components/store/brand-group";
 import { Pagination } from "@/components/store/pagination";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
+
+// generateMetadata and the page both need this row; cache() makes it one
+// database read per request instead of two.
+const getBrand = cache(queryBrand);
 
 export async function generateMetadata({
   params,

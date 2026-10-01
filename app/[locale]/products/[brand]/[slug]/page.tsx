@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { getProduct } from "@/lib/db/queries/catalog";
+import { getProduct as queryProduct } from "@/lib/db/queries/catalog";
 import { getSettings } from "@/lib/db/queries/settings";
 import { pick } from "@/lib/i18n-fields";
 import { excerpt, pageMetadata, siteUrl } from "@/lib/seo";
@@ -13,6 +14,10 @@ import { VialGlyph } from "@/components/vial-glyph";
 import { CategoryChips } from "@/components/store/category-chips";
 import { PriceDisplay } from "@/components/store/price-display";
 import { ProductActions } from "@/components/store/product-actions";
+
+// generateMetadata and the page both need this row; cache() makes it one
+// database read per request instead of two.
+const getProduct = cache(queryProduct);
 
 type Params = { locale: string; brand: string; slug: string };
 

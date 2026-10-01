@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as z from "zod";
 
 export const DATA_REQUEST_TYPES = ["delete", "access", "correct"] as const;
 

@@ -15,9 +15,14 @@ import { CookieConsent } from "@/components/cookie-consent";
 import { GoalPickerModal } from "@/components/store/goal-picker-modal";
 import "../globals.css";
 
+// Kufi is only used under dir="rtl" (globals.css). One root layout serves
+// both locales, so preloading it would make every English page fetch ~120 KB
+// of Arabic glyphs it never renders. Arabic pages still discover it from the
+// CSS on first paint.
 const notoKufiArabic = Noto_Kufi_Arabic({
   variable: "--font-noto-kufi",
   subsets: ["arabic"],
+  preload: false,
 });
 
 export function generateStaticParams() {

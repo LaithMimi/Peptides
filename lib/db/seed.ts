@@ -11,6 +11,7 @@ import {
 } from "./schema";
 import { CONTACT } from "@/lib/contact";
 import seedProducts from "./seed-data/products.json";
+import { LEGAL_PAGES } from "./seed-data/legal-pages";
 
 /**
  * Idempotent launch data. "PEP Lab" is an ordinary brand row: no code branches
@@ -103,7 +104,7 @@ const PLACEHOLDER_AR = "نص مؤقت. هذه الصفحة بانتظار محت
 
 const PAGE_SEED = [
   { slug: "about", titleEn: "About", titleAr: "من نحن" },
-  { slug: "terms", titleEn: "Terms & Conditions", titleAr: "الشروط والأحكام" },
+  { slug: "terms", titleEn: "Terms of Service", titleAr: "شروط الخدمة" },
   { slug: "privacy", titleEn: "Privacy Policy", titleAr: "سياسة الخصوصية" },
   {
     slug: "shipping-returns",
@@ -127,14 +128,24 @@ export async function seedDatabase(db: Db): Promise<void> {
   await db
     .insert(pages)
     .values(
-      PAGE_SEED.map((p) => ({
-        ...p,
-        bodyEn: PLACEHOLDER_EN,
-        bodyAr: PLACEHOLDER_AR,
-        isPlaceholder: true,
-      }))
+      PAGE_SEED.map((p) => {
+        const legal = LEGAL_PAGES[p.slug as keyof typeof LEGAL_PAGES];
+        return legal
+          ? { slug: p.slug, ...legal, isPlaceholder: false }
+          : { ...p, bodyEn: PLACEHOLDER_EN, bodyAr: PLACEHOLDER_AR, isPlaceholder: true };
+      })
     )
     .onConflictDoNothing();
+
+  // Replace the Terms / Privacy placeholder text on databases seeded before it
+  // existed. Only pages still marked as placeholders are touched, so text the
+  // admin has approved is never overwritten.
+  for (const [slug, legal] of Object.entries(LEGAL_PAGES)) {
+    await db
+      .update(pages)
+      .set({ ...legal, isPlaceholder: false })
+      .where(and(eq(pages.slug, slug), eq(pages.isPlaceholder, true)));
+  }
 
   // Fill in Arabic category descriptions on databases seeded before they
   // existed. Only blank values are touched, so admin edits are never overwritten.

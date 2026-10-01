@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { getCategory, listCategories, listShop } from "@/lib/db/queries/catalog";
+import { getCategory as queryCategory, listCategories, listShop } from "@/lib/db/queries/catalog";
 import { getSettings } from "@/lib/db/queries/settings";
 import { pick } from "@/lib/i18n-fields";
 import { excerpt, pageMetadata } from "@/lib/seo";
@@ -9,6 +10,10 @@ import { BrandGroup } from "@/components/store/brand-group";
 import { CategoryChips } from "@/components/store/category-chips";
 import { Pagination } from "@/components/store/pagination";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
+
+// generateMetadata and the page both need this row; cache() makes it one
+// database read per request instead of two.
+const getCategory = cache(queryCategory);
 
 export async function generateMetadata({
   params,

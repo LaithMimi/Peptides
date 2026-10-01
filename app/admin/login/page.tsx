@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getCurrentAdmin } from "@/lib/admin-auth";
 import { adminLogin } from "@/app/admin/actions/auth";
 import { AdminField, AdminForm, adminInput } from "@/components/admin/admin-form";
+import { PasswordInput } from "@/components/admin/password-input";
 
 export const metadata = { title: "Sign in" };
 
@@ -19,14 +20,7 @@ export default async function AdminLoginPage() {
           <input id="email" name="email" type="email" autoComplete="username" required className={adminInput} />
         </AdminField>
         <AdminField name="password" label="Password">
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            className={adminInput}
-          />
+          <PasswordInput id="password" name="password" autoComplete="current-password" required />
         </AdminField>
       </AdminForm>
      </div>

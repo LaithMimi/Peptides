@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as z from "zod";
 import { MAX_PRICE_MINOR, toMinor } from "@/lib/money";
 import { PAGE_SLUGS } from "@/lib/db/schema";
 

@@ -11,7 +11,8 @@ import "./globals.css";
 // The last-resort fallback, used only when a root layout itself fails (for
 // example the storefront chrome cannot reach the database). It replaces the
 // whole document, so it has no next-intl provider: its two languages live here.
-const notoKufiArabic = Noto_Kufi_Arabic({ variable: "--font-noto-kufi", subsets: ["arabic"] });
+// preload: false — see app/[locale]/layout.tsx; this boundary ships with every route.
+const notoKufiArabic = Noto_Kufi_Arabic({ variable: "--font-noto-kufi", subsets: ["arabic"], preload: false });
 
 const COPY = {
   en: {

@@ -108,24 +108,26 @@ export async function listShop(filters: ShopFilters = {}): Promise<ShopResult> {
   const page = Math.max(1, Math.floor(filters.page ?? 1));
   const where = filterConditions(filters, db);
 
-  const [{ total }] = await db
-    .select({ total: sql<number>`count(*)::int` })
-    .from(products)
-    .innerJoin(brands, eq(brands.id, products.brandId))
-    .where(where);
-
-  const rows = await db
-    .select({ product: products, brand: brands })
-    .from(products)
-    .innerJoin(brands, eq(brands.id, products.brandId))
-    .where(where)
-    .orderBy(
-      asc(sql`lower(${brands.nameEn})`),
-      asc(products.sortOrder),
-      asc(products.nameEn)
-    )
-    .limit(PAGE_SIZE)
-    .offset((page - 1) * PAGE_SIZE);
+  // Independent reads: run them together so the page waits one round trip, not two.
+  const [[{ total }], rows] = await Promise.all([
+    db
+      .select({ total: sql<number>`count(*)::int` })
+      .from(products)
+      .innerJoin(brands, eq(brands.id, products.brandId))
+      .where(where),
+    db
+      .select({ product: products, brand: brands })
+      .from(products)
+      .innerJoin(brands, eq(brands.id, products.brandId))
+      .where(where)
+      .orderBy(
+        asc(sql`lower(${brands.nameEn})`),
+        asc(products.sortOrder),
+        asc(products.nameEn)
+      )
+      .limit(PAGE_SIZE)
+      .offset((page - 1) * PAGE_SIZE),
+  ]);
 
   const images = await attachImages(
     db,
@@ -192,22 +194,24 @@ export async function getProduct(
     );
   if (!row) return null;
 
-  const images = await db
-    .select()
-    .from(productImages)
-    .where(eq(productImages.productId, row.product.id))
-    .orderBy(asc(productImages.sortOrder));
-  const cats = await db
-    .select({ category: categories })
-    .from(productCategories)
-    .innerJoin(categories, eq(categories.id, productCategories.categoryId))
-    .where(
-      and(
-        eq(productCategories.productId, row.product.id),
-        eq(categories.isActive, true)
+  const [images, cats] = await Promise.all([
+    db
+      .select()
+      .from(productImages)
+      .where(eq(productImages.productId, row.product.id))
+      .orderBy(asc(productImages.sortOrder)),
+    db
+      .select({ category: categories })
+      .from(productCategories)
+      .innerJoin(categories, eq(categories.id, productCategories.categoryId))
+      .where(
+        and(
+          eq(productCategories.productId, row.product.id),
+          eq(categories.isActive, true)
+        )
       )
-    )
-    .orderBy(asc(categories.sortOrder), asc(categories.nameEn));
+      .orderBy(asc(categories.sortOrder), asc(categories.nameEn)),
+  ]);
 
   return {
     product: row.product,

@@ -2,15 +2,19 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale, useTranslations } from "next-intl";
-import {
-  feedbackContactFormSchema,
-  type FeedbackContactFormValues,
-} from "@/lib/feedback-schema";
+import type { FeedbackContactFormValues } from "@/lib/feedback-schema";
 import { submitFeedback } from "@/app/[locale]/feedback/actions";
 import { Field, inputClass } from "@/components/form-field";
 import { LegalNote } from "@/components/legal-note";
+
+// This form sits at the bottom of the homepage, so it validates with plain
+// react-hook-form rules instead of zodResolver: pulling Zod into the client
+// cost the homepage ~40 KB gzipped of JavaScript for two checks. The server
+// action still validates the full feedbackSchema, which stays the source of
+// truth. Same regex as Zod's z.email(), same error codes.
+const EMAIL =
+  /^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$/;
 
 export function FeedbackForm() {
   const t = useTranslations("feedback");
@@ -31,7 +35,6 @@ export function FeedbackForm() {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<FeedbackContactFormValues>({
-    resolver: zodResolver(feedbackContactFormSchema),
     defaultValues: { name: "", email: "", message: "", website: "" },
   });
 
@@ -97,7 +100,9 @@ export function FeedbackForm() {
           id="feedbackEmail"
           type="email"
           autoComplete="email"
-          {...register("email")}
+          {...register("email", {
+            validate: (v) => EMAIL.test(v.trim()) || "invalidEmail",
+          })}
           className={inputClass}
         />
       </Field>
@@ -111,7 +116,9 @@ export function FeedbackForm() {
           id="feedbackMessage"
           rows={4}
           placeholder={t("messagePlaceholder")}
-          {...register("message")}
+          {...register("message", {
+            validate: (v) => v.trim().length > 0 || "required",
+          })}
           className={inputClass}
         />
       </Field>
