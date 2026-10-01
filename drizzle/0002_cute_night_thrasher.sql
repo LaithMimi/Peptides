@@ -1,0 +1,2 @@
+ALTER TABLE "store_settings" ALTER COLUMN "default_locale" SET DEFAULT 'ar';--> statement-breakpoint
+UPDATE "store_settings" SET "default_locale" = 'ar' WHERE "default_locale" = 'en' AND 'ar' = ANY("supported_locales");

@@ -4,7 +4,6 @@ import { CONTACT } from "@/lib/contact";
 import { getSettings } from "@/lib/db/queries/settings";
 import { pageMetadata } from "@/lib/seo";
 import { LtrValue } from "@/components/ltr-value";
-import { WhatsAppButton } from "@/components/store/whatsapp-button";
 
 export async function generateMetadata({
   params,
@@ -30,14 +29,7 @@ export default async function ContactPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("contact");
-  const tp = await getTranslations("price");
   const settings = await getSettings();
-
-  // Details come from store settings (editable in admin); the business phone
-  // published before settings existed is the fallback.
-  const phoneDisplay = settings.phone?.trim() || CONTACT.phoneDisplay;
-  const phoneTel = phoneDisplay.replace(/[^\d+]/g, "");
-  const email = settings.email?.trim() || CONTACT.email;
   const address = settings.address?.trim();
 
   return (
@@ -55,30 +47,14 @@ export default async function ContactPage({
           <dd className={`mt-1 whitespace-pre-line ${valueClass}`}>{address || t("locationValue")}</dd>
         </div>
         <div>
-          <dt className={labelClass}>{t("phone")}</dt>
+          <dt className={labelClass}>{t("email")}</dt>
           <dd className="mt-1">
-            <a
-              href={`tel:${phoneTel}`}
-              aria-label={`${t("call")} ${phoneDisplay}`}
-              className={`${valueClass} ${linkFocus}`}
-            >
-              <LtrValue>{phoneDisplay}</LtrValue>
+            <a href={`mailto:${CONTACT.email}`} className={`${valueClass} ${linkFocus}`}>
+              <LtrValue>{CONTACT.email}</LtrValue>
             </a>
           </dd>
         </div>
-        {email && (
-          <div>
-            <dt className={labelClass}>{t("email")}</dt>
-            <dd className="mt-1">
-              <a href={`mailto:${email}`} className={`${valueClass} ${linkFocus}`}>
-                <LtrValue>{email}</LtrValue>
-              </a>
-            </dd>
-          </div>
-        )}
       </dl>
-
-      <WhatsAppButton number={settings.whatsappNumber} label={tp("whatsappLabel")} />
 
       <p className="text-sm text-muted">{t("note")}</p>
     </div>

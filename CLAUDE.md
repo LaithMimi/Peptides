@@ -128,17 +128,20 @@ Server Action and the image-upload route additionally call `requireAdmin()`
 themselves (defense in depth — never rely on the layout alone). Admin
 manages brands, categories, products (with images via Vercel Blob,
 `app/api/admin/blob-upload/route.ts`), orders, store settings (delivery fee,
-unpriced-product behavior, WhatsApp number, supported languages), and the
+unpriced-product behavior, supported languages), and the
 editable legal/about pages (`pages` table, rendered with `react-markdown`,
 raw HTML is never rendered). See
 `specs/003-multi-brand-peptide-store/contracts/routes.md` for the full
 route and access-rule map.
 
-**Unpriced products & WhatsApp**: whether an unpriced product shows "Ask
-About Price" (WhatsApp) or hides its price entirely is the
+**Unpriced products & contact**: whether an unpriced product shows "Ask
+About Price" (a `mailto:` link) or hides its price entirely is the
 `store_settings.unpriced_behavior` setting, never hardcoded per brand or
-product. `lib/whatsapp.ts` builds the link from the configured number; an
-empty number hides every WhatsApp control site-wide.
+product. The business has no phone number or WhatsApp anywhere on the site: all
+customer communication goes through `CONTACT.email` (`lib/contact.ts`) or
+the admin Messages inbox (`inbound_messages`, fed by the feedback and
+data-request forms). The customer's own phone at checkout is kept for
+delivery.
 
 **Error-code translation pattern (customer-facing only)**: `lib/schemas/order.ts`
 uses short codes as `message` (`"required"`, `"invalidPhone"`,

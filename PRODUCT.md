@@ -48,7 +48,7 @@ order number and is guarded by a signed access token in its link. The store
 receives the order in the admin dashboard and a notification email, and
 follows up to deliver and collect payment. A product without a price yet
 follows a single store-wide setting: either "Ask About Price" (opens
-WhatsApp with the product name prefilled) or hides its price and shows the
+email to the store with the product name prefilled) or hides its price and shows the
 same contact button instead — never a checkout option.
 
 ## Capabilities and Constraints
@@ -57,7 +57,7 @@ same contact button instead — never a checkout option.
   Orders are real and stored, paid cash on delivery; totals are always
   computed server-side from the database, never trusted from the browser.
 - Product price is nullable by design; an unpriced product can never be
-  checked out, only asked about via WhatsApp.
+  checked out, only asked about by email.
 - Bilingual English + Arabic with correct RTL layout is a first-class
   requirement of every storefront page, not an add-on. The admin dashboard
   itself is English-only (an internal tool, not customer-facing).
@@ -110,7 +110,7 @@ same contact button instead — never a checkout option.
 
 Per the original brief, these are still open and must be confirmed before
 go-live (tracked in `specs/003-multi-brand-peptide-store/tasks.md`):
-final store name/logo sign-off, the WhatsApp number, the store notification
+final store name/logo sign-off, the store notification
 email, final product data/images/prices for every brand, the research-area
 list and copy, which unpriced-product behavior to default to, delivery
 coverage area, final legal text (Terms, Privacy, Shipping & Returns, Product

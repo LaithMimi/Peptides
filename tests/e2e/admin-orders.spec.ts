@@ -118,6 +118,8 @@ test.describe("admin orders, settings and pages (US5)", () => {
 
     await signIn(page);
     await page.goto("/admin/settings");
+    // Arabic is the default language, so make English the default before removing Arabic.
+    await page.getByLabel("Default language").selectOption("en");
     await page.getByLabel("Arabic", { exact: true }).uncheck();
     await page.getByRole("button", { name: "Save settings" }).click();
     await expect(page.getByText("Saved.")).toBeVisible();
@@ -126,6 +128,7 @@ test.describe("admin orders, settings and pages (US5)", () => {
 
     await page.goto("/admin/settings");
     await page.getByLabel("Arabic", { exact: true }).check();
+    await page.getByLabel("Default language").selectOption("ar");
     await page.getByRole("button", { name: "Save settings" }).click();
     await expect(page.getByText("Saved.")).toBeVisible();
     await page.goto("/en");
@@ -134,6 +137,6 @@ test.describe("admin orders, settings and pages (US5)", () => {
 
   test("the bare address opens the store in the default language", async ({ page }) => {
     await page.goto("/");
-    await expect(page).toHaveURL(/\/en$/);
+    await expect(page).toHaveURL(/\/ar$/);
   });
 });

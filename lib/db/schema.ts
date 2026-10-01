@@ -224,7 +224,7 @@ export const storeSettings = pgTable(
     unpricedBehavior: unpricedBehavior("unpriced_behavior")
       .notNull()
       .default("ask_price"),
-    defaultLocale: text("default_locale").notNull().default("en"),
+    defaultLocale: text("default_locale").notNull().default("ar"),
     supportedLocales: text("supported_locales")
       .array()
       .notNull()

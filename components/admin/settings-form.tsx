@@ -16,19 +16,7 @@ export function SettingsForm({ settings }: { settings: StoreSettings }) {
         <AdminField name="logoUrl" label="Logo" help="An uploaded image URL or a file in /public, for example /brand/pep-club-logo.png.">
           <input id="logoUrl" name="logoUrl" defaultValue={settings.logoUrl ?? ""} className={adminInput} />
         </AdminField>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <AdminField name="phone" label="Phone" help="Shown on the Contact page.">
-            <input id="phone" name="phone" type="tel" dir="ltr" defaultValue={settings.phone ?? ""} className={adminInput} />
-          </AdminField>
-          <AdminField
-            name="whatsappNumber"
-            label="WhatsApp number"
-            help="Digits with the country code, for example 972501234567. Leave empty to hide all WhatsApp buttons."
-          >
-            <input id="whatsappNumber" name="whatsappNumber" dir="ltr" defaultValue={settings.whatsappNumber ?? ""} className={adminInput} />
-          </AdminField>
-        </div>
-        <AdminField name="email" label="Store email" help="New-order emails are sent here.">
+        <AdminField name="email" label="Store email" help="New-order emails are sent here. The public contact email is set in lib/contact.ts.">
           <input id="email" name="email" type="email" dir="ltr" defaultValue={settings.email ?? ""} className={adminInput} />
         </AdminField>
         <AdminField name="address" label="Address">
@@ -74,7 +62,7 @@ export function SettingsForm({ settings }: { settings: StoreSettings }) {
         <AdminField
           name="unpricedBehavior"
           label="Unpriced products"
-          help="What customers see for a product without a price. Either way they cannot order it, and the button opens WhatsApp with the product name."
+          help="What customers see for a product without a price. Either way they cannot order it, and the button opens an email to the store with the product name."
         >
           <select id="unpricedBehavior" name="unpricedBehavior" defaultValue={settings.unpricedBehavior} className={adminInput}>
             <option value="ask_price">Show &ldquo;Price unavailable&rdquo; and an &ldquo;Ask about price&rdquo; button</option>
