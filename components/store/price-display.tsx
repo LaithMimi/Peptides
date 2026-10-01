@@ -23,12 +23,13 @@ export function PriceDisplay({
   if (priceMinor !== null) {
     return (
       <span className={className}>
-        <bdi dir="ltr" className="font-mono font-semibold text-accent">
+        <bdi dir="ltr" className="font-mono font-semibold tracking-tight text-accent">
           {formatMoney(priceMinor, locale)}
         </bdi>
       </span>
     );
   }
   if (behavior === "hide_price") return null;
-  return <span className={`text-muted ${className ?? ""}`}>{t("unavailable")}</span>;
+  // Size only amplifies a real price; the unpriced note stays quiet.
+  return <span className="text-sm text-muted">{t("unavailable")}</span>;
 }

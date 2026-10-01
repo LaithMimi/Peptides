@@ -8,7 +8,7 @@ export async function FeedbackSection() {
   return (
     <section
       aria-labelledby="feedback-heading"
-      className="grid grid-cols-1 gap-8 border-t border-dashed border-border-strong pt-10 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-12"
+      className="grid grid-cols-1 gap-8 border-t border-dashed border-border-strong pt-16 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-12"
     >
       <div className="flex flex-col gap-4">
         <span className="inline-flex size-16 items-center justify-center rounded-full bg-surface-raised p-3 text-accent">
@@ -16,7 +16,7 @@ export async function FeedbackSection() {
         </span>
         <h2
           id="feedback-heading"
-          className="font-serif text-2xl font-semibold uppercase tracking-wide text-navy sm:text-3xl"
+          className="font-serif text-3xl font-semibold uppercase tracking-tight text-navy sm:text-4xl"
         >
           {t("title")}
         </h2>

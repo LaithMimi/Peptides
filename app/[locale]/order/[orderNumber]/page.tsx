@@ -51,7 +51,7 @@ export default async function OrderConfirmationPage({ params, searchParams }: Pr
         <span className="inline-flex size-16 items-center justify-center rounded-full bg-surface p-3 text-accent">
           <VialGlyph className="size-10" />
         </span>
-        <h1 className="font-serif text-3xl font-semibold uppercase tracking-wide text-navy">
+        <h1 className="text-balance font-serif text-4xl font-semibold uppercase leading-[1.02] tracking-tight text-navy sm:text-5xl lg:text-6xl">
           {t("title")}
         </h1>
         <p className="text-foreground">{t("body", { name: order.customerName })}</p>
