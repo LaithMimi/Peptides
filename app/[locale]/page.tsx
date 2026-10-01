@@ -45,13 +45,13 @@ export default async function HomePage({
   const featured = featuredAll;
 
   return (
-    <div className="flex flex-col gap-10">
-      <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12">
+    <div className="flex flex-col gap-16 sm:gap-24">
+      <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-14">
         <div>
-          <h1 className="font-serif text-4xl font-semibold uppercase tracking-wide text-navy sm:text-5xl">
+          <h1 className="text-balance font-serif text-5xl font-semibold uppercase leading-[0.98] tracking-tight text-navy sm:text-6xl">
             {t("heroTitle")}
           </h1>
-          <p className="mt-4 max-w-lg text-lg text-muted">{t("heroBody")}</p>
+          <p className="mt-6 max-w-lg text-lg text-muted sm:text-xl">{t("heroBody")}</p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
               href="/shop"
@@ -123,7 +123,7 @@ export default async function HomePage({
         <section aria-labelledby="home-areas" className="flex flex-col gap-3">
           <h2
             id="home-areas"
-            className="font-serif text-xl font-semibold uppercase tracking-wide text-navy"
+            className="font-serif text-2xl font-semibold uppercase tracking-tight text-navy sm:text-4xl"
           >
             {t("researchAreasTitle")}
           </h2>
@@ -136,7 +136,7 @@ export default async function HomePage({
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <h2
               id="home-featured"
-              className="font-serif text-xl font-semibold uppercase tracking-wide text-navy"
+              className="font-serif text-2xl font-semibold uppercase tracking-tight text-navy sm:text-4xl"
             >
               {t("featuredTitle")}
             </h2>
@@ -161,7 +161,7 @@ export default async function HomePage({
         <section aria-labelledby="home-brands" className="flex flex-col gap-3">
           <h2
             id="home-brands"
-            className="font-serif text-xl font-semibold uppercase tracking-wide text-navy"
+            className="font-serif text-2xl font-semibold uppercase tracking-tight text-navy sm:text-4xl"
           >
             {t("brandsTitle")}
           </h2>

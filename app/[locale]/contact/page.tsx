@@ -43,7 +43,7 @@ export default async function ContactPage({
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
       <header>
-        <h1 className="font-serif text-3xl font-semibold uppercase tracking-wide text-navy">
+        <h1 className="text-balance font-serif text-4xl font-semibold uppercase leading-[1.02] tracking-tight text-navy sm:text-5xl lg:text-6xl">
           {t("title")}
         </h1>
         <p className="mt-2 text-muted">{t("intro")}</p>

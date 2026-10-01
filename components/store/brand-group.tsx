@@ -21,7 +21,7 @@ export function BrandGroup({
     <section aria-labelledby={`brand-${group.brand.slug}`} className="flex flex-col gap-4">
       <h2
         id={`brand-${group.brand.slug}`}
-        className="border-b border-dashed border-border-strong pb-2 font-serif text-xl font-semibold uppercase tracking-wide text-navy"
+        className="border-b border-dashed border-border-strong pb-2 font-serif text-2xl font-semibold uppercase tracking-tight text-navy sm:text-4xl"
       >
         <Link
           href={`/brands/${group.brand.slug}`}

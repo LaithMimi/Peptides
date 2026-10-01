@@ -13,11 +13,11 @@ export async function HowToUse() {
       <div>
         <h2
           id="home-how-to-use"
-          className="font-serif text-xl font-semibold uppercase tracking-wide text-navy"
+          className="font-serif text-2xl font-semibold uppercase tracking-tight text-navy sm:text-4xl"
         >
           {t("title")}
         </h2>
-        <p className="mt-1 max-w-2xl text-sm text-muted">{t("intro")}</p>
+        <p className="mt-3 max-w-2xl text-base text-muted">{t("intro")}</p>
       </div>
 
       <ol className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4">
