@@ -19,7 +19,11 @@ export function HeaderShell({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 lg:px-8">
+    // Named so page transitions leave it anchored in place (see globals.css).
+    <header
+      className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 lg:px-8"
+      style={{ viewTransitionName: "site-header" }}
+    >
       <div
         data-scrolled={scrolled}
         className="site-nav relative mx-auto grid w-full max-w-[1400px] grid-cols-[1fr_auto] items-center gap-x-4 rounded-full px-3 py-2 sm:px-6 md:grid-cols-[1fr_auto_1fr]"

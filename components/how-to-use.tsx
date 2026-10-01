@@ -13,7 +13,7 @@ export async function HowToUse() {
       <div>
         <h2
           id="home-how-to-use"
-          className="font-serif text-2xl font-semibold uppercase tracking-tight text-navy sm:text-4xl"
+          className="type-heading text-navy"
         >
           {t("title")}
         </h2>

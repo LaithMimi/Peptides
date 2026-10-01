@@ -1,7 +1,7 @@
 {
   "site": {
     "name": "Pep Club",
-    "tagline": "Research peptides from trusted brands"
+    "tagline": "Peptides from trusted brands"
   },
   "nav": {
     "catalog": "Catalog",
@@ -23,7 +23,7 @@
     "long": "All products listed on this site are intended strictly for research and laboratory use. They are not drugs, dietary supplements, or cosmetics, and are not for human or veterinary use, consumption, or administration in any form."
   },
   "catalog": {
-    "title": "Research Peptide Catalog",
+    "title": "Peptide Catalog",
     "subtitle": "Explore compounds currently of interest across recovery, growth-hormone, metabolic, and cognitive research.",
     "viewDetails": "View research details"
   },
@@ -202,11 +202,6 @@
     "successTitle": "Thank you",
     "successBody": "Your feedback has been sent."
   },
-  "trust": {
-    "curated": "Multiple brands",
-    "quoteBased": "Cash on delivery",
-    "bilingual": "English and Arabic"
-  },
   "confirmation": {
     "title": "Order received",
     "body": "Thank you, {name}. We have received your order and will contact you to arrange delivery.",
@@ -216,7 +211,17 @@
     "payment": "Payment method",
     "paymentValue": "Cash on delivery",
     "deliveryTo": "Delivery address",
-    "continueShopping": "Continue shopping"
+    "continueShopping": "Continue shopping",
+    "progress": {
+      "title": "Order status",
+      "new": "Received",
+      "processing": "Being prepared",
+      "out_for_delivery": "Out for delivery",
+      "completed": "Delivered",
+      "done": "done",
+      "hint": "This page always shows your order's latest status. Keep its link to check back.",
+      "cancelled": "This order was cancelled. If you didn't expect this, <email>email us</email>."
+    }
   },
   "footer": {
     "disclaimer": "For Research Use Only — Not for Human Use. Not for diagnostic or therapeutic use in humans or animals.",
@@ -231,8 +236,8 @@
     "note": "We arrange delivery and answer product questions directly. Please do not send medical questions: our products are for laboratory research use only."
   },
   "home": {
-    "heroTitle": "Research peptides from trusted brands, in one place",
-    "heroBody": "Browse laboratory research peptides by brand and by research area. Order online and pay in cash on delivery.",
+    "heroTitle": "Peptides from trusted brands, in one place",
+    "heroBody": "Browse peptides by brand and by research area. Order online and pay in cash on delivery.",
     "heroCta": "Shop now",
     "scrollDown": "Scroll down",
     "researchAreasTitle": "Research areas",
@@ -244,7 +249,7 @@
   },
   "howToUse": {
     "title": "How to prepare a vial",
-    "intro": "A quick laboratory reference for reconstituting a lyophilized research peptide.",
+    "intro": "A quick laboratory reference for reconstituting a lyophilized peptide.",
     "stepLabel": "Step {n}",
     "step1": "Remove the plastic cap from the peptide vial",
     "step2": "Wipe the stoppers with an alcohol swab",
@@ -259,7 +264,7 @@
   },
   "shop": {
     "title": "Shop",
-    "subtitle": "Every research peptide in the store, grouped by brand.",
+    "subtitle": "Every peptide in the store, grouped by brand.",
     "filtersTitle": "Filter products",
     "brandFilter": "Brand",
     "areaFilter": "Research area",
@@ -282,7 +287,7 @@
   },
   "brands": {
     "title": "Brands",
-    "subtitle": "The manufacturers whose research peptides we carry.",
+    "subtitle": "The manufacturers whose peptides we carry.",
     "empty": "No brands are available right now."
   },
   "unavailable": {
@@ -326,7 +331,9 @@
     "blockedBody": "Remove them to continue checking out, or contact the store to ask about them.",
     "unavailableLine": "This item is no longer available. Remove it to continue.",
     "unpricedLine": "{name} has no listed price yet.",
-    "contactStore": "Contact the store"
+    "contactStore": "Contact the store",
+    "addedShort": "Added",
+    "emptyByArea": "Or start from a research area"
   },
   "checkout": {
     "title": "Checkout",

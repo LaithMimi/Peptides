@@ -60,7 +60,7 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       dir={dir}
-      className={`${GeistSans.variable} ${GeistMono.variable} ${notoKufiArabic.variable} h-full antialiased`}
+      className={`${GeistSans.variable} ${GeistMono.variable} ${notoKufiArabic.variable} storefront h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
         {/*

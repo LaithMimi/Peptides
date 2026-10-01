@@ -121,7 +121,7 @@ describe("admin order, settings and page actions", () => {
   it("dashboard counts new and processing orders, products and brands", async () => {
     await makeOrder();
     await makeOrder({ status: "processing" });
-    expect(await dashboardCounts()).toEqual({ newOrders: 2, processingOrders: 1, products: 10, brands: 1 });
+    expect(await dashboardCounts()).toEqual({ newOrders: 2, processingOrders: 1, products: 10, brands: 1, unreadMessages: 0 });
     const filtered = await listOrders("processing");
     expect(filtered.total).toBe(1);
     expect((await listOrders(undefined)).total).toBe(3);

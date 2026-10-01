@@ -142,7 +142,7 @@ export default async function ProductPage({ params }: { params: Promise<Params> 
                 {brandName}
               </Link>
             </p>
-            <h1 className="mt-2 text-balance font-serif text-4xl font-semibold uppercase leading-[1.02] tracking-tight text-navy sm:text-5xl">
+            <h1 className="mt-2 type-title text-navy">
               {name}
             </h1>
             {focus && <p className="mt-1 text-muted">{focus}</p>}

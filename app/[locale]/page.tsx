@@ -11,6 +11,9 @@ import { CategoryChips } from "@/components/store/category-chips";
 import { VialGlyph } from "@/components/vial-glyph";
 import { ScrollIndicator } from "@/components/scroll-indicator";
 import Image from "next/image";
+import type { CSSProperties } from "react";
+
+const TILE_DELAYS = [320, 590, 410, 500];
 
 export default async function HomePage({
   params,
@@ -20,7 +23,6 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("home");
-  const tTrust = await getTranslations("trust");
   const [categories, featuredAll, brands, settings] = await Promise.all([
     listCategories(),
     listFeatured(8),
@@ -28,14 +30,6 @@ export default async function HomePage({
     getSettings(),
   ]);
 
-  // "Multiple brands" is only true once the catalog actually has more than
-  // one active brand — showing it against a single-brand launch catalog
-  // would be a claim the site can't back, which the design system forbids.
-  const trustMarkers = [
-    ...(brands.length > 1 ? [tTrust("curated")] : []),
-    tTrust("quoteBased"),
-    tTrust("bilingual"),
-  ];
 
   // Hero shows the first 4 as a photo collage; the Featured section below shows
   // the full fetched set. These can overlap on a small catalog — that's fine,
@@ -48,11 +42,19 @@ export default async function HomePage({
     <div className="flex flex-col gap-16 sm:gap-24">
       <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-14">
         <div>
-          <h1 className="text-balance font-serif text-5xl font-semibold uppercase leading-[0.98] tracking-tight text-navy sm:text-6xl">
+          <h1 className="hero-focus type-display text-navy">
             {t("heroTitle")}
           </h1>
-          <p className="mt-6 max-w-lg text-lg text-muted sm:text-xl">{t("heroBody")}</p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+          <p
+            className="hero-focus mt-6 max-w-lg text-lg text-muted sm:text-xl"
+            style={{ "--delay": "90ms" } as CSSProperties}
+          >
+            {t("heroBody")}
+          </p>
+          <div
+            className="hero-focus mt-8 flex flex-wrap items-center gap-3"
+            style={{ "--delay": "170ms" } as CSSProperties}
+          >
             <Link
               href="/shop"
               className="btn-primary inline-flex min-h-11 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide"
@@ -66,16 +68,6 @@ export default async function HomePage({
               {t("pickerCta")}
             </Link>
           </div>
-          <ul className="mt-8 flex flex-wrap gap-2">
-            {trustMarkers.map((marker) => (
-              <li
-                key={marker}
-                className="rounded-full border border-border-strong bg-surface-raised px-3 py-1 font-mono text-xs uppercase tracking-widest text-navy"
-              >
-                {marker}
-              </li>
-            ))}
-          </ul>
         </div>
         {heroProducts.length > 0 && (
           <div className="grid grid-cols-2 gap-x-4 gap-y-8 pb-6">
@@ -85,7 +77,10 @@ export default async function HomePage({
               return (
                 <div
                   key={product.id}
-                  className={`aspect-square overflow-hidden rounded-xl border border-border-strong bg-surface-raised shadow-sm ${i % 3 === 1 ? "translate-y-6" : ""}`}
+                  // Photos land one by one after the headline; the offset
+                  // tile (i === 1) lands last.
+                  style={{ "--delay": `${TILE_DELAYS[i] ?? 360}ms` } as CSSProperties}
+                  className={`hero-tile aspect-square overflow-hidden rounded-xl border border-border-strong bg-surface-raised shadow-sm ${i % 3 === 1 ? "translate-y-6" : ""}`}
                 >
                   {product.image ? (
                     <Image
@@ -123,7 +118,7 @@ export default async function HomePage({
         <section aria-labelledby="home-areas" className="flex flex-col gap-3">
           <h2
             id="home-areas"
-            className="font-serif text-2xl font-semibold uppercase tracking-tight text-navy sm:text-4xl"
+            className="type-heading text-navy"
           >
             {t("researchAreasTitle")}
           </h2>
@@ -136,7 +131,7 @@ export default async function HomePage({
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <h2
               id="home-featured"
-              className="font-serif text-2xl font-semibold uppercase tracking-tight text-navy sm:text-4xl"
+              className="type-heading text-navy"
             >
               {t("featuredTitle")}
             </h2>
@@ -147,7 +142,7 @@ export default async function HomePage({
               {t("viewAll")}
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 sm:gap-x-4 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 sm:gap-x-4 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-8">
             {featured.map((product) => (
               <ProductCard key={product.id} product={product} behavior={settings.unpricedBehavior} />
             ))}
@@ -161,7 +156,7 @@ export default async function HomePage({
         <section aria-labelledby="home-brands" className="flex flex-col gap-3">
           <h2
             id="home-brands"
-            className="font-serif text-2xl font-semibold uppercase tracking-tight text-navy sm:text-4xl"
+            className="type-heading text-navy"
           >
             {t("brandsTitle")}
           </h2>

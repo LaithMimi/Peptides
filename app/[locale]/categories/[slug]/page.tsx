@@ -51,7 +51,7 @@ export default async function CategoryPage({
   return (
     <div className="flex flex-col gap-8">
       <header>
-        <h1 className="text-balance font-serif text-4xl font-semibold uppercase leading-[1.02] tracking-tight text-navy sm:text-5xl lg:text-6xl">
+        <h1 className="type-title text-navy">
           {pick(category, "name", locale) ?? category.nameEn}
         </h1>
         {description && <p className="mt-4 max-w-2xl text-lg text-muted">{description}</p>}

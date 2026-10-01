@@ -21,7 +21,7 @@ export function BrandGroup({
     <section aria-labelledby={`brand-${group.brand.slug}`} className="flex flex-col gap-4">
       <h2
         id={`brand-${group.brand.slug}`}
-        className="border-b border-dashed border-border-strong pb-2 font-serif text-2xl font-semibold uppercase tracking-tight text-navy sm:text-4xl"
+        className="border-b border-dashed border-border-strong pb-2 type-heading text-navy"
       >
         <Link
           href={`/brands/${group.brand.slug}`}
@@ -31,7 +31,7 @@ export function BrandGroup({
           {brandName}
         </Link>
       </h2>
-      <div className="grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 sm:gap-x-4 lg:grid-cols-4 xl:grid-cols-5">
+      <div className="grid grid-cols-2 gap-x-3 gap-y-5 sm:grid-cols-3 sm:gap-x-4 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-8">
         {group.products.map((product) => (
           <ProductCard key={product.id} product={product} behavior={behavior} />
         ))}

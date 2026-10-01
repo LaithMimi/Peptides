@@ -29,7 +29,7 @@ export function PurposePicker({
 
   return (
     <section aria-labelledby="picker-title" className="flex flex-col gap-4">
-      <h2 id="picker-title" className="font-serif text-2xl font-semibold uppercase tracking-tight text-navy sm:text-4xl">
+      <h2 id="picker-title" className="type-heading text-navy">
         {t("pickerTitle")}
       </h2>
       <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -59,7 +59,7 @@ export function PurposePicker({
                     {name}
                   </span>
                   {isSelected && (
-                    <span className="shrink-0 glass-badge rounded-full px-2 py-0.5 font-mono text-xs uppercase tracking-wide">
+                    <span className="chip-pop shrink-0 glass-badge rounded-full px-2 py-0.5 font-mono text-xs uppercase tracking-wide">
                       {t("selected")}
                     </span>
                   )}

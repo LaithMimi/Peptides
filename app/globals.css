@@ -94,6 +94,25 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
+/*
+  Storefront scale. The storefront reads at Apple's 17px body size, rising
+  fluidly to 18px on wide desktops (17px at 1024px wide, 18px from ~1440px).
+  Every Tailwind size, gap, control height, icon, and the type roles below
+  are rem-based, so the whole storefront grows together and keeps its
+  rhythm. rem in a root font-size resolves against the browser default, so
+  a visitor's own font-size preference still scales it. Scoped to the
+  storefront's <html>; the English-only admin keeps the denser 16px root.
+  The two smallest text steps also get a higher floor here: 12px labels
+  and 14px meta lines were doing too much of the customer-facing reading.
+*/
+html.storefront {
+  font-size: clamp(1.0625rem, 0.909rem + 0.24vw, 1.125rem);
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.45;
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.5;
+}
+
 /* Letter-spacing pulls Arabic letters apart and breaks their joining; the
    Latin-tuned tracking utilities are switched off under RTL. Inputs keep
    theirs so the spaced one-time code stays legible. */
@@ -103,6 +122,93 @@ html[dir="rtl"] :not(input):not(textarea) {
 
 html[dir="rtl"] body {
   font-family: var(--font-arabic), var(--font-sans), Arial, sans-serif;
+}
+
+/* Geist Mono has no Arabic glyphs, so Arabic text in a mono label fell
+   through to the system's fixed-width Arabic face. Kufi takes the Arabic
+   glyphs; Latin values (10 mg, prices) still render in Geist Mono. */
+html[dir="rtl"] {
+  --font-mono: "GeistMono", var(--font-noto-kufi), ui-monospace, monospace;
+}
+
+/*
+  Type roles. Headings are Geist 600 in capitals; capitals need a little
+  positive tracking (never negative) and can take tighter leading than
+  mixed case because they have no descenders. Display is reserved for the
+  homepage hero and is the largest type on the site; Title is every page
+  H1; Heading is a section H2; Card title is the product name on a card.
+  Color and spacing stay with the element's own utilities.
+*/
+@utility type-display {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: clamp(2.75rem, 1.6rem + 3vw, 3.75rem);
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+  text-wrap: balance;
+}
+
+@utility type-title {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 2.25rem;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+  @media (width >= 40rem) {
+    font-size: 3rem;
+  }
+  @media (width >= 64rem) {
+    font-size: 3.25rem;
+  }
+}
+
+@utility type-heading {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  line-height: 1.05;
+  letter-spacing: 0.015em;
+  text-wrap: balance;
+  @media (width >= 40rem) {
+    font-size: 2.25rem;
+  }
+}
+
+@utility type-card-title {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 1.0625rem;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
+  @media (width >= 40rem) {
+    font-size: 1.25rem;
+  }
+}
+
+/* Noto Kufi Arabic has tall ascenders, dots and marks above and below the
+   line: the capital-tuned leading above would clip them, so headings open
+   up under RTL. Unlayered, so it wins over the layered role utilities. */
+html[dir="rtl"] .type-display {
+  line-height: 1.25;
+}
+html[dir="rtl"] :is(.type-title, .type-heading) {
+  line-height: 1.35;
+}
+html[dir="rtl"] .type-card-title {
+  line-height: 1.5;
+}
+
+/* Even out the last line of running text wherever the browser supports it. */
+p,
+li,
+dd {
+  text-wrap: pretty;
 }
 
 /* One visible keyboard-focus ring for every interactive element. */
@@ -212,8 +318,8 @@ html[dir="rtl"] body {
 
 .scroll-indicator {
   display: flex;
-  width: 40px;
-  height: 40px;
+  width: 2.75rem;
+  height: 2.75rem;
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
@@ -345,5 +451,430 @@ html[dir="rtl"] body {
   .btn-primary:hover:not(:disabled):not([aria-disabled="true"]),
   .btn-primary:active:not(:disabled):not([aria-disabled="true"]) {
     transform: none;
+  }
+}
+
+/*
+  Motion: "coming into focus"
+  One idea carries every arrival on the storefront. Like a microscope
+  racking onto a specimen, things arrive by sharpening out of a soft blur
+  rather than flying in. Two authored moments use it at full strength (the
+  home hero, plus the order-confirmation vial owned by the delight pass);
+  everywhere else it is a quiet
+  3-4px rack on page and result changes. Feedback (cart badge, quantity
+  digits, removed lines, totals) stays small and fast. Every default state
+  is fully visible: if an animation never runs, nothing is hidden.
+*/
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-quick: cubic-bezier(0.4, 0, 1, 1);
+  --motion-exit: 140ms;
+  --motion-enter: 420ms;
+}
+
+@keyframes focus-in {
+  from {
+    opacity: 0;
+    filter: blur(var(--focus-blur, 6px));
+    transform: translateY(var(--focus-rise, 14px));
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Page continuity (React <ViewTransition>, see components/page-view.tsx). */
+
+/* Clicks pass through to the live page while a transition runs. */
+::view-transition {
+  pointer-events: none;
+}
+
+/* Moving between a short page and a long one toggles a classic (non-overlay)
+   scrollbar, which changes the viewport width mid-transition and makes Chrome
+   abort it ("Viewport size changed"). Reserving the gutter keeps the width
+   constant. */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* The outgoing page leaves quickly; the incoming page (its own group,
+   below) racks into focus. Root's new state does not animate, so the
+   footer and ground are simply there. */
+::view-transition-old(root) {
+  animation: var(--motion-exit) var(--ease-in-quick) both fade-out;
+}
+::view-transition-new(root) {
+  animation: none;
+}
+
+::view-transition-new(.page-enter) {
+  --focus-blur: 4px;
+  --focus-rise: 10px;
+  animation: var(--motion-enter) var(--ease-out-expo) 60ms both focus-in;
+}
+
+/* The skeleton steps aside before the real content arrives. */
+::view-transition-old(.skeleton-exit) {
+  animation: var(--motion-exit) var(--ease-in-quick) both fade-out;
+}
+
+/* Same place, different content: a result set swaps under its controls. */
+::view-transition-old(.results-swap) {
+  animation: 120ms var(--ease-in-quick) both fade-out;
+}
+::view-transition-new(.results-swap) {
+  --focus-blur: 3px;
+  --focus-rise: 8px;
+  animation: 340ms var(--ease-out-expo) 80ms both focus-in;
+}
+
+/* The fixed header is the spatial anchor: it never moves or fades. */
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+/* The active-link underline slides from the old link to the new one. */
+::view-transition-group(.nav-indicator) {
+  animation-duration: 380ms;
+  animation-timing-function: var(--ease-out-expo);
+  z-index: 101;
+}
+::view-transition-new(.nav-indicator-in) {
+  animation: 260ms var(--ease-out-expo) both nav-indicator-in;
+}
+::view-transition-old(.nav-indicator-out) {
+  animation: 120ms var(--ease-in-quick) both fade-out;
+}
+
+@keyframes nav-indicator-in {
+  from {
+    opacity: 0;
+    transform: scaleX(0.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+/* Header */
+
+.nav-link {
+  position: relative;
+}
+
+.nav-indicator {
+  position: absolute;
+  inset-inline: 0.5rem;
+  bottom: 0.45rem;
+  height: 2px;
+  border-radius: 9999px;
+  background: var(--accent);
+}
+
+/* The mobile menu drops out of the capsule; its links follow in order. */
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+}
+
+.menu-in {
+  transform-origin: top center;
+  animation: 240ms var(--ease-out-expo) both menu-in;
+}
+
+.menu-in > * {
+  --focus-blur: 2px;
+  --focus-rise: 6px;
+  animation: 260ms var(--ease-out-expo) both focus-in;
+}
+.menu-in > :nth-child(1) { animation-delay: 30ms; }
+.menu-in > :nth-child(2) { animation-delay: 60ms; }
+.menu-in > :nth-child(3) { animation-delay: 90ms; }
+.menu-in > :nth-child(4) { animation-delay: 120ms; }
+.menu-in > :nth-child(5) { animation-delay: 150ms; }
+
+/* Home hero: the authored focal moment.
+   The headline racks into focus, its supporting lines follow, then the four
+   real product photos rise out of their wells and sharpen one by one; the
+   offset tile lands last. About 1s end to end, once per visit to the page. */
+.hero-focus {
+  --focus-blur: 10px;
+  --focus-rise: 18px;
+  animation: 820ms var(--ease-out-expo) both focus-in;
+  animation-delay: var(--delay, 0ms);
+}
+
+@keyframes tile-rise {
+  from {
+    clip-path: inset(100% 0 0 0 round 0.75rem);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 0.75rem);
+  }
+}
+
+@keyframes tile-focus {
+  from {
+    filter: blur(12px);
+    transform: scale(1.12);
+  }
+  to {
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+.hero-tile {
+  animation: 760ms var(--ease-out-expo) both tile-rise;
+  animation-delay: var(--delay, 0ms);
+}
+
+.hero-tile > * {
+  animation: 1000ms var(--ease-out-expo) both tile-focus;
+  animation-delay: var(--delay, 0ms);
+}
+
+/* Product cards arrive as the grid scrolls into view.
+   Scroll-driven, so each card's entrance is tied to its own position (a
+   natural stagger across columns) and costs no JavaScript. Browsers without
+   view timelines simply show the cards. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .card-in-view {
+      animation: card-in-view linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 90%;
+    }
+  }
+}
+
+@keyframes card-in-view {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Small acknowledgments */
+
+@keyframes status-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* Add-to-cart confirmation and field errors slide into place. */
+.status-in {
+  animation: 260ms var(--ease-out-expo) both status-in;
+}
+
+@keyframes chip-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.08);
+  }
+}
+
+/* A "Selected" badge popping onto a research-area tile. */
+.chip-pop {
+  animation: 300ms var(--ease-out-expo) both chip-pop;
+}
+
+/* Busy submit: a band of light sweeps the button while the request runs. */
+@keyframes busy-sheen {
+  from {
+    background-position: 150% 0;
+  }
+  to {
+    background-position: -50% 0;
+  }
+}
+
+.btn-primary[aria-busy="true"],
+.btn-glass[aria-busy="true"] {
+  background-image: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.38) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  animation: busy-sheen 1.3s linear infinite;
+}
+
+/* The first-visit dialog's scrim fades rather than snapping on. */
+.goal-picker-dialog[open]::backdrop {
+  animation: 240ms ease-out both backdrop-in;
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Every keyframed entrance collapses to an instant state change. */
+@media (prefers-reduced-motion: reduce) {
+  .menu-in,
+  .menu-in > *,
+  .hero-focus,
+  .hero-tile,
+  .hero-tile > *,
+  .status-in,
+  .chip-pop,
+  .goal-picker-dialog[open]::backdrop {
+    animation: none;
+  }
+
+  .btn-primary[aria-busy="true"],
+  .btn-glass[aria-busy="true"] {
+    animation: none;
+    background-image: none;
+  }
+}
+
+/*
+  Delight: three earned moments.
+  "Precision you can feel": built from the logo's peptide dot-chain and the
+  vial mark, never a new visual device. (1) Order placed: the vial's seal
+  ring closes, liquid rises to the fill line, the chain bonds; below it the
+  order-status chain links up to the order's real state. (2) Add to cart:
+  the button confirms in place with a drawn check (the header badge pop
+  lives in the motion block above). (3) Empty cart: the same vial, empty —
+  static. Every default state is the final state, so nothing hides if an
+  animation never runs.
+*/
+@keyframes vial-ring-close {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@keyframes vial-liquid-rise {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes vial-bond-link {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+.vial-sealing .vial-ring {
+  stroke-dasharray: 1;
+  transform: rotate(-90deg);
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: 900ms var(--ease-out-expo) 120ms both vial-ring-close;
+}
+
+.vial-sealing .vial-liquid {
+  transform-origin: bottom;
+  transform-box: fill-box;
+  animation: 700ms var(--ease-out-expo) 420ms both vial-liquid-rise;
+}
+
+.vial-sealing .vial-bond {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: 360ms var(--ease-out-expo) both vial-bond-link;
+}
+.vial-sealing .vial-bond-1 { animation-delay: 820ms; }
+.vial-sealing .vial-bond-2 { animation-delay: 900ms; }
+.vial-sealing .vial-bond-3 { animation-delay: 980ms; }
+
+/* Order-status chain: reached bonds draw from the previous node, in order,
+   after the vial has sealed; the current node lands last. */
+@keyframes chain-bond-draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes chain-node-land {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  70% {
+    transform: scale(1.12);
+  }
+}
+
+.chain-bond {
+  transform-origin: left center;
+  animation: 380ms var(--ease-out-expo) both chain-bond-draw;
+  animation-delay: calc(var(--chain-delay, 150ms) + (var(--i, 1) - 1) * 160ms);
+}
+[dir="rtl"] .chain-bond {
+  transform-origin: right center;
+}
+
+.chain-bond-pending {
+  background-image: linear-gradient(to right, var(--border-strong) 50%, transparent 50%);
+  background-size: 6px 2px;
+}
+
+.chain-node-current {
+  animation: 420ms var(--ease-out-expo) both chain-node-land;
+  animation-delay: calc(var(--chain-delay, 150ms) + 80ms + (var(--i, 0) - 1) * 160ms);
+}
+
+/* Add to cart: the check draws itself in the button. */
+@keyframes added-check-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+.added-check {
+  stroke-dasharray: 1;
+  animation: 320ms var(--ease-out-expo) 60ms both added-check-draw;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vial-sealing .vial-ring,
+  .vial-sealing .vial-liquid,
+  .vial-sealing .vial-bond,
+  .chain-bond,
+  .chain-node-current,
+  .added-check {
+    animation: none;
   }
 }

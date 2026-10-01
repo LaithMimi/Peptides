@@ -297,6 +297,7 @@ export function CheckoutForm() {
         <button
           type="submit"
           disabled={isSubmitting || !cart.canCheckout}
+          aria-busy={isSubmitting}
           className="btn-primary inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 font-serif text-sm font-semibold uppercase tracking-wide disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isSubmitting ? t("confirming") : t("confirm")}

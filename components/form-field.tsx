@@ -48,12 +48,12 @@ export function Field({
       </label>
       {control}
       {help && !error && (
-        <p id={helpId} className="text-xs text-muted">
+        <p id={helpId} className="text-sm text-muted">
           {help}
         </p>
       )}
       {error && (
-        <p id={errorId} role="alert" className="text-sm text-danger">
+        <p id={errorId} role="alert" className="status-in text-sm text-danger">
           {error}
         </p>
       )}

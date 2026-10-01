@@ -16,7 +16,7 @@ export async function FeedbackSection() {
         </span>
         <h2
           id="feedback-heading"
-          className="font-serif text-3xl font-semibold uppercase tracking-tight text-navy sm:text-4xl"
+          className="type-heading text-navy"
         >
           {t("title")}
         </h2>

@@ -20,11 +20,41 @@ typography:
   display:
     fontFamily: "Geist Sans, ui-sans-serif, system-ui, sans-serif"
     fontWeight: 600
+    fontSize: "clamp(2.75rem, 1.6rem + 3vw, 3.75rem)"
+    lineHeight: 0.95
+    letterSpacing: "0.005em"
+    fontFeature: "uppercase"
+  title:
+    fontFamily: "Geist Sans, ui-sans-serif, system-ui, sans-serif"
+    fontWeight: 600
+    fontSize: "2.25rem"
+    lineHeight: 1
+    letterSpacing: "0.01em"
+    fontFeature: "uppercase"
+  heading:
+    fontFamily: "Geist Sans, ui-sans-serif, system-ui, sans-serif"
+    fontWeight: 600
+    fontSize: "1.5rem"
+    lineHeight: 1.05
+    letterSpacing: "0.015em"
+    fontFeature: "uppercase"
+  title-sm:
+    fontSize: "3rem"
+  title-lg:
+    fontSize: "3.25rem"
+  heading-sm:
+    fontSize: "2.25rem"
+  card-title:
+    fontFamily: "Geist Sans, ui-sans-serif, system-ui, sans-serif"
+    fontWeight: 600
+    fontSize: "1.0625rem"
+    lineHeight: 1.15
     letterSpacing: "0.02em"
-    fontFeature: "uppercase tracking-wide"
+    fontFeature: "uppercase"
   body:
     fontFamily: "Geist Sans, ui-sans-serif, system-ui, sans-serif"
     fontWeight: 400
+    fontSize: "1rem"
   label:
     fontFamily: "Geist Mono, ui-monospace, monospace"
     fontSize: "0.75rem"
@@ -113,12 +143,23 @@ Color is applied by role only, never as a region. The client briefly tried a "co
 **Character:** A single clean geometric grotesk family (Geist) carries both display and body weight — confident, high-contrast, Apple-register typography. Geist Mono is reserved for values (price, vial size, purity, quantity) and micro-labels, never prose.
 
 ### Hierarchy
-- **Display** (Geist Sans, 600, 2.25–3rem, uppercase, tracking-wide): the homepage hero H1 (largest in the system, per the Apple-register craft bar).
-- **Headline** (Geist Sans, 600, 1.125–2rem, uppercase, tracking-wide): page-level H1s (catalog title, product name) and section headings.
-- **Body** (Geist Sans, 400, 0.875–1.125rem): descriptions, research-area lists, form help text.
-- **Label** (Geist Mono, 500, 0.75rem, uppercase, tracked 0.1em): field labels, vial-size/purity values, quantity, nav micro-labels, trust-marker chips.
+Heading roles are named utilities in `app/globals.css` (`type-display`, `type-title`, `type-heading`, `type-card-title`); use them instead of re-typing size/leading/tracking strings. Color and spacing stay on the element.
+- **Display** (`type-display`, Geist Sans 600, uppercase, fluid 2.75–3.75rem, leading 0.95, tracking +0.005em): the homepage hero H1 only, and the largest type on the site.
+- **Title** (`type-title`, 600, uppercase, 2.25 / 3 / 3.25rem at base/sm/lg, leading 1, tracking +0.01em): every page H1, including the product name on its detail page.
+- **Heading** (`type-heading`, 600, uppercase, 1.5 / 2.25rem, leading 1.05, tracking +0.015em): section H2s.
+- **Card title** (`type-card-title`, 600, uppercase, 1.0625rem in the two-up phone grid, 1.25rem from `sm`, leading 1.15, tracking +0.02em, `overflow-wrap: anywhere` so a long name never spills out of a narrow card): product names on cards.
+- **Subheading** (600, uppercase, 0.875–1.25rem, `tracking-wide`): panel and sidebar headings (order summary, usage, warnings).
+- **Body** (Geist Sans, 400, 0.875–1.25rem): descriptions, research-area lists, form help text. 0.875rem is the floor for anything a customer reads as copy, card research-focus lines and field help included.
+- **Label** (Geist Mono, `text-xs` = 0.8125rem on the storefront, uppercase, tracked 0.1em): field labels, vial-size/purity values, quantity, nav micro-labels. Nothing smaller than `text-xs`.
+- **Long-form** (`components/store/markdown.tsx`, About and legal pages): sentence-case headings, `leading-relaxed` prose held to a 34rem measure (~70 characters; `ch` overshoots in Geist).
 
 ### Named Rules
+**The Storefront Scale Rule.** The storefront `<html>` carries the `storefront` class, which sets a fluid root of 17px (Apple's body size) rising to 18px on wide desktops (`clamp(1.0625rem, 0.909rem + 0.24vw, 1.125rem)`), and raises the two smallest steps: `text-xs` 0.8125rem (leading 1.45), `text-sm` 0.9375rem (leading 1.5). All rem values in this document scale with that root, so sizes, gaps, controls and icons grow together; author new UI in rem/Tailwind units, never px, or it falls out of scale. The admin dashboard has no `storefront` class and keeps the denser 16px root. Product grids top out at 4 columns (`lg:gap-x-6 lg:gap-y-8`) so cards keep their size at the larger type.
+
+**The Tracked Capitals Rule.** Capitals always take zero-to-positive tracking (wider as the size drops), never `tracking-tight`. The negative tracking that suits mixed case crowds capitals together.
+
+**The Arabic Leading Rule.** Under `dir="rtl"`, heading roles open up to 1.25–1.5 leading (Noto Kufi Arabic marks sit far above and below the line), `text-transform` has no effect, and all letter-spacing is reset so letters keep joining. The mono stack becomes `"GeistMono", Noto Kufi Arabic` so Arabic text in a mono label gets Kufi instead of the system fixed-width Arabic face (Courier New on Windows); Latin values still render in Geist Mono. Geist ships upright only, so never use `italic`: the browser would fake the slant.
+
 **The Kicker Ban.** No small-caps or tracked label ever sits directly above a heading as a standalone eyebrow line — the heading carries its own weight.
 
 ## Layout
@@ -166,19 +207,38 @@ Two families: **pills** (`rounded-full`) for every button, chip, and toggle, and
 ### Navigation (deliberate exception to the rest of the system)
 - The header is a **floating capsule of clear glass**, not a full-width bar and not a colored fill: `app/[locale]/layout.tsx`'s `<header>` adds page-edge padding and a top gap, then the bar (`.nav-glass` in `app/globals.css`, `rounded-full`) sits inset from the viewport edges at `max-w-6xl`. The material is real `backdrop-filter: blur(20px) saturate(180%)` under only a whisper of brand blue (`rgba(0,0,255,.13→.04)` gradient), a blue-tinted 1px edge (`rgba(0,0,255,.22)`), and a bright inset top rim (`inset 0 1px 0 rgba(255,255,255,.85)`). Dark mode swaps the tint for `rgba(102,105,255,.22)` over a faint white wash with a white-alpha edge. History, so it isn't retried: a solid navy→blue gradient, then a dot-chain overlay, then a *dark tinted* glass were each tried; the dark tinted pane put white ink over a pale pane (≈2.7:1, failing AA), so the glass is deliberately **light and clear with dark ink**. This was an explicit, scoped client request layered on top of the otherwise-plain "category standard" system — the one loud moment on the page, not a signal to extend glass or the capsule shape to cards or content.
 - Ink stays normal: nav links `text-navy` (hover `text-accent`), the logo uses the ordinary `.brand-mark`, the cart badge is the usual accent dot, and the mobile-menu button is an accent outline. Because ink is set by the theme tokens (dark ink on light theme, light ink on dark), legibility never depends on what sits behind the glass. Measured: navy ink over the glass ≥13:1, accent ink ≥6:1. The locale switcher is unchanged.
-- **Fixed capsule update (`site-header.tsx`, `header-shell.tsx`, `.site-nav` / `.glass-button` in `app/globals.css`):** the header is now `position: fixed`, `max-w-[1400px]`, a 3-column grid — 16px bold logo/name left, 14px medium links centered, glass Cart CTA (plus the locale switcher) right. It is fully transparent with no border at scroll 0; past 8px `data-scrolled` turns on the glass (`rgba(255,255,255,.1)`, `blur(12px)`, `rgba(255,255,255,.15)` rim) plus a soft shadow, since a white-alpha rim is invisible on this white ground. All glass transitions use `0.3s cubic-bezier(0.4,0,0.2,1)`. `.glass-button` hovers to `scale(1.05)` with a deeper shadow and no colored tint (the original orange glow was removed). Ink is always the navy token (never white) so contrast never depends on the backdrop. `<main>` carries `pt-28` to clear the fixed bar. The home hero ends in a 40px `ScrollIndicator` ring whose arrow floats 10px over 3s (`float` keyframes; disabled under `prefers-reduced-motion`).
+- **Fixed capsule update (`site-header.tsx`, `header-shell.tsx`, `.site-nav` / `.glass-button` in `app/globals.css`):** the header is now `position: fixed`, `max-w-[1400px]`, a 3-column grid — 16px bold logo/name left, 14px medium links centered, glass Cart CTA (plus the locale switcher) right. It is fully transparent with no border at scroll 0; past 8px `data-scrolled` turns on the glass (`rgba(255,255,255,.1)`, `blur(12px)`, `rgba(255,255,255,.15)` rim) plus a soft shadow, since a white-alpha rim is invisible on this white ground. All glass transitions use `0.3s cubic-bezier(0.4,0,0.2,1)`. `.glass-button` hovers to `scale(1.05)` with a deeper shadow and no colored tint (the original orange glow was removed). Ink is always the navy token (never white) so contrast never depends on the backdrop. `<main>` carries `pt-28` to clear the fixed bar. The home hero ends in a 2.75rem `ScrollIndicator` ring whose arrow floats 10px over 3s (`float` keyframes; disabled under `prefers-reduced-motion`).
 - **All buttons share this glass:** `.btn-glass` is now the one button material (white-alpha glass, Bold Blue ink, a raised hover with a deeper shadow and `scale(1.05)`, no colored hover tint), used on every filled and former outline button — hero CTAs, Add to cart, cart/checkout, filters, forms, cookie choices, locale switcher, quantity stepper, mobile menu. Disabled buttons don't react to hover. `.glass-badge` is the same material with no hover, for the numbered badges in How-to-use and the purpose picker. The older "blue-tinted glass" and "outline buttons stay as-is" notes under Components → Buttons are superseded.
 - The mobile disclosure menu floats as its own `absolute`-positioned card below the capsule (same `.nav-glass` + `rounded-2xl`), not nested inside the pill — opening it never stretches the capsule into a tall stadium shape.
 - No account/sign-in control — this product has none, by hard constraint.
 
 ### Trust Markers
-Short, strictly factual pill chips under the hero subtitle. Every chip must be verifiably true of the site as built — never a claim about verification, certification, or customers the business hasn't confirmed.
+Removed at the client's request (2026-10-01): the hero no longer shows a row of trust chips ("Cash on delivery", "English and Arabic", "Multiple brands"). Don't reintroduce them unless asked; if they come back, every chip must be verifiably true of the site as built.
 
 ### Homepage Hero Photo Collage (signature moment, not a signature device)
 The homepage hero's right column (`app/[locale]/page.tsx`) shows four real featured-product photos in a `grid-cols-2` collage, one tile offset downward (`translate-y-6`) for visual rhythm — the closest this system has to a "moment," and it is built entirely from real seeded photography, never generated imagery, per the client's explicit instruction. It is not a reusable component or repeating unit elsewhere in the system; it is specific to this one hero.
 
 ### Vial Glyph
-`components/vial-glyph.tsx`: an authored SVG — a cylindrical, crimp-capped vial (matching the real seeded product photography's shape) with a small peptide-bond dot-chain accent, in `currentColor`. Shown directly (no wrapper/mount) wherever a product has no photo of its own.
+`components/vial-glyph.tsx`: an authored SVG — a cylindrical, crimp-capped vial (matching the real seeded product photography's shape) with a small peptide-bond dot-chain accent, in `currentColor`. Shown directly (no wrapper/mount) wherever a product has no photo of its own. Also `variant="empty"` (empty cart) and `variant="sealed"` (order confirmation) — see Motion → Delight.
+
+## Motion
+
+**North star: "coming into focus."** Like a microscope racking onto a specimen, things arrive by sharpening out of a soft blur (`focus-in` keyframes: opacity + small rise + blur → 0, `--ease-out-expo`), never by flying, bouncing or sliding across the page. All rules live in the "Motion" block of `app/globals.css`; every default state is fully visible, and everything collapses under `prefers-reduced-motion`.
+
+- **Authored moment (home hero only):** headline, body and CTAs rack into focus in sequence (`.hero-focus` + `--delay`), then the four real product photos rise out of their wells (clip-path) and sharpen (`.hero-tile`); the offset tile lands last. About 1s, once per visit to the page. Don't add a second hero-scale entrance elsewhere. The order-confirmation vial sequence belongs to the delight pass (`.vial-sealing`).
+- **Page continuity (React `<ViewTransition>`):** `app/[locale]/template.tsx` → `components/page-view.tsx` racks each new page into focus on navigation; the old page fades out fast; the loading skeleton steps aside (`.skeleton-exit`); the fixed header is anchored (`view-transition-name: site-header`) and never moves. Query-only changes (shop pagination, research-area picks) crossfade just the results (`ResultsView`, `.results-swap`).
+- **Navigation:** the active section is marked `aria-current="page"` with a 2px Light Blue underline that slides between links (`nav-indicator`, desktop only). The mobile menu drops out of the capsule with its links following in order (`.menu-in`).
+- **Feedback (Web Animations API, `lib/motion.ts`):** add-to-cart pops the header cart and its badge (driven by `CART_ADDED_EVENT`, never by hydration or quantity edits); quantity digits tick in the direction of the change; a removed cart line fades then folds its height so the lines below slide up; the order total flashes Light Blue when a quantity edit reprices it; field errors slide in (`.status-in`); busy submit buttons carry a light sheen (`aria-busy`).
+- **Product grids:** cards rise into place as they scroll into view (`.card-in-view`, scroll-driven CSS, no JS; unsupported browsers just show them).
+- **Timing:** 100–150ms exits, 220–420ms routine entrances, ≤1s for the hero. Exits are always faster than entrances. No bounce or elastic easing, no infinite decorative loops (the scroll-indicator float is the one existing exception).
+
+### Delight: three earned moments
+**Thesis: "precision you can feel."** Each meaningful step lands with lab-grade certainty, built only from the logo's peptide dot-chain and the existing Vial Glyph — no new visual device. Rules live in the "Delight" block at the end of `app/globals.css`.
+- **The vial's arc.** `VialGlyph` has three states: `default`, `empty` (no fill line or chain — the empty cart) and `sealed` (contents up to the fill line — a placed order). On a fresh order (`status = new`) the confirmation wraps it in `.vial-sealing`: the seal ring closes, liquid rises, the chain bonds (~1.3s, once). A revisit to a progressed order shows it already sealed.
+- **Order status chain** (`components/store/order-progress.tsx`): the order's *real* status, one node per state of the order state machine (received → being prepared → out for delivery → delivered), drawn as the logo's dot-chain — reached bonds solid Bold Blue, pending bonds a dashed hairline, the current node a Light Blue dot. It reads the database on every request, so the confirmation link doubles as an order tracker; a cancelled order shows a plain note with the store email instead. Mirrors in RTL.
+- **Add to cart** confirms in the button itself: the label swaps to a drawn check + "Added" for 1.8s at a stable width (both labels share one grid cell), the button stays clickable, and the existing status line carries the announcement. The header badge pop (Motion → Feedback) completes it.
+- **Empty cart:** the empty vial, one primary action (Browse the shop) and a quiet route into research areas (`/start`).
+- Don't add celebration to routine actions beyond these; keep them proportional to consequence.
 
 ## Do's and Don'ts
 

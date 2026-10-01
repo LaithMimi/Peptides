@@ -7,6 +7,7 @@ import { BrandGroup } from "@/components/store/brand-group";
 import { Filters } from "@/components/store/filters";
 import { Pagination } from "@/components/store/pagination";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
+import { ResultsView } from "@/components/page-view";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -53,7 +54,7 @@ export default async function ShopPage({
   return (
     <div className="flex flex-col gap-8">
       <header>
-        <h1 className="text-balance font-serif text-4xl font-semibold uppercase leading-[1.02] tracking-tight text-navy sm:text-5xl lg:text-6xl">
+        <h1 className="type-title text-navy">
           {t("title")}
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-muted">{t("subtitle")}</p>
@@ -67,18 +68,22 @@ export default async function ShopPage({
         {t("results", { count: result.total })}
       </p>
 
-      {result.groups.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-border-strong px-6 py-12 text-center">
-          <p className="font-serif text-lg font-semibold uppercase tracking-wide text-navy">
-            {t("empty")}
-          </p>
-          <p className="mt-2 text-muted">{t("emptyHelp")}</p>
+      <ResultsView swapKey={[brand, area, listed, result.page].join("|")}>
+        <div className="flex flex-col gap-8">
+          {result.groups.length === 0 ? (
+            <div className="rounded-2xl border-2 border-dashed border-border-strong px-6 py-12 text-center">
+              <p className="font-serif text-lg font-semibold uppercase tracking-wide text-navy">
+                {t("empty")}
+              </p>
+              <p className="mt-2 text-muted">{t("emptyHelp")}</p>
+            </div>
+          ) : (
+            result.groups.map((group) => (
+              <BrandGroup key={group.brand.slug} group={group} behavior={settings.unpricedBehavior} />
+            ))
+          )}
         </div>
-      ) : (
-        result.groups.map((group) => (
-          <BrandGroup key={group.brand.slug} group={group} behavior={settings.unpricedBehavior} />
-        ))
-      )}
+      </ResultsView>
 
       <Pagination
         pathname="/shop"

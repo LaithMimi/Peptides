@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
+import { EASE_OUT_EXPO, prefersReducedMotion } from "@/lib/motion";
 
 /**
  * Touch-friendly quantity control ([-] 3 [+]). `name` is the product name, used
@@ -20,6 +22,25 @@ export function QuantityStepper({
   name: string;
 }) {
   const t = useTranslations("cart");
+  const outputRef = useRef<HTMLOutputElement>(null);
+  const previous = useRef(value);
+
+  // The digit ticks in from the direction of the change: up for more, down
+  // for fewer, so the press and its result read as one motion.
+  useEffect(() => {
+    const from = previous.current;
+    previous.current = value;
+    if (from === value || prefersReducedMotion()) return;
+    const offset = value > from ? "45%" : "-45%";
+    outputRef.current?.animate(
+      [
+        { transform: `translateY(${offset})`, opacity: 0 },
+        { transform: "translateY(0)", opacity: 1 },
+      ],
+      { duration: 220, easing: EASE_OUT_EXPO }
+    );
+  }, [value]);
+
   const buttonClass =
     "inline-flex size-11 items-center justify-center btn-glass rounded-full font-mono text-lg font-semibold disabled:cursor-not-allowed disabled:opacity-40";
 
@@ -35,8 +56,9 @@ export function QuantityStepper({
         <span aria-hidden="true">−</span>
       </button>
       <output
+        ref={outputRef}
         aria-live="polite"
-        className="min-w-8 text-center font-mono text-base font-semibold text-navy"
+        className="inline-block min-w-8 text-center font-mono text-base font-semibold text-navy"
       >
         {value}
       </output>

@@ -25,7 +25,7 @@ export function ProductCard({
   return (
     <Link
       href={`/products/${product.brand.slug}/${product.slug}`}
-      className="group flex h-full flex-col gap-2 overflow-hidden rounded-xl border border-border-strong bg-surface shadow-sm transition-shadow duration-200 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      className="card-in-view group flex h-full flex-col gap-2 overflow-hidden rounded-xl border border-border-strong bg-surface shadow-sm transition-shadow duration-200 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
     >
       <div className="aspect-[4/3] w-full overflow-hidden bg-surface-raised">
         {product.image ? (
@@ -48,23 +48,23 @@ export function ProductCard({
           </div>
         )}
       </div>
-      <div className="flex flex-1 flex-col gap-0.5 px-3 pb-3 pt-0.5">
-        <span className="font-mono text-xs uppercase tracking-widest text-muted">
+      <div className="flex flex-1 flex-col gap-0.5 px-3 pb-3 pt-0.5 sm:px-4 sm:pb-4">
+        <span className="font-mono text-xs uppercase tracking-wider text-muted sm:tracking-widest">
           {brandName}
           {product.vialSize && (
             <>
               {" · "}
-              <LtrValue>{product.vialSize}</LtrValue>
+              <LtrValue className="whitespace-nowrap">{product.vialSize}</LtrValue>
             </>
           )}
         </span>
-        <h3 className="font-serif text-lg font-semibold uppercase leading-tight tracking-tight text-navy">
+        <h3 className="type-card-title text-navy">
           {name}
         </h3>
-        {focus && <p className="line-clamp-2 text-xs text-muted">{focus}</p>}
+        {focus && <p className="line-clamp-2 text-sm leading-snug text-muted">{focus}</p>}
         <div className="mt-auto flex flex-col gap-0.5 pt-1 text-sm">
           <PriceDisplay priceMinor={product.priceMinor} behavior={behavior} className="text-lg" />
-          <span className="font-serif text-xs font-medium italic text-navy group-hover:text-accent">
+          <span className="text-xs font-semibold text-navy group-hover:text-accent sm:text-sm sm:font-medium">
             {t("viewDetails")}
             <span aria-hidden="true" className="ms-1 inline-block rtl:rotate-180">
               →

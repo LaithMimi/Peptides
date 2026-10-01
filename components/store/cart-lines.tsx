@@ -4,10 +4,48 @@ import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { formatMoney } from "@/lib/money";
+import { EASE_OUT_EXPO, prefersReducedMotion } from "@/lib/motion";
 import { LtrValue } from "@/components/ltr-value";
 import { VialGlyph } from "@/components/vial-glyph";
 import { QuantityStepper } from "@/components/store/quantity-stepper";
 import type { DisplayLine } from "@/components/store/use-priced-cart";
+
+/**
+ * Lets a removed line leave instead of vanishing: it fades and settles back,
+ * then folds its height (and the list gap below it) to zero so the lines
+ * underneath slide up into place, and only then is it removed from the cart.
+ * Under reduced motion, or if the animation cannot run, it is removed at once.
+ */
+function removeWithCollapse(button: HTMLButtonElement, remove: () => void) {
+  const line = button.closest("li");
+  if (!line || prefersReducedMotion() || typeof line.animate !== "function") {
+    remove();
+    return;
+  }
+  if (line.dataset.removing) return;
+  line.dataset.removing = "true";
+  button.disabled = true;
+  const height = line.getBoundingClientRect().height;
+  line.style.overflow = "hidden";
+  const animation = line.animate(
+    [
+      { opacity: 1, transform: "scale(1)", height: `${height}px`, marginBottom: "0px" },
+      { opacity: 0, transform: "scale(0.97)", height: `${height}px`, marginBottom: "0px", offset: 0.45 },
+      {
+        opacity: 0,
+        transform: "scale(0.97)",
+        height: "0px",
+        paddingTop: "0px",
+        paddingBottom: "0px",
+        borderWidth: "0px",
+        marginBottom: "-0.75rem",
+      },
+    ],
+    { duration: 380, easing: EASE_OUT_EXPO, fill: "forwards" }
+  );
+  animation.onfinish = remove;
+  animation.oncancel = remove;
+}
 
 /**
  * The cart's line items. With `editable` each line has a quantity stepper and a
@@ -129,7 +167,9 @@ export function CartLines({
               {editable && (
                 <button
                   type="button"
-                  onClick={() => onRemove?.(line.productId)}
+                  onClick={(event) =>
+                    removeWithCollapse(event.currentTarget, () => onRemove?.(line.productId))
+                  }
                   aria-label={t("removeItem", { name: line.name || t("thisItem") })}
                   className="inline-flex min-h-11 items-center rounded-full border border-border-strong px-4 font-serif text-xs font-semibold uppercase tracking-wide text-navy transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:shadow-sm"
                 >

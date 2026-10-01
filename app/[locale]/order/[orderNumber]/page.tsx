@@ -8,6 +8,7 @@ import { pageMetadata } from "@/lib/seo";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 import { LtrValue } from "@/components/ltr-value";
 import { ClearCartOnMount } from "@/components/store/clear-cart-on-mount";
+import { OrderProgress } from "@/components/store/order-progress";
 import { VialGlyph } from "@/components/vial-glyph";
 
 type Props = {
@@ -48,10 +49,15 @@ export default async function OrderConfirmationPage({ params, searchParams }: Pr
     <div className="mx-auto flex max-w-2xl flex-col gap-6">
       <ClearCartOnMount />
       <div className="flex flex-col items-center gap-3 rounded-xl border border-border-strong bg-surface-raised p-6 text-center">
-        <span className="inline-flex size-16 items-center justify-center rounded-full bg-surface p-3 text-accent">
-          <VialGlyph className="size-10" />
+        {/* The vial seals once, on arrival; a revisit to a progressed order shows it sealed. */}
+        <span
+          className={`inline-flex size-16 items-center justify-center rounded-full bg-surface p-3 text-accent${
+            order.status === "new" ? " vial-sealing" : ""
+          }`}
+        >
+          <VialGlyph className="size-10" variant={order.status === "cancelled" ? "default" : "sealed"} />
         </span>
-        <h1 className="text-balance font-serif text-4xl font-semibold uppercase leading-[1.02] tracking-tight text-navy sm:text-5xl lg:text-6xl">
+        <h1 className="type-title text-navy">
           {t("title")}
         </h1>
         <p className="text-foreground">{t("body", { name: order.customerName })}</p>
@@ -62,6 +68,8 @@ export default async function OrderConfirmationPage({ params, searchParams }: Pr
           {format.dateTime(order.createdAt, { dateStyle: "medium", timeStyle: "short" })}
         </p>
       </div>
+
+      <OrderProgress status={order.status} />
 
       <section aria-labelledby="order-items" className="flex flex-col gap-3">
         <h2

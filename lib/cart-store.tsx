@@ -23,6 +23,12 @@ export const MAX_CART_QUANTITY = 100;
 
 const EMPTY_CART: CartItem[] = [];
 
+/**
+ * Dispatched on `window` after a deliberate add (not on hydration or a quantity
+ * edit), so the header's cart badge can acknowledge it.
+ */
+export const CART_ADDED_EVENT = "pepclub:cart-added";
+
 let cartItems: CartItem[] = EMPTY_CART;
 let loaded = false;
 const listeners = new Set<() => void>();
@@ -103,6 +109,7 @@ function addItem(productId: string, quantity = 1) {
   } else {
     setCart([...cartItems, { productId, quantity: clamp(quantity) }]);
   }
+  if (typeof window !== "undefined") window.dispatchEvent(new Event(CART_ADDED_EVENT));
 }
 
 function setQuantity(productId: string, quantity: number) {

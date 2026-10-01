@@ -7,6 +7,7 @@ import { BrandGroup } from "@/components/store/brand-group";
 import { Pagination } from "@/components/store/pagination";
 import { PurposePicker } from "@/components/store/purpose-picker";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
+import { ResultsView } from "@/components/page-view";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -54,7 +55,7 @@ export default async function StartPage({
   return (
     <div className="flex flex-col gap-8">
       <header>
-        <h1 className="text-balance font-serif text-4xl font-semibold uppercase leading-[1.02] tracking-tight text-navy sm:text-5xl lg:text-6xl">
+        <h1 className="type-title text-navy">
           {t("title")}
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-muted">{t("subtitle")}</p>
@@ -69,7 +70,7 @@ export default async function StartPage({
       )}
 
       <section aria-labelledby="picker-results" className="flex flex-col gap-6">
-        <h2 id="picker-results" className="font-serif text-2xl font-semibold uppercase tracking-tight text-navy sm:text-4xl">
+        <h2 id="picker-results" className="type-heading text-navy">
           {t("resultsTitle")}
         </h2>
 
@@ -80,13 +81,17 @@ export default async function StartPage({
             <p role="status" className="font-mono text-xs uppercase tracking-widest text-muted">
               {tShop("results", { count: result.total })}
             </p>
-            {result.groups.length === 0 ? (
-              <p className="text-muted">{tShop("empty")}</p>
-            ) : (
-              result.groups.map((group) => (
-                <BrandGroup key={group.brand.slug} group={group} behavior={settings.unpricedBehavior} />
-              ))
-            )}
+            <ResultsView swapKey={`${selected.join(",")}|${result.page}`}>
+              <div className="flex flex-col gap-6">
+                {result.groups.length === 0 ? (
+                  <p className="text-muted">{tShop("empty")}</p>
+                ) : (
+                  result.groups.map((group) => (
+                    <BrandGroup key={group.brand.slug} group={group} behavior={settings.unpricedBehavior} />
+                  ))
+                )}
+              </div>
+            </ResultsView>
             <Pagination
               pathname="/start"
               query={{ purpose: selected.join(",") }}
