@@ -98,7 +98,7 @@ The named craft bar is **Apple.com** (restrained, high-contrast typography, mini
 **Key Characteristics:**
 - Plain bordered cards (`rounded-xl border border-border-strong shadow-sm`, `shadow-md` on hover) — no signature glow, glass, or backlight device
 - A four-color client palette — Soft White `#FAFAFA`, Jet Black `#0D0D0D`, Bold Blue `#1B22A7`, Light Blue `#4260E6` — carries the whole site: Soft White ground, Jet Black body ink, Bold Blue headings and button ink, and Light Blue for the one primary button per page, prices, selected chips, links, and focus. **Restrained roles, no colored regions** (client decision, see Colors)
-- Real seeded product photography carries visual weight — the homepage hero features four real product photos in a Sephora-style collage instead of an abstract motif or generated imagery
+- Real photography carries visual weight — the homepage hero is the client-supplied Pep Club vial studio photograph (`public/hero/pep-club-vial.jpeg`) on a dark studio panel; product pages carry real seeded product photos
 - No customer account/sign-in affordance anywhere (hard product constraint) and no fabricated discount or "deal" badges (no discount field exists in the schema; the No Fabricated Data Rule)
 - Bilingual EN/AR with true RTL mirroring; Geist Mono bidi-isolates Latin/numeric values (vial size, purity) inside Arabic text via `components/ltr-value.tsx`
 
@@ -164,7 +164,7 @@ Heading roles are named utilities in `app/globals.css` (`type-display`, `type-ti
 
 ## Layout
 
-Single-column content shell, `max-w-6xl`, centered, `px-4 sm:px-6 lg:px-8` gutters. The homepage hero is a `lg:grid-cols-2` split: headline/subhead/CTA at left, a 2×2 real-photo collage at right (one tile offset for visual interest, in the Sephora/beauty-retail register). The catalog grid steps `1 → 2 → 3` (and up to 5 on the shop grid) columns at `sm`/`lg`/`xl`. Product/product-detail pages use a two-column `md:grid-cols-2` split (image panel beside content) that collapses to one column below `md`.
+Single-column content shell, `max-w-6xl`, centered, `px-4 sm:px-6 lg:px-8` gutters. The homepage hero is a rounded dark studio panel (`.hero-studio`) that bleeds out of the content column to nearly the full viewport (0.75/1/1.5rem gutters; `100cqi` against the `page` container on `<body>`, so no scrollbar overflow), with its copy kept on the content column's start line: from `lg` the vial photograph fills the end ~68% and dissolves into the panel ground toward the copy column on the start side; below `lg` the photo stacks above the copy and fades downward. RTL mirrors the panel, never the photo. The catalog grid steps `1 → 2 → 3` (and up to 5 on the shop grid) columns at `sm`/`lg`/`xl`. Product/product-detail pages use a two-column `md:grid-cols-2` split (image panel beside content) that collapses to one column below `md`.
 
 ## Elevation & Depth
 
@@ -215,8 +215,8 @@ Two families: **pills** (`rounded-full`) for every button, chip, and toggle, and
 ### Trust Markers
 Removed at the client's request (2026-10-01): the hero no longer shows a row of trust chips ("Cash on delivery", "English and Arabic", "Multiple brands"). Don't reintroduce them unless asked; if they come back, every chip must be verifiably true of the site as built.
 
-### Homepage Hero Photo Collage (signature moment, not a signature device)
-The homepage hero's right column (`app/[locale]/page.tsx`) shows four real featured-product photos in a `grid-cols-2` collage, one tile offset downward (`translate-y-6`) for visual rhythm — the closest this system has to a "moment," and it is built entirely from real seeded photography, never generated imagery, per the client's explicit instruction. It is not a reusable component or repeating unit elsewhere in the system; it is specific to this one hero.
+### Homepage Studio Hero (signature moment, not a signature device)
+The homepage hero (`app/[locale]/page.tsx`, `.hero-studio*` in `app/globals.css`) is the one dark region on the storefront, supplied by the client on 2026-10-01: their own Pep Club vial studio photograph. The panel ground `#030b17` is sampled from the photo's shadowed edges so a CSS mask can melt the photo into it with no seam. Copy on the panel is white (H1) and `#b8c4e4` (body, a tint of the panel hue, never gray); the secondary CTA is `.btn-on-dark` (white ink, white-alpha outline) and focus rings lighten to `#9fb1f5` inside the panel. The photo is never mirrored for Arabic (its label would read backwards) — only the mask direction and crop flip. This is a client-approved exception to "no colored regions" and to the earlier "no AI-generated images" note; it stays specific to this one hero and is not a pattern for other sections.
 
 ### Vial Glyph
 `components/vial-glyph.tsx`: an authored SVG — a cylindrical, crimp-capped vial (matching the real seeded product photography's shape) with a small peptide-bond dot-chain accent, in `currentColor`. Shown directly (no wrapper/mount) wherever a product has no photo of its own. Also `variant="empty"` (empty cart) and `variant="sealed"` (order confirmation) — see Motion → Delight.
@@ -225,12 +225,12 @@ The homepage hero's right column (`app/[locale]/page.tsx`) shows four real featu
 
 **North star: "coming into focus."** Like a microscope racking onto a specimen, things arrive by sharpening out of a soft blur (`focus-in` keyframes: opacity + small rise + blur → 0, `--ease-out-expo`), never by flying, bouncing or sliding across the page. All rules live in the "Motion" block of `app/globals.css`; every default state is fully visible, and everything collapses under `prefers-reduced-motion`.
 
-- **Authored moment (home hero only):** headline, body and CTAs rack into focus in sequence (`.hero-focus` + `--delay`), then the four real product photos rise out of their wells (clip-path) and sharpen (`.hero-tile`); the offset tile lands last. About 1s, once per visit to the page. Don't add a second hero-scale entrance elsewhere. The order-confirmation vial sequence belongs to the delight pass (`.vial-sealing`).
+- **Authored moment (home hero only):** the studio photograph pulls focus like a lens racking onto the vial (`rack-focus`: blur, slight overscale and lifted shadows settle out), then the headline, body and CTAs rack in after it (`.hero-focus` + `--delay`). About 1.2s, once per visit to the page. Don't add a second hero-scale entrance elsewhere. The order-confirmation vial sequence belongs to the delight pass (`.vial-sealing`).
 - **Page continuity (React `<ViewTransition>`):** `app/[locale]/template.tsx` → `components/page-view.tsx` racks each new page into focus on navigation; the old page fades out fast; the loading skeleton steps aside (`.skeleton-exit`); the fixed header is anchored (`view-transition-name: site-header`) and never moves. Query-only changes (shop pagination, research-area picks) crossfade just the results (`ResultsView`, `.results-swap`).
 - **Navigation:** the active section is marked `aria-current="page"` with a 2px Light Blue underline that slides between links (`nav-indicator`, desktop only). The mobile menu drops out of the capsule with its links following in order (`.menu-in`).
 - **Feedback (Web Animations API, `lib/motion.ts`):** add-to-cart pops the header cart and its badge (driven by `CART_ADDED_EVENT`, never by hydration or quantity edits); quantity digits tick in the direction of the change; a removed cart line fades then folds its height so the lines below slide up; the order total flashes Light Blue when a quantity edit reprices it; field errors slide in (`.status-in`); busy submit buttons carry a light sheen (`aria-busy`).
 - **Product grids:** cards rise into place as they scroll into view (`.card-in-view`, scroll-driven CSS, no JS; unsupported browsers just show them).
-- **Timing:** 100–150ms exits, 220–420ms routine entrances, ≤1s for the hero. Exits are always faster than entrances. No bounce or elastic easing, no infinite decorative loops (the scroll-indicator float is the one existing exception).
+- **Timing:** 100–150ms exits, 220–420ms routine entrances, ≤1.2s for the hero. Exits are always faster than entrances. No bounce or elastic easing, no infinite decorative loops (the scroll-indicator float is the one existing exception).
 
 ### Delight: three earned moments
 **Thesis: "precision you can feel."** Each meaningful step lands with lab-grade certainty, built only from the logo's peptide dot-chain and the existing Vial Glyph — no new visual device. Rules live in the "Delight" block at the end of `app/globals.css`.

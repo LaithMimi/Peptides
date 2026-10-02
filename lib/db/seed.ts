@@ -137,7 +137,7 @@ export async function seedDatabase(db: Db): Promise<void> {
     )
     .onConflictDoNothing();
 
-  // Replace the Terms / Privacy placeholder text on databases seeded before it
+  // Replace placeholder page text on databases seeded before it
   // existed. Only pages still marked as placeholders are touched, so text the
   // admin has approved is never overwritten.
   for (const [slug, legal] of Object.entries(LEGAL_PAGES)) {

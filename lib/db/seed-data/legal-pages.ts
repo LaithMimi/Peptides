@@ -1,7 +1,9 @@
 import { CONTACT } from "@/lib/contact";
 
 /**
- * Terms of Service and Privacy Policy text (Markdown), English and Arabic.
+ * Text (Markdown), English and Arabic, for every footer page: Terms of
+ * Service, Privacy Policy, Shipping & Returns, Product Disclaimer, Cookie
+ * Policy and About.
  * Drafted under Israeli law; the English version prevails (Terms 18.4).
  * Seeded into the `pages` table; once the admin edits a page, the database
  * copy is the source of truth and this file is no longer read for it.
@@ -488,7 +490,7 @@ export const PRIVACY_AR = `**تاريخ السريان:** ${EFFECTIVE_AR}
 
 8.1 للحفاظ على جلسة التسوق، يخزّن الموقع في متصفحك: (أ) المنتجات وكمياتها في سلة التسوق؛ (ب) مسودة مؤقتة لتفاصيل الطلب التي أدخلتها (الاسم والهاتف والعنوان)، تُحفظ فقط حتى إغلاق علامة تبويب المتصفح؛ و(ج) اختيارك بشأن ملفات تعريف الارتباط. تبقى هذه البيانات على جهازك، ولا تُرسل إلينا إلا عند تقديم الطلب، ولا تتضمن الأسعار.
 
-8.2 إذا كنت تستخدم جهازًا مشتركًا أو عامًا، فعليك مسح هذه البيانات بعد الاستخدام بالنقر على "حذف البيانات من هذا المتصفح" في صفحة [سياسة ملفات تعريف الارتباط](/ar/legal/cookies)، حيث تجد أيضًا مزيدًا من المعلومات.
+8.2 إذا كنت تستخدم جهازًا مشتركًا أو عامًا، فعليك مسح هذه البيانات بعد الاستخدام بالنقر على "احذف البيانات في هذا المتصفح" في صفحة [سياسة ملفات تعريف الارتباط](/ar/legal/cookies)، حيث تجد أيضًا مزيدًا من المعلومات.
 
 ## 9. حقوقك
 
@@ -515,7 +517,399 @@ export const PRIVACY_AR = `**تاريخ السريان:** ${EFFECTIVE_AR}
 Pep Club · القدس · [${EMAIL}](mailto:${EMAIL})
 `;
 
+export const ABOUT_EN = `Pep Club is a Jerusalem-based store for research peptides. We bring products from several manufacturers together in one catalog, so researchers can compare brands, vial sizes and prices side by side and order from a single place.
+
+## What we sell
+
+Every product on this site is sold strictly for laboratory and in-vitro research use. Nothing we sell is intended for human or animal consumption, and nothing on this site is medical advice. Products are grouped by brand and by research area, a short label describing the field of study a compound is discussed in. A research area is a way to browse, not a claim about what a product does.
+
+## How ordering works
+
+- **No account.** You order as a guest with your name, phone number and delivery address. Nothing else is required.
+- **Prices set by the store.** Every total is calculated by our system from the current catalog price and delivery fee, and you see the full amount before you submit.
+- **Cash on delivery.** You pay the courier in cash when your order arrives. We take no payment online and never ask for card or bank details.
+- **We confirm by phone.** After you order, we contact you to confirm the details and arrange delivery.
+
+## What we stand behind
+
+We publish only the information manufacturers actually supply to us: product names, vial quantities and, where provided, purity figures and certificates of analysis. We do not invent batch data, and we do not make claims about effects, results or dosing. If a detail is not on the product page, we do not have it.
+
+## Get in touch
+
+Questions about a product, a price or an order? Email us at [${EMAIL}](mailto:${EMAIL}) or use the [contact page](/en/contact). We answer questions about availability, orders and delivery. We do not answer medical or dosing questions.
+`;
+
+export const ABOUT_AR = `Pep Club متجر للببتيدات البحثية مقرّه القدس. نجمع منتجات عدة شركات مصنّعة في كتالوج واحد، ليتمكن الباحثون من مقارنة العلامات التجارية وأحجام القوارير والأسعار جنبًا إلى جنب، والطلب من مكان واحد.
+
+## ماذا نبيع
+
+يُباع كل منتج على هذا الموقع حصريًا للاستخدام البحثي المخبري وفي المختبر (in-vitro). لا شيء مما نبيعه مخصّص للاستهلاك البشري أو الحيواني، ولا شيء على هذا الموقع يُعدّ نصيحة طبية. تُصنَّف المنتجات حسب العلامة التجارية وحسب مجال البحث، وهو وصف قصير لمجال الدراسة الذي يُناقَش فيه المركّب. مجال البحث وسيلة للتصفح، وليس ادعاءً بما يفعله المنتج.
+
+## كيف يتم الطلب
+
+- **بلا حساب.** تطلب كزائر باسمك ورقم هاتفك وعنوان التوصيل فقط.
+- **الأسعار يحددها المتجر.** يحسب نظامنا كل مجموع من سعر الكتالوج الحالي ورسوم التوصيل، وترى المبلغ الكامل قبل الإرسال.
+- **الدفع نقدًا عند الاستلام.** تدفع لمندوب التوصيل نقدًا عند وصول طلبك. لا نتقاضى أي دفعة عبر الإنترنت ولا نطلب أبدًا بيانات بطاقة أو حساب بنكي.
+- **نؤكد هاتفيًا.** بعد الطلب نتواصل معك لتأكيد التفاصيل وترتيب التوصيل.
+
+## ما نلتزم به
+
+ننشر فقط المعلومات التي يزوّدنا بها المصنّعون فعلًا: أسماء المنتجات، وكميات القوارير، ونسب النقاء وشهادات التحليل حين تتوفر. لا نختلق بيانات الدفعات، ولا ندّعي أي تأثيرات أو نتائج أو جرعات. إن لم تكن المعلومة على صفحة المنتج، فهي غير متوفرة لدينا.
+
+## تواصل معنا
+
+لديك سؤال عن منتج أو سعر أو طلب؟ راسلنا على [${EMAIL}](mailto:${EMAIL}) أو استخدم [صفحة التواصل](/ar/contact). نجيب عن أسئلة التوفر والطلبات والتوصيل، ولا نجيب عن أي أسئلة طبية أو تتعلق بالجرعات.
+`;
+
+export const SHIPPING_EN = `**Effective date:** ${EFFECTIVE_EN}
+
+This policy forms part of our [Terms of Service](/en/legal/terms). Where the two differ, the Terms prevail.
+
+## 1. Delivery areas
+
+1.1 We deliver only within the areas we serve. When you submit an order, we contact you by phone to confirm that we can deliver to your address before the order is dispatched.
+
+1.2 If we cannot deliver to your address, we will cancel the order at no cost to you.
+
+## 2. Delivery fee and timing
+
+2.1 The delivery fee, if any, is shown in your cart and at checkout before you submit your order, and is included in the total you pay on delivery.
+
+2.2 We aim to deliver within a few working days of confirming your order. Delivery times are estimates, not commitments, and may be affected by closures, road restrictions, security conditions, holidays or other events beyond our control.
+
+## 3. Payment on delivery
+
+3.1 You pay the full order total in cash to the courier when the order is handed over. Please have the exact amount ready where possible.
+
+3.2 We never request payment online, by card or by bank transfer before delivery. If anyone asks you to pay in advance in our name, do not pay, and report it to us at [${EMAIL}](mailto:${EMAIL}).
+
+## 4. At handover
+
+4.1 Please check the outer packaging before accepting the order. If the package is visibly damaged, opened or tampered with, tell the courier and refuse the delivery. We will contact you to arrange a replacement or cancel the order.
+
+4.2 Products are delivered in sealed packaging. Once you accept the order, you are responsible for storing the products correctly (see our [Product Disclaimer](/en/legal/product-disclaimer)).
+
+## 5. Missed and refused deliveries
+
+5.1 If we cannot reach you, or you are unavailable after two (2) reasonable delivery attempts, the order will be cancelled.
+
+5.2 Refusing an order without a valid reason, or giving an incorrect address or phone number, may lead us to decline future orders, as set out in Section 8.2 of the Terms.
+
+## 6. Cancelling an order
+
+6.1 You can cancel an order free of charge at any time before it is marked "out for delivery". Email [${EMAIL}](mailto:${EMAIL}) with your order number.
+
+6.2 Once an order is out for delivery, you may refuse it at the door instead.
+
+## 7. Returns
+
+7.1 Because our products are sensitive research materials whose condition we cannot verify once the seal is broken, we accept returns only of products that are **sealed, unopened and in their original packaging**, and that have been stored as directed.
+
+7.2 Subject to Section 7.1, if you are a consumer you may cancel a purchase within fourteen (14) days of receiving the products, in accordance with the Consumer Protection Law, 5741-1981, and the Consumer Protection (Cancellation of Transaction) Regulations, 5771-2010. Where the cancellation is not due to a defect, a cancellation fee of up to the lower of 5% of the price or ₪100 may be deducted.
+
+7.3 To request a return, email [${EMAIL}](mailto:${EMAIL}) with your order number and the products concerned. We will arrange collection with you; please do not send products back without contacting us first.
+
+## 8. Wrong, missing or damaged items
+
+8.1 If you receive the wrong product, an item is missing, or a product arrives damaged inside sealed outer packaging, please email us within forty-eight (48) hours of delivery with your order number and, where possible, a photo.
+
+8.2 We will replace the affected item or refund it, at no cost to you, including any delivery fee for the replacement.
+
+## 9. Refunds
+
+9.1 Approved refunds are paid within fourteen (14) days of our receiving the returned products (or of our confirming the problem, where no return is needed).
+
+9.2 Because orders are paid in cash, we will agree the refund method with you, for example cash on collection or bank transfer to an account in your name.
+
+## 10. Contact
+
+Pep Club · Jerusalem · [${EMAIL}](mailto:${EMAIL})
+`;
+
+export const SHIPPING_AR = `**تاريخ السريان:** ${EFFECTIVE_AR}
+
+تُعدّ هذه السياسة جزءًا من [شروط الخدمة](/ar/legal/terms). في حال وجود تعارض بينهما، تسود الشروط.
+
+## 1. مناطق التوصيل
+
+1.1 نوصل فقط داخل المناطق التي نخدمها. عند تقديمك طلبًا، نتواصل معك هاتفيًا لتأكيد إمكانية التوصيل إلى عنوانك قبل إرسال الطلب.
+
+1.2 إذا تعذّر علينا التوصيل إلى عنوانك، نلغي الطلب دون أي تكلفة عليك.
+
+## 2. رسوم التوصيل ومدته
+
+2.1 تظهر رسوم التوصيل، إن وُجدت، في سلة التسوق وعند إتمام الطلب قبل إرساله، وتُضاف إلى المجموع الذي تدفعه عند الاستلام.
+
+2.2 نسعى إلى التوصيل خلال أيام عمل قليلة من تأكيد طلبك. مواعيد التوصيل تقديرية وليست التزامًا، وقد تتأثر بالإغلاقات أو القيود على الطرق أو الأوضاع الأمنية أو الأعياد أو غيرها من الظروف الخارجة عن إرادتنا.
+
+## 3. الدفع عند الاستلام
+
+3.1 تدفع المجموع الكامل للطلب نقدًا لمندوب التوصيل عند تسليمك الطلب. يُرجى تجهيز المبلغ الدقيق قدر الإمكان.
+
+3.2 لا نطلب أبدًا الدفع مسبقًا عبر الإنترنت أو ببطاقة أو بتحويل بنكي قبل التوصيل. إذا طلب منك أحد الدفع مسبقًا باسمنا، فلا تدفع، وأبلغنا على [${EMAIL}](mailto:${EMAIL}).
+
+## 4. عند الاستلام
+
+4.1 يُرجى فحص الغلاف الخارجي قبل قبول الطلب. إذا كان الطرد تالفًا أو مفتوحًا أو يبدو عليه العبث بشكل ظاهر، فأبلغ المندوب وارفض الاستلام، وسنتواصل معك لترتيب بديل أو إلغاء الطلب.
+
+4.2 تُسلَّم المنتجات في عبوات مختومة. بمجرد قبولك الطلب، تصبح مسؤولًا عن تخزين المنتجات بالشكل الصحيح (راجع [إخلاء مسؤولية المنتجات](/ar/legal/product-disclaimer)).
+
+## 5. تعذّر التوصيل ورفض الاستلام
+
+5.1 إذا لم نتمكن من الوصول إليك، أو لم تكن متاحًا بعد محاولتي (2) توصيل معقولتين، يُلغى الطلب.
+
+5.2 قد يؤدي رفض الطلب دون سبب وجيه، أو تقديم عنوان أو رقم هاتف غير صحيح، إلى رفضنا طلبات مستقبلية، وفقًا للبند 8.2 من الشروط.
+
+## 6. إلغاء الطلب
+
+6.1 يمكنك إلغاء الطلب مجانًا في أي وقت قبل أن تصبح حالته "قيد التوصيل". راسلنا على [${EMAIL}](mailto:${EMAIL}) مع ذكر رقم الطلب.
+
+6.2 بعد خروج الطلب للتوصيل، يمكنك رفض استلامه عند الباب بدلًا من ذلك.
+
+## 7. الإرجاع
+
+7.1 لأن منتجاتنا مواد بحثية حساسة لا يمكننا التحقق من حالتها بعد فتح الختم، نقبل إرجاع المنتجات **المختومة وغير المفتوحة وفي عبوتها الأصلية** فقط، والتي خُزّنت وفق التعليمات.
+
+7.2 مع مراعاة البند 7.1، إذا كنت مستهلكًا فيحق لك إلغاء الشراء خلال أربعة عشر (14) يومًا من استلام المنتجات، وفقًا لقانون حماية المستهلك لسنة 5741-1981 وأنظمة حماية المستهلك (إلغاء الصفقة) لسنة 5771-2010. إذا لم يكن الإلغاء بسبب عيب، يجوز خصم رسوم إلغاء لا تتجاوز 5% من السعر أو 100 ₪، أيهما أقل.
+
+7.3 لطلب الإرجاع، راسلنا على [${EMAIL}](mailto:${EMAIL}) مع رقم الطلب والمنتجات المعنية، وسنرتّب معك موعد الاستلام. يُرجى عدم إعادة أي منتج قبل التواصل معنا.
+
+## 8. منتجات خاطئة أو ناقصة أو تالفة
+
+8.1 إذا وصلك منتج خاطئ، أو نقص أحد المنتجات، أو وصل منتج تالفًا داخل غلاف خارجي مختوم، يُرجى مراسلتنا خلال ثمانٍ وأربعين (48) ساعة من التوصيل مع رقم الطلب وصورة إن أمكن.
+
+8.2 سنستبدل المنتج المعني أو نسترد ثمنه دون أي تكلفة عليك، بما في ذلك رسوم توصيل البديل.
+
+## 9. استرداد المبالغ
+
+9.1 تُدفع المبالغ المستردة المعتمدة خلال أربعة عشر (14) يومًا من استلامنا المنتجات المُرجعة (أو من تأكيدنا للمشكلة إذا لم يلزم الإرجاع).
+
+9.2 بما أن الطلبات تُدفع نقدًا، نتفق معك على طريقة الاسترداد، مثل الدفع نقدًا عند استلام المنتج أو التحويل البنكي إلى حساب باسمك.
+
+## 10. التواصل
+
+Pep Club · القدس · [${EMAIL}](mailto:${EMAIL})
+`;
+
+export const DISCLAIMER_EN = `**Effective date:** ${EFFECTIVE_EN}
+
+This disclaimer applies to every product sold on the Site, from every brand, and forms part of our [Terms of Service](/en/legal/terms).
+
+## 1. For research use only
+
+1.1 All products are sold strictly for laboratory and in-vitro research use. They are **not for human consumption** and are not intended for veterinary, clinical, diagnostic or therapeutic use, or for introduction into the human or animal body by any route.
+
+1.2 Products may be sold only to persons aged eighteen (18) or over who confirm at checkout that they are buying for research use.
+
+## 2. Not approved as medicines
+
+The products have not been evaluated, approved or registered as medicines, drugs, food supplements or cosmetics by the Israeli Ministry of Health, the Palestinian Ministry of Health, the U.S. Food and Drug Administration, or any other regulatory authority. They are not intended to diagnose, treat, cure, mitigate or prevent any disease or condition.
+
+## 3. No medical or dosing advice
+
+3.1 Nothing on the Site, on a product label or in any message from us is medical advice, a therapeutic claim, a dosing instruction or a recommendation to use a product in any way.
+
+3.2 We do not answer questions about using products in people or animals, and our staff are not permitted to give such information. Please do not send them.
+
+## 4. Research areas
+
+Products are grouped by "research area", a short description of the field of scientific study in which a compound is discussed in published literature. A research area is a browsing aid only. It is not a statement that a product has any effect, is safe, or is suitable for any purpose.
+
+## 5. Product information
+
+5.1 Product names, vial quantities, purity figures and certificates of analysis are published as supplied by the manufacturer. We do not independently test each batch unless a product page says so.
+
+5.2 Product images are illustrative. Packaging, labels and appearance may differ from what is shown.
+
+5.3 Brand names and trademarks belong to their respective owners. Listing a brand does not mean that brand endorses Pep Club.
+
+## 6. Storage and handling
+
+6.1 Peptides can be sensitive to heat, light, moisture and contamination. Store products as indicated on the label or by the manufacturer, keep them out of reach of children, and handle and dispose of them in line with good laboratory practice and applicable law.
+
+6.2 We are not responsible for any change in a product's condition after it has been handed over to you.
+
+## 7. Your responsibility
+
+By buying from us, you accept full responsibility for the lawful, safe and proper handling, use and disposal of the products, and for complying with all laws that apply to you. Any use outside laboratory research is entirely at your own risk and breaches our Terms.
+
+## 8. Limitation of liability
+
+To the fullest extent permitted by law, Pep Club accepts no liability for any injury, illness, loss or damage resulting from the use or misuse of any product, as set out in Sections 13 and 14 of our [Terms of Service](/en/legal/terms). Nothing in this disclaimer limits rights you have under law that cannot be limited.
+
+## 9. Contact
+
+Pep Club · Jerusalem · [${EMAIL}](mailto:${EMAIL})
+`;
+
+export const DISCLAIMER_AR = `**تاريخ السريان:** ${EFFECTIVE_AR}
+
+ينطبق إخلاء المسؤولية هذا على كل منتج يُباع على الموقع، من جميع العلامات التجارية، ويُعدّ جزءًا من [شروط الخدمة](/ar/legal/terms).
+
+## 1. للاستخدام البحثي فقط
+
+1.1 تُباع جميع المنتجات حصريًا للاستخدام البحثي المخبري وفي المختبر (in-vitro). وهي **غير مخصّصة للاستهلاك البشري**، ولا للاستخدام البيطري أو السريري أو التشخيصي أو العلاجي، ولا لإدخالها إلى جسم الإنسان أو الحيوان بأي طريقة.
+
+1.2 لا تُباع المنتجات إلا لمن بلغ الثامنة عشرة (18) من العمر ويؤكد عند إتمام الطلب أنه يشتري لغرض بحثي.
+
+## 2. غير معتمدة كأدوية
+
+لم تُقيَّم المنتجات أو تُعتمد أو تُسجَّل كأدوية أو عقاقير أو مكمّلات غذائية أو مستحضرات تجميل من قِبل وزارة الصحة الإسرائيلية أو وزارة الصحة الفلسطينية أو إدارة الغذاء والدواء الأمريكية (FDA) أو أي جهة تنظيمية أخرى. وهي غير مخصّصة لتشخيص أي مرض أو حالة أو علاجها أو شفائها أو تخفيفها أو الوقاية منها.
+
+## 3. لا نصائح طبية ولا جرعات
+
+3.1 لا شيء على الموقع أو على ملصق أي منتج أو في أي رسالة منّا يُعدّ نصيحة طبية أو ادعاءً علاجيًا أو تعليمات جرعة أو توصية باستخدام منتج بأي شكل.
+
+3.2 لا نجيب عن أسئلة تتعلق باستخدام المنتجات على البشر أو الحيوانات، ولا يُسمح لموظفينا بتقديم مثل هذه المعلومات. يُرجى عدم إرسالها.
+
+## 4. مجالات البحث
+
+تُصنَّف المنتجات حسب "مجال البحث"، وهو وصف قصير لمجال الدراسة العلمية الذي يُناقَش فيه المركّب في الأدبيات المنشورة. مجال البحث أداة للتصفح فقط، وليس تصريحًا بأن للمنتج أي تأثير أو أنه آمن أو مناسب لأي غرض.
+
+## 5. معلومات المنتجات
+
+5.1 تُنشر أسماء المنتجات وكميات القوارير ونسب النقاء وشهادات التحليل كما يزوّدنا بها المصنّع. لا نفحص كل دفعة بشكل مستقل إلا إذا ذُكر ذلك في صفحة المنتج.
+
+5.2 صور المنتجات توضيحية، وقد تختلف العبوات والملصقات والمظهر عمّا هو معروض.
+
+5.3 أسماء العلامات التجارية وشعاراتها ملك لأصحابها. إدراج علامة تجارية لا يعني أنها تتبنّى Pep Club أو تروّج له.
+
+## 6. التخزين والتعامل
+
+6.1 قد تكون الببتيدات حساسة للحرارة والضوء والرطوبة والتلوث. خزّن المنتجات وفق ما هو مذكور على الملصق أو من قِبل المصنّع، وأبقها بعيدًا عن متناول الأطفال، وتعامل معها وتخلّص منها وفق الممارسات المخبرية السليمة والقانون المعمول به.
+
+6.2 لسنا مسؤولين عن أي تغيّر في حالة المنتج بعد تسليمه إليك.
+
+## 7. مسؤوليتك
+
+بشرائك منّا، تتحمّل المسؤولية الكاملة عن التعامل مع المنتجات واستخدامها والتخلص منها بشكل قانوني وآمن وسليم، وعن الالتزام بجميع القوانين التي تنطبق عليك. أي استخدام خارج البحث المخبري يكون على مسؤوليتك وحدك ويُعدّ مخالفة لشروطنا.
+
+## 8. حدود المسؤولية
+
+إلى أقصى حد يسمح به القانون، لا يتحمّل Pep Club أي مسؤولية عن أي إصابة أو مرض أو خسارة أو ضرر ناتج عن استخدام أي منتج أو إساءة استخدامه، وفقًا للبندين 13 و14 من [شروط الخدمة](/ar/legal/terms). لا شيء في إخلاء المسؤولية هذا يحدّ من حقوق يمنحها لك القانون ولا يجوز تقييدها.
+
+## 9. التواصل
+
+Pep Club · القدس · [${EMAIL}](mailto:${EMAIL})
+`;
+
+export const COOKIES_EN = `**Effective date:** ${EFFECTIVE_EN}
+
+This policy explains what the Site stores on your device and why. It should be read together with our [Privacy Policy](/en/legal/privacy).
+
+## 1. The short version
+
+We do not use advertising, analytics or tracking cookies, and we do not set any cookie when you browse or order. The Site keeps a few small items in your browser's own storage so that your cart and checkout work. That data stays on your device and is not sent to us until you submit an order.
+
+## 2. Cookies
+
+2.1 The storefront sets no cookies. Your language is taken from the page address, not from a cookie.
+
+2.2 The only cookie the Site uses is a secure sign-in cookie for the store's own staff on the administration area. It is never set for customers.
+
+## 3. Browser storage
+
+The Site uses your browser's local and session storage for the following:
+
+- **Cart** (local storage): the products and quantities you have added. It contains no prices and stays until you empty your cart or delete it.
+- **Checkout draft** (session storage): the name, phone number and address you have typed at checkout, so they are not lost if you reload the page or switch language. It is deleted when you close the browser tab, and never includes your research-use acknowledgment or notes.
+- **Cookie choice** (local storage): whether you chose "Essential only" or "Accept optional storage", so we do not ask again.
+- **First-visit prompt** (local storage): a note that you have already seen the welcome prompt, so it does not reappear.
+
+## 4. Essential and optional storage
+
+4.1 The items listed in Section 3 are essential: the cart and checkout cannot work without them, so they do not require your consent.
+
+4.2 We do not currently use any optional storage. Choosing "Accept optional storage" does not enable advertising or tracking. If we ever add optional storage, it will be described here and used only if you have chosen to allow it.
+
+## 5. Your choices
+
+5.1 You can change your choice at any time with the "Cookie settings" link at the bottom of every page.
+
+5.2 To remove everything this Site has stored in your browser, use the "Delete data in this browser" button below. We recommend doing this on a shared or public device.
+
+5.3 You can also clear site data or block storage in your browser settings. If you block it, your cart will not be remembered between pages.
+
+## 6. Third parties
+
+We do not allow advertising networks, social media plugins or analytics providers to place cookies or trackers through the Site. Our hosting provider processes basic technical data, such as IP addresses, to deliver and secure the Site, as described in Section 3.3 of our [Privacy Policy](/en/legal/privacy).
+
+## 7. Changes and contact
+
+We will update this page, with a new effective date, if what we store changes. Questions: Pep Club · Jerusalem · [${EMAIL}](mailto:${EMAIL})
+`;
+
+export const COOKIES_AR = `**تاريخ السريان:** ${EFFECTIVE_AR}
+
+توضح هذه السياسة ما يخزّنه الموقع على جهازك ولماذا. يُرجى قراءتها مع [سياسة الخصوصية](/ar/legal/privacy).
+
+## 1. باختصار
+
+لا نستخدم ملفات تعريف ارتباط إعلانية أو تحليلية أو للتتبّع، ولا نضع أي ملف تعريف ارتباط أثناء تصفحك أو طلبك. يحتفظ الموقع ببعض العناصر الصغيرة في مساحة التخزين الخاصة بمتصفحك حتى تعمل سلة التسوق وإتمام الطلب. تبقى هذه البيانات على جهازك ولا تُرسل إلينا إلا عند إرسالك الطلب.
+
+## 2. ملفات تعريف الارتباط
+
+2.1 لا يضع المتجر أي ملفات تعريف ارتباط. تُحدَّد لغتك من عنوان الصفحة، لا من ملف تعريف ارتباط.
+
+2.2 ملف تعريف الارتباط الوحيد الذي يستخدمه الموقع هو ملف دخول آمن لموظفي المتجر في منطقة الإدارة، ولا يُوضع أبدًا للعملاء.
+
+## 3. تخزين المتصفح
+
+يستخدم الموقع التخزين المحلي (local storage) وتخزين الجلسة (session storage) في متصفحك لما يلي:
+
+- **سلة التسوق** (تخزين محلي): المنتجات والكميات التي أضفتها. لا تحتوي على أسعار، وتبقى حتى تفرغ السلة أو تحذفها.
+- **مسودة إتمام الطلب** (تخزين الجلسة): الاسم ورقم الهاتف والعنوان التي كتبتها عند إتمام الطلب، كي لا تضيع إذا أعدت تحميل الصفحة أو غيّرت اللغة. تُحذف عند إغلاق علامة التبويب، ولا تتضمن أبدًا إقرار الاستخدام البحثي أو الملاحظات.
+- **اختيارك بشأن ملفات تعريف الارتباط** (تخزين محلي): هل اخترت "الأساسية فقط" أو "قبول التخزين الاختياري"، كي لا نسألك مجددًا.
+- **نافذة الزيارة الأولى** (تخزين محلي): ملاحظة بأنك شاهدت نافذة الترحيب، كي لا تظهر مجددًا.
+
+## 4. التخزين الضروري والاختياري
+
+4.1 العناصر المذكورة في البند 3 ضرورية: لا تعمل السلة وإتمام الطلب بدونها، لذا لا تتطلب موافقتك.
+
+4.2 لا نستخدم حاليًا أي تخزين اختياري. اختيار "قبول التخزين الاختياري" لا يفعّل أي إعلانات أو تتبّع. إذا أضفنا تخزينًا اختياريًا مستقبلًا، فسنصفه هنا ولن نستخدمه إلا إذا سمحت به.
+
+## 5. خياراتك
+
+5.1 يمكنك تغيير اختيارك في أي وقت عبر رابط "إعدادات ملفات تعريف الارتباط" أسفل كل صفحة.
+
+5.2 لحذف كل ما خزّنه الموقع في متصفحك، استخدم زر "احذف البيانات في هذا المتصفح" أدناه. ننصح بذلك عند استخدام جهاز مشترك أو عام.
+
+5.3 يمكنك أيضًا مسح بيانات الموقع أو حظر التخزين من إعدادات متصفحك. في حال حظره، لن تُحفظ سلة التسوق عند التنقل بين الصفحات.
+
+## 6. الأطراف الثالثة
+
+لا نسمح لشبكات الإعلانات أو إضافات وسائل التواصل الاجتماعي أو مزوّدي التحليلات بوضع ملفات تعريف ارتباط أو أدوات تتبّع عبر الموقع. يعالج مزوّد الاستضافة بيانات تقنية أساسية، مثل عناوين IP، لتشغيل الموقع وحمايته، كما هو موضح في البند 3.3 من [سياسة الخصوصية](/ar/legal/privacy).
+
+## 7. التغييرات والتواصل
+
+سنحدّث هذه الصفحة، مع تاريخ سريان جديد، إذا تغيّر ما نخزّنه. للاستفسارات: Pep Club · القدس · [${EMAIL}](mailto:${EMAIL})
+`;
+
 export const LEGAL_PAGES = {
+  about: {
+    titleEn: "About",
+    titleAr: "من نحن",
+    bodyEn: ABOUT_EN,
+    bodyAr: ABOUT_AR,
+  },
+  "shipping-returns": {
+    titleEn: "Shipping & Returns",
+    titleAr: "الشحن والإرجاع",
+    bodyEn: SHIPPING_EN,
+    bodyAr: SHIPPING_AR,
+  },
+  "product-disclaimer": {
+    titleEn: "Product Disclaimer",
+    titleAr: "إخلاء مسؤولية المنتجات",
+    bodyEn: DISCLAIMER_EN,
+    bodyAr: DISCLAIMER_AR,
+  },
+  cookies: {
+    titleEn: "Cookie Policy",
+    titleAr: "سياسة ملفات تعريف الارتباط",
+    bodyEn: COOKIES_EN,
+    bodyAr: COOKIES_AR,
+  },
   terms: {
     titleEn: "Terms of Service",
     titleAr: "شروط الخدمة",

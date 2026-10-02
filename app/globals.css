@@ -301,7 +301,9 @@ dd {
 
 @media (prefers-reduced-motion: reduce) {
   .btn-glass:hover:not(:disabled):not([aria-disabled="true"]),
-  .btn-glass:active:not(:disabled):not([aria-disabled="true"]) {
+  .btn-glass:active:not(:disabled):not([aria-disabled="true"]),
+  .btn-on-dark:hover,
+  .btn-on-dark:active {
     transform: none;
   }
 }
@@ -641,45 +643,158 @@ html {
 .menu-in > :nth-child(4) { animation-delay: 120ms; }
 .menu-in > :nth-child(5) { animation-delay: 150ms; }
 
-/* Home hero: the authored focal moment.
-   The headline racks into focus, its supporting lines follow, then the four
-   real product photos rise out of their wells and sharpen one by one; the
-   offset tile lands last. About 1s end to end, once per visit to the page. */
-.hero-focus {
-  --focus-blur: 10px;
-  --focus-rise: 18px;
-  animation: 820ms var(--ease-out-expo) both focus-in;
-  animation-delay: var(--delay, 0ms);
+/*
+  Home hero: the studio panel.
+  The one dark region on the storefront, and it is the client's own vial
+  photograph rather than a colored block: the panel ground (--studio) is
+  sampled from the photo's shadowed edges, so the image's start edge can
+  dissolve into it with a mask instead of a visible seam. Mobile stacks the
+  photo above the copy and fades it downward; from lg the photo takes the
+  end side and fades toward the copy. The photo itself is never mirrored
+  for RTL (the label would read backwards) — only the mask direction flips.
+*/
+/* The page body is the inline-size container the hero bleeds against:
+   100cqi is the viewport minus any scrollbar, so a full-bleed panel never
+   causes horizontal scroll the way 100vw would. */
+.storefront body {
+  container: page / inline-size;
 }
 
-@keyframes tile-rise {
-  from {
-    clip-path: inset(100% 0 0 0 round 0.75rem);
+.hero-studio {
+  --studio: #030b17;
+  --bleed-gutter: 0.75rem;
+  /* Break out of <main>'s max-w-6xl column to (nearly) the full viewport. */
+  margin-inline: calc(50% - 50cqi + var(--bleed-gutter));
+  --studio-ink-soft: #b8c4e4;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  overflow: hidden;
+  border-radius: 1.75rem;
+  background: var(--studio);
+  color: #fff;
+  box-shadow:
+    0 2px 4px rgba(13, 13, 13, 0.08),
+    0 30px 60px -30px rgba(3, 11, 23, 0.55);
+}
+
+.hero-studio :focus-visible {
+  outline-color: #9fb1f5;
+}
+
+.hero-studio-photo {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 98%);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent 98%);
+}
+
+.hero-studio-photo img {
+  object-position: 50% 58%;
+}
+
+.hero-studio-copy {
+  position: relative;
+  z-index: 1;
+  margin-top: -3.5rem;
+  padding: 0 1.5rem 2.25rem;
+}
+
+@media (min-width: 40rem) {
+  .hero-studio {
+    --bleed-gutter: 1rem;
   }
-  to {
-    clip-path: inset(0 0 0 0 round 0.75rem);
+  .hero-studio-photo {
+    aspect-ratio: 16 / 10;
+  }
+  .hero-studio-copy {
+    padding: 0 2.5rem 3rem;
   }
 }
 
-@keyframes tile-focus {
+@media (min-width: 64rem) {
+  .hero-studio {
+    --bleed-gutter: 1.5rem;
+    /* Copy starts on the same line as the content column below
+       (max-w-6xl + lg:px-8), never closer than 4rem to the panel edge. */
+    --copy-start: max(4rem, calc((100cqi - 72rem) / 2 + 2rem - var(--bleed-gutter)));
+    min-height: clamp(34rem, calc(100svh - var(--header-clearance) - 7rem), 46rem);
+    align-items: center;
+  }
+  .hero-studio-photo {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: 68%;
+    aspect-ratio: auto;
+    -webkit-mask-image: linear-gradient(to right, transparent 12%, #000 52%);
+    mask-image: linear-gradient(to right, transparent 12%, #000 52%);
+  }
+  html[dir="rtl"] .hero-studio-photo {
+    -webkit-mask-image: linear-gradient(to left, transparent 12%, #000 52%);
+    mask-image: linear-gradient(to left, transparent 12%, #000 52%);
+  }
+  /* Crop from the photo's start side so the vial and its near molecule sit
+     clear of the copy column; RTL crops the other way. */
+  .hero-studio-photo img {
+    object-position: 26% 50%;
+  }
+  html[dir="rtl"] .hero-studio-photo img {
+    object-position: 74% 50%;
+  }
+  .hero-studio-copy {
+    margin: 0;
+    max-width: min(46%, calc(var(--copy-start) + 34rem));
+    padding-block: 4rem;
+    padding-inline: var(--copy-start) 0;
+  }
+}
+
+/* The secondary hero action on the dark panel: an outlined pill in white
+   ink, sharing the primary's lift and press. */
+.btn-on-dark {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all var(--glass-time) var(--glass-ease);
+}
+
+.btn-on-dark:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.55);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.btn-on-dark:active {
+  transform: translateY(1px) scale(0.98);
+  background: rgba(255, 255, 255, 0.04);
+  transition-duration: 0.08s;
+}
+
+/* The authored focal moment: the photograph pulls focus like a lens racking
+   onto the vial (blur and a slight overscale settle out, the shadows lift),
+   then the headline and its supporting lines rack in after it. About 1.2s
+   end to end, once per visit to the page. */
+@keyframes rack-focus {
   from {
-    filter: blur(12px);
-    transform: scale(1.12);
+    filter: blur(14px) brightness(0.55);
+    transform: scale(1.07);
   }
   to {
-    filter: blur(0);
+    filter: blur(0) brightness(1);
     transform: scale(1);
   }
 }
 
-.hero-tile {
-  animation: 760ms var(--ease-out-expo) both tile-rise;
-  animation-delay: var(--delay, 0ms);
+.hero-studio-photo img {
+  animation: 1100ms var(--ease-out-expo) both rack-focus;
 }
 
-.hero-tile > * {
-  animation: 1000ms var(--ease-out-expo) both tile-focus;
-  animation-delay: var(--delay, 0ms);
+.hero-focus {
+  --focus-blur: 10px;
+  --focus-rise: 18px;
+  animation: 820ms var(--ease-out-expo) both focus-in;
+  animation-delay: calc(var(--delay, 0ms) + 200ms);
 }
 
 /* Product cards arrive as the grid scrolls into view.
@@ -775,8 +890,7 @@ html {
   .menu-in,
   .menu-in > *,
   .hero-focus,
-  .hero-tile,
-  .hero-tile > *,
+  .hero-studio-photo img,
   .status-in,
   .chip-pop,
   .goal-picker-dialog[open]::backdrop {

@@ -84,8 +84,8 @@ storefront — familiar enough to shop confidently, credible enough (real
 photography, generous whitespace, confident type) to place a real
 cash-on-delivery order.
 FIRST VIEWPORT: Header band (logo, nav, cart, locale — no account/sign-in)
-atop a plain split hero: headline/subhead/CTA at left, a clean grid of
-real featured-product photos at right.
+atop a dark studio hero panel: headline/subhead/CTA on the start side, the
+client's Pep Club vial photograph melting into the panel on the end side.
 FORM: The category standard (canon) — chosen directly over a degraded
 third direction roll (seed key 51d42a69, network unreachable, assigned
 "Terracotta Crucible"); quality bar named by the client: Apple.com,
